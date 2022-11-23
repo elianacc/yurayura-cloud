@@ -10,9 +10,8 @@ yurayura-cloud
 ├── yurayura-cloud-service-comic-6001 ----- 番剧服务生产者
 ├── yurayura-cloud-service-sys-5001 ----- 系统服务生产者
 └── yurayura-cloud-service-user-6003 ----- 用户服务生产者
+yurayura-codegenerator  ----- 服务生产者代码生成器
 ```
-
-## 
 
 
 
