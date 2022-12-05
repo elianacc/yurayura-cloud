@@ -11,12 +11,12 @@
 
     <modules>
         <module>yurayura-cloud-commons</module>
-        <module>yurayura-cloud-service-comic-6001</module>
-        <module>yurayura-cloud-service-user-6003</module>
-        <module>yurayura-cloud-service-sys-5001</module>
-        <module>yurayura-cloud-client-business-comic-2333</module>
-        <module>yurayura-cloud-client-business-user-2335</module>
-        <module>yurayura-cloud-client-business-sys-3333</module>
+        <module>yurayura-cloud-service-comic</module>
+        <module>yurayura-cloud-service-user</module>
+        <module>yurayura-cloud-service-sys</module>
+        <module>yurayura-cloud-client-business-comic</module>
+        <module>yurayura-cloud-client-business-user</module>
+        <module>yurayura-cloud-client-business-sys</module>
         <module>yurayura-cloud-client-business-base</module>
     </modules>
 
