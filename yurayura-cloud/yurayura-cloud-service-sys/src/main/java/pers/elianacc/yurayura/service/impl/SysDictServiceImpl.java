@@ -1,10 +1,14 @@
 package pers.elianacc.yurayura.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import pers.elianacc.yurayura.dao.SysDictMapper;
 import pers.elianacc.yurayura.dto.IdsDto;
 import pers.elianacc.yurayura.dto.SysDictInsertDto;
@@ -13,10 +17,6 @@ import pers.elianacc.yurayura.dto.SysDictUpdateDto;
 import pers.elianacc.yurayura.entity.sys.dict.SysDict;
 import pers.elianacc.yurayura.enumerate.EnableStatusEnum;
 import pers.elianacc.yurayura.service.ISysDictService;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 import pers.elianacc.yurayura.util.RedisUtil;
 
 import java.util.ArrayList;
@@ -41,21 +41,19 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     public PageInfo<SysDict> getPage(SysDictSelectDto dto) {
         // 设置分页
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
-        QueryWrapper<SysDict> queryWrapper = new QueryWrapper<>();
-        List<SysDict> sysDictList = sysDictMapper.selectList(queryWrapper
-                .like(!ObjectUtils.isEmpty(dto.getDictCode()), "dict_code", dto.getDictCode())
-                .eq(!ObjectUtils.isEmpty(dto.getDictStatus()), "dict_status", dto.getDictStatus())
-                .orderByAsc("dict_code", "dict_seq"));
+        List<SysDict> sysDictList = sysDictMapper.selectList(Wrappers.<SysDict>lambdaQuery()
+                .like(!ObjectUtils.isEmpty(dto.getDictCode()), SysDict::getDictCode, dto.getDictCode())
+                .eq(!ObjectUtils.isEmpty(dto.getDictStatus()), SysDict::getDictStatus, dto.getDictStatus())
+                .orderByAsc(SysDict::getDictCode, SysDict::getDictSeq));
         return new PageInfo<>(sysDictList, 5);
     }
 
     @Override
     public String insert(SysDictInsertDto dto) {
         String warn = "";
-        QueryWrapper<SysDict> queryWrapper = new QueryWrapper<>();
-        List<SysDict> sysDictList = sysDictMapper.selectList(queryWrapper
-                .eq("dict_code", dto.getDictCode())
-                .eq("dict_val", dto.getDictVal()));
+        List<SysDict> sysDictList = sysDictMapper.selectList(Wrappers.<SysDict>lambdaQuery()
+                .eq(SysDict::getDictCode, dto.getDictCode())
+                .eq(SysDict::getDictVal, dto.getDictVal()));
         if (sysDictList.isEmpty()) {
             SysDict sysDict = new SysDict();
             BeanUtils.copyProperties(dto, sysDict);
@@ -107,11 +105,10 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
             List<SysDict> sysDictList = JSON.parseArray(JSON.toJSONString(objList), SysDict.class);
             return sysDictList.stream().sorted(Comparator.comparing(SysDict::getDictSeq)).collect(Collectors.toList());
         }
-        QueryWrapper<SysDict> queryWrapper = new QueryWrapper<>();
-        return sysDictMapper.selectList(queryWrapper
-                .eq("dict_code", dictCode)
-                .eq("dict_status", EnableStatusEnum.ENABLE.getStatusId())
-                .orderByAsc("dict_seq"));
+        return sysDictMapper.selectList(Wrappers.<SysDict>lambdaQuery()
+                .eq(SysDict::getDictCode, dictCode)
+                .eq(SysDict::getDictStatus, EnableStatusEnum.ENABLE.getStatusId())
+                .orderByAsc(SysDict::getDictSeq));
     }
 
     @Override

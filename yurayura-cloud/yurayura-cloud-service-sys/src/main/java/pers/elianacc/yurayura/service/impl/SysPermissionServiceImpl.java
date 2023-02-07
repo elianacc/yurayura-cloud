@@ -1,9 +1,13 @@
 package pers.elianacc.yurayura.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import pers.elianacc.yurayura.bo.SysPermissionAuthorTreeSelectBo;
 import pers.elianacc.yurayura.dao.SysPermissionMapper;
 import pers.elianacc.yurayura.dao.SysRoleMapper;
@@ -13,10 +17,6 @@ import pers.elianacc.yurayura.dto.SysPermissionUpdateDto;
 import pers.elianacc.yurayura.entity.sys.permission.SysPermission;
 import pers.elianacc.yurayura.enumerate.EnableStatusEnum;
 import pers.elianacc.yurayura.service.ISysPermissionService;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
@@ -39,13 +39,12 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
     public PageInfo<SysPermission> getPage(SysPermissionSelectDto dto) {
         // 设置分页
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
-        QueryWrapper<SysPermission> queryWrapper = new QueryWrapper<>();
-        List<SysPermission> sysPermissionList = sysPermissionMapper.selectList(queryWrapper
-                .like(!ObjectUtils.isEmpty(dto.getPermissionCode()), "permission_code", dto.getPermissionCode())
-                .eq(!ObjectUtils.isEmpty(dto.getPermissionType()), "permission_type", dto.getPermissionType())
-                .eq(!ObjectUtils.isEmpty(dto.getPermissionStatus()), "permission_status", dto.getPermissionStatus())
-                .eq(!ObjectUtils.isEmpty(dto.getPermissionBelongSubmenuName()), "permission_belong_submenu_name", dto.getPermissionBelongSubmenuName())
-                .orderByAsc("permission_belong_submenu_name", "permission_seq")
+        List<SysPermission> sysPermissionList = sysPermissionMapper.selectList(Wrappers.<SysPermission>lambdaQuery()
+                .like(!ObjectUtils.isEmpty(dto.getPermissionCode()), SysPermission::getPermissionCode, dto.getPermissionCode())
+                .eq(!ObjectUtils.isEmpty(dto.getPermissionType()), SysPermission::getPermissionType, dto.getPermissionType())
+                .eq(!ObjectUtils.isEmpty(dto.getPermissionStatus()), SysPermission::getPermissionStatus, dto.getPermissionStatus())
+                .eq(!ObjectUtils.isEmpty(dto.getPermissionBelongSubmenuName()), SysPermission::getPermissionBelongSubmenuName, dto.getPermissionBelongSubmenuName())
+                .orderByAsc(SysPermission::getPermissionBelongSubmenuName, SysPermission::getPermissionSeq)
         );
         return new PageInfo<>(sysPermissionList, 5);
     }
@@ -60,9 +59,8 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
         } else {
             sysPermission.setPermissionCode(sysPermission.getPermissionBelongSubmenuName() + "_" + dto.getPermissionBtnVal());
         }
-        QueryWrapper<SysPermission> queryWrapper = new QueryWrapper<>();
-        List<SysPermission> existPermList = sysPermissionMapper.selectList(queryWrapper
-                .eq("permission_code", sysPermission.getPermissionCode()));
+        List<SysPermission> existPermList = sysPermissionMapper.selectList(Wrappers.<SysPermission>lambdaQuery()
+                .eq(SysPermission::getPermissionCode, sysPermission.getPermissionCode()));
         if (!existPermList.isEmpty()) {
             warn = "此权限已经存在";
         } else {

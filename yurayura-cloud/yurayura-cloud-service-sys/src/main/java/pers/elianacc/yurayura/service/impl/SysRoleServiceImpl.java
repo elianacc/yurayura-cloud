@@ -1,9 +1,12 @@
 package pers.elianacc.yurayura.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import pers.elianacc.yurayura.dao.SysManagerMapper;
 import pers.elianacc.yurayura.dao.SysPermissionMapper;
 import pers.elianacc.yurayura.dao.SysRoleMapper;
@@ -13,9 +16,6 @@ import pers.elianacc.yurayura.dto.SysRoleUpdateDto;
 import pers.elianacc.yurayura.entity.sys.role.SysRole;
 import pers.elianacc.yurayura.enumerate.EnableStatusEnum;
 import pers.elianacc.yurayura.service.ISysRoleService;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,15 +48,14 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     public List<SysRole> getAll() {
-        QueryWrapper<SysRole> queryWrapper = new QueryWrapper<>();
-        return sysRoleMapper.selectList(queryWrapper.ne("id", 1));
+        return sysRoleMapper.selectList(Wrappers.<SysRole>lambdaQuery().ne(SysRole::getId, 1));
     }
 
     @Override
     public String insert(SysRoleInsertDto dto) {
         String warn = "";
-        QueryWrapper<SysRole> queryWrapper = new QueryWrapper<>();
-        List<SysRole> sysRoleList = sysRoleMapper.selectList(queryWrapper.eq("role_name", dto.getRoleName()));
+        List<SysRole> sysRoleList = sysRoleMapper.selectList(Wrappers.<SysRole>lambdaQuery()
+                .eq(SysRole::getRoleName, dto.getRoleName()));
         if (sysRoleList.isEmpty()) {
             SysRole sysRole = new SysRole();
             BeanUtils.copyProperties(dto, sysRole);
@@ -84,8 +83,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             warn = "超级管理员的角色信息不允许被修改";
             return warn;
         }
-        QueryWrapper<SysRole> queryWrapper = new QueryWrapper<>();
-        List<SysRole> sysRoleList = sysRoleMapper.selectList(queryWrapper.eq("role_name", dto.getRoleName()));
+        List<SysRole> sysRoleList = sysRoleMapper.selectList(Wrappers.<SysRole>lambdaQuery()
+                .eq(SysRole::getRoleName, dto.getRoleName()));
         if (!sysRoleList.isEmpty() && !oldRole.getRoleName().equals(dto.getRoleName())) {
             warn = "角色名已经存在";
         } else {

@@ -1,6 +1,6 @@
 package pers.elianacc.yurayura.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -51,8 +51,8 @@ public class SysManagerServiceImpl extends ServiceImpl<SysManagerMapper, SysMana
     @Override
     public String insert(SysManagerInsertDto dto) {
         String warn = "";
-        QueryWrapper<SysManager> queryWrapper = new QueryWrapper<>();
-        List<SysManager> sysManagerList = sysManagerMapper.selectList(queryWrapper.eq("manager_name", dto.getManagerName()));
+        List<SysManager> sysManagerList = sysManagerMapper.selectList(Wrappers.<SysManager>lambdaQuery()
+                .eq(SysManager::getManagerName, dto.getManagerName()));
         if (sysManagerList.isEmpty()) {
             SysManager sysManager = new SysManager();
             BeanUtils.copyProperties(dto, sysManager);
@@ -116,10 +116,9 @@ public class SysManagerServiceImpl extends ServiceImpl<SysManagerMapper, SysMana
 
     @Override
     public SysManager getEnableManagerByName(String managerName) {
-        QueryWrapper<SysManager> queryWrapper = new QueryWrapper<>();
-        return sysManagerMapper.selectOne(queryWrapper
-                .eq("manager_name", managerName)
-                .eq("manager_status", EnableStatusEnum.ENABLE.getStatusId()));
+        return sysManagerMapper.selectOne(Wrappers.<SysManager>lambdaQuery()
+                .eq(SysManager::getManagerName, managerName)
+                .eq(SysManager::getManagerStatus, EnableStatusEnum.ENABLE.getStatusId()));
     }
 
 }

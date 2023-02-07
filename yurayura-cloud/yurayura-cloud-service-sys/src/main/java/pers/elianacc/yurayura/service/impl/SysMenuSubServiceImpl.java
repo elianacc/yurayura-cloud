@@ -1,7 +1,10 @@
 package pers.elianacc.yurayura.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import pers.elianacc.yurayura.dao.SysMenuMapper;
 import pers.elianacc.yurayura.dao.SysMenuSubMapper;
 import pers.elianacc.yurayura.dao.SysPermissionMapper;
@@ -15,9 +18,6 @@ import pers.elianacc.yurayura.enumerate.EnableStatusEnum;
 import pers.elianacc.yurayura.enumerate.SysMenuTypeEnum;
 import pers.elianacc.yurayura.enumerate.SysPermissionTypeEnum;
 import pers.elianacc.yurayura.service.ISysMenuSubService;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -70,11 +70,11 @@ public class SysMenuSubServiceImpl extends ServiceImpl<SysMenuSubMapper, SysMenu
     @Override
     public void deleteById(IdDto dto) {
         SysMenuSub deleteSysMenuSub = sysMenuSubMapper.selectById(dto.getId());
-        QueryWrapper<SysPermission> permissionQueryWrapper = new QueryWrapper<>();
-        List<SysPermission> deleteSysPermissions = sysPermissionMapper.selectList(permissionQueryWrapper
-                .eq("permission_belong_submenu_name", deleteSysMenuSub.getMenuName()));
+        List<SysPermission> deleteSysPermissions = sysPermissionMapper.selectList(Wrappers.<SysPermission>lambdaQuery()
+                .eq(SysPermission::getPermissionBelongSubmenuName, deleteSysMenuSub.getMenuName()));
         deleteSysPermissions.forEach(permission -> sysRoleMapper.deleteRolePermissionByPermissionId(permission.getId()));
-        sysPermissionMapper.delete(permissionQueryWrapper.eq("permission_belong_submenu_name", deleteSysMenuSub.getMenuName()));
+        sysPermissionMapper.delete(Wrappers.<SysPermission>lambdaQuery()
+                .eq(SysPermission::getPermissionBelongSubmenuName, deleteSysMenuSub.getMenuName()));
         sysMenuSubMapper.deleteById(dto.getId());
     }
 
@@ -89,8 +89,8 @@ public class SysMenuSubServiceImpl extends ServiceImpl<SysMenuSubMapper, SysMenu
 
     @Override
     public SysMenuSub getByIndex(String index) {
-        QueryWrapper<SysMenuSub> queryWrapper = new QueryWrapper<>();
-        return sysMenuSubMapper.selectOne(queryWrapper.eq("menu_index", index));
+        return sysMenuSubMapper.selectOne(Wrappers.<SysMenuSub>lambdaQuery()
+                .eq(SysMenuSub::getMenuIndex, index));
     }
 
     @Override
