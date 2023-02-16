@@ -2,6 +2,9 @@ package pers.elianacc.yurayura.controller.block;
 
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import pers.elianacc.yurayura.vo.ApiResult;
+import pers.elianacc.yurayura.vo.SysMenuTreeSelectVo;
+
+import java.util.List;
 
 /**
  * 系统菜单 自定义限流处理逻辑
@@ -11,7 +14,7 @@ import pers.elianacc.yurayura.vo.ApiResult;
  */
 public class SysMenuBlockHandler {
 
-    public static ApiResult getTreeListBlockHandler(BlockException exception) {
+    public static ApiResult<List<SysMenuTreeSelectVo>> getTreeListBlockHandler(BlockException exception) {
         return ApiResult.warn("操作过于频繁！");
     }
 

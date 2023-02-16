@@ -1,7 +1,9 @@
 package pers.elianacc.yurayura.controller.block;
 
 import com.alibaba.csp.sentinel.slots.block.BlockException;
+import com.github.pagehelper.PageInfo;
 import pers.elianacc.yurayura.dto.SysDictSelectDto;
+import pers.elianacc.yurayura.entity.sys.dict.SysDict;
 import pers.elianacc.yurayura.vo.ApiResult;
 
 /**
@@ -12,7 +14,7 @@ import pers.elianacc.yurayura.vo.ApiResult;
  */
 public class SysDictBlockHandler {
 
-    public static ApiResult getPageBlockHandler(SysDictSelectDto dto, BlockException exception) {
+    public static ApiResult<PageInfo<SysDict>> getPageBlockHandler(SysDictSelectDto dto, BlockException exception) {
         return ApiResult.warn("操作过于频繁！");
     }
 

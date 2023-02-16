@@ -27,10 +27,10 @@ public class ComicController {
      * 查询番剧（根据番剧id）
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<pers.elianacc.yurayura.entity.comic.Comic>
      */
     @GetMapping("/getById")
-    public ApiResult getById(IdDto dto) {
+    public ApiResult<Comic> getById(IdDto dto) {
         if (ObjectUtils.isEmpty(dto.getId())) {
             return ApiResult.warn("id不能为空");
         }
@@ -41,10 +41,10 @@ public class ComicController {
      * 分页查询番剧
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<PageInfo<Comic>>
      */
     @PostMapping("/getPage")
-    public ApiResult getPage(@RequestBody ComicSelectDto dto) {
+    public ApiResult<PageInfo<Comic>> getPage(@RequestBody ComicSelectDto dto) {
         if (ObjectUtils.isEmpty(dto.getPageNum())) {
             return ApiResult.warn("页码不能为空");
         } else if (ObjectUtils.isEmpty(dto.getPageSize())) {
@@ -61,10 +61,10 @@ public class ComicController {
      * 添加番剧
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PostMapping("/insert")
-    public ApiResult insert(ComicInsertDto dto) {
+    public ApiResult<String> insert(ComicInsertDto dto) {
         if (ObjectUtils.isEmpty(dto.getComicName())) {
             return ApiResult.warn("名称不能为空");
         } else if (ObjectUtils.isEmpty(dto.getComicTime())) {
@@ -89,10 +89,10 @@ public class ComicController {
      * 批量删除番剧（根据番剧id组）
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PutMapping("/deleteBatchByIds")
-    public ApiResult deleteBatchByIds(@RequestBody IdsDto dto) {
+    public ApiResult<String> deleteBatchByIds(@RequestBody IdsDto dto) {
         if (dto.getIds().isEmpty()) {
             return ApiResult.warn("id组不能为空");
         }
@@ -104,10 +104,10 @@ public class ComicController {
      * 修改番剧
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PutMapping("/update")
-    public ApiResult update(ComicUpdateDto dto) {
+    public ApiResult<String> update(ComicUpdateDto dto) {
         if (ObjectUtils.isEmpty(dto.getId())) {
             return ApiResult.warn("id不能为空");
         } else if (ObjectUtils.isEmpty(dto.getComicName())) {

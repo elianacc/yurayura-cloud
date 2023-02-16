@@ -1,5 +1,6 @@
 package pers.elianacc.yurayura.service.impl;
 
+import com.github.pagehelper.PageInfo;
 import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
@@ -11,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.ObjectUtils;
-import pers.elianacc.yurayura.dto.*;
+import pers.elianacc.yurayura.dto.SysManagerInsertDto;
+import pers.elianacc.yurayura.dto.SysManagerLoginDto;
+import pers.elianacc.yurayura.dto.SysManagerSelectDto;
+import pers.elianacc.yurayura.dto.SysManagerUpdateDto;
 import pers.elianacc.yurayura.entity.sys.manager.SysManager;
 import pers.elianacc.yurayura.exception.BusinessException;
 import pers.elianacc.yurayura.feign.SysFeignClient;
@@ -36,8 +40,8 @@ public class SysManagerServiceImpl implements SysManagerService {
     private SysFeignClient sysFeignClient;
 
     @Override
-    public ApiResult getPage(SysManagerSelectDto dto) {
-        ApiResult apiResult = sysFeignClient.getPage(dto);
+    public ApiResult<PageInfo<Map<String, Object>>> getPage(SysManagerSelectDto dto) {
+        ApiResult<PageInfo<Map<String, Object>>> apiResult = sysFeignClient.getPage(dto);
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
@@ -46,8 +50,8 @@ public class SysManagerServiceImpl implements SysManagerService {
 
     @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @Override
-    public ApiResult insert(SysManagerInsertDto dto) {
-        ApiResult apiResult = sysFeignClient.insert(dto);
+    public ApiResult<String> insert(SysManagerInsertDto dto) {
+        ApiResult<String> apiResult = sysFeignClient.insert(dto);
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
@@ -56,8 +60,8 @@ public class SysManagerServiceImpl implements SysManagerService {
 
     @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @Override
-    public ApiResult update(SysManagerUpdateDto dto) {
-        ApiResult apiResult = sysFeignClient.update(dto);
+    public ApiResult<String> update(SysManagerUpdateDto dto) {
+        ApiResult<String> apiResult = sysFeignClient.update(dto);
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
@@ -100,7 +104,7 @@ public class SysManagerServiceImpl implements SysManagerService {
         SysManager currentSysManager = (SysManager) SecurityUtils.getSubject().getPrincipal();
         Map<String, Object> currentManagerMsg = new HashMap<>();
         currentManagerMsg.put("managerName", currentSysManager.getManagerName());
-        ApiResult apiResult = sysFeignClient.getManagerRolePermission(currentSysManager.getId());
+        ApiResult<String> apiResult = sysFeignClient.getManagerRolePermission(currentSysManager.getId());
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }

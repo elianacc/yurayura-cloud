@@ -2,6 +2,9 @@ package pers.elianacc.yurayura.controller;
 
 
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.*;
 import pers.elianacc.yurayura.dto.IdDto;
 import pers.elianacc.yurayura.dto.SysDictInsertDto;
 import pers.elianacc.yurayura.dto.SysDictSelectDto;
@@ -9,9 +12,6 @@ import pers.elianacc.yurayura.dto.SysDictUpdateDto;
 import pers.elianacc.yurayura.entity.sys.dict.SysDict;
 import pers.elianacc.yurayura.service.ISysDictService;
 import pers.elianacc.yurayura.vo.ApiResult;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,10 +32,10 @@ public class SysDictController {
      * 查询系统数据字典（根据系统数据字典id）
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<pers.elianacc.yurayura.entity.sys.dict.SysDict>
      */
     @GetMapping("/getById")
-    public ApiResult getById(IdDto dto) {
+    public ApiResult<SysDict> getById(IdDto dto) {
         if (ObjectUtils.isEmpty(dto.getId())) {
             return ApiResult.warn("id不能为空");
         }
@@ -46,10 +46,10 @@ public class SysDictController {
      * 分页查询系统数据字典
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<PageInfo<SysDict>>
      */
     @PostMapping("/getPage")
-    public ApiResult getPage(@RequestBody SysDictSelectDto dto) {
+    public ApiResult<PageInfo<SysDict>> getPage(@RequestBody SysDictSelectDto dto) {
         if (ObjectUtils.isEmpty(dto.getPageNum())) {
             return ApiResult.warn("页码不能为空");
         } else if (ObjectUtils.isEmpty(dto.getPageSize())) {
@@ -66,10 +66,10 @@ public class SysDictController {
      * 添加系统数据字典
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PostMapping("/insert")
-    public ApiResult insert(@RequestBody SysDictInsertDto dto) {
+    public ApiResult<String> insert(@RequestBody SysDictInsertDto dto) {
         if (ObjectUtils.isEmpty(dto.getDictCode())) {
             return ApiResult.warn("字典编码不能为空");
         } else if (ObjectUtils.isEmpty(dto.getDictName())) {
@@ -96,10 +96,10 @@ public class SysDictController {
      * 修改系统数据字典
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PutMapping("/update")
-    public ApiResult update(@RequestBody SysDictUpdateDto dto) {
+    public ApiResult<String> update(@RequestBody SysDictUpdateDto dto) {
         if (ObjectUtils.isEmpty(dto.getId())) {
             return ApiResult.warn("id不能为空");
         } else if (ObjectUtils.isEmpty(dto.getDictName())) {
@@ -122,10 +122,10 @@ public class SysDictController {
      * 查询系统数据字典（根据字典编码）
      *
      * @param dictCode
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.util.List<pers.elianacc.yurayura.entity.sys.dict.SysDict>>
      */
     @GetMapping("/getByDictCode")
-    public ApiResult getByDictCode(@RequestParam String dictCode) {
+    public ApiResult<List<SysDict>> getByDictCode(@RequestParam String dictCode) {
         if (ObjectUtils.isEmpty(dictCode)) {
             return ApiResult.warn("字典编码不能为空");
         }
@@ -140,10 +140,10 @@ public class SysDictController {
      * 查询所有系统数据字典
      *
      * @param
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.util.List<pers.elianacc.yurayura.entity.sys.dict.SysDict>>
      */
     @GetMapping("/getAll")
-    public ApiResult getAll() {
+    public ApiResult<List<SysDict>> getAll() {
         List<SysDict> sysDictList = iSysDictService.getAll();
         if (sysDictList.isEmpty()) {
             return ApiResult.warn("系统数据字典在redis中不存在，请添加");

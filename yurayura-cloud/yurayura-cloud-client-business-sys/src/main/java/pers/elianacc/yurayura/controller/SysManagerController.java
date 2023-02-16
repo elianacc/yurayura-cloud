@@ -2,6 +2,7 @@ package pers.elianacc.yurayura.controller;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.baomidou.lock.annotation.Lock4j;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
@@ -45,14 +46,14 @@ public class SysManagerController {
      * 分页查询系统管理员
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<PageInfo<Map<String,Object>>>
      */
     @PostMapping("/getPage")
     @SentinelResource(value = "sys-manager-getPage",
             blockHandlerClass = SysManagerBlockHandler.class,
             blockHandler = "getPageBlockHandler")
     @ApiOperation("分页查询系统管理员")
-    public ApiResult getPage(@RequestBody SysManagerSelectDto dto) {
+    public ApiResult<PageInfo<Map<String, Object>>> getPage(@RequestBody SysManagerSelectDto dto) {
         return sysManagerService.getPage(dto);
     }
 
@@ -60,12 +61,12 @@ public class SysManagerController {
      * 添加系统管理员
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PostMapping("/insert")
     @Lock4j(keys = {"#dto.managerName"}, autoRelease = false)
     @ApiOperation("添加系统管理员")
-    public ApiResult insert(@RequestBody SysManagerInsertDto dto) {
+    public ApiResult<String> insert(@RequestBody SysManagerInsertDto dto) {
         return sysManagerService.insert(dto);
     }
 
@@ -73,12 +74,12 @@ public class SysManagerController {
      * 修改系统管理员
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PutMapping("/update")
     @Lock4j(keys = {"#dto.id"}, autoRelease = false)
     @ApiOperation("修改系统管理员")
-    public ApiResult update(@RequestBody SysManagerUpdateDto dto) {
+    public ApiResult<String> update(@RequestBody SysManagerUpdateDto dto) {
         return sysManagerService.update(dto);
     }
 
@@ -111,12 +112,12 @@ public class SysManagerController {
      *
      * @param dto
      * @param session
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PostMapping("/login")
     @Lock4j(keys = {"#dto.managerName"}, autoRelease = false)
     @ApiOperation("系统管理员登入")
-    public ApiResult login(@RequestBody SysManagerLoginDto dto, @ApiIgnore HttpSession session) {
+    public ApiResult<String> login(@RequestBody SysManagerLoginDto dto, @ApiIgnore HttpSession session) {
         if (ObjectUtils.isEmpty(dto.getManagerName())) {
             return ApiResult.warn("用户名不能为空");
         } else if (ObjectUtils.isEmpty(dto.getManagerPassword())) {
@@ -135,11 +136,11 @@ public class SysManagerController {
      * 系统管理员注销
      *
      * @param
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @GetMapping("/logout")
     @ApiOperation("系统管理员注销")
-    public ApiResult logout() {
+    public ApiResult<String> logout() {
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
         return ApiResult.success("管理员注销成功");
@@ -149,11 +150,11 @@ public class SysManagerController {
      * 判断系统管理员认证状态
      *
      * @param
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @GetMapping("/judgeAuthen")
     @ApiOperation("判断系统管理员认证状态")
-    public ApiResult judgeAuthen() {
+    public ApiResult<String> judgeAuthen() {
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
             return ApiResult.warn("管理员还未登入，请先登入！");
@@ -165,11 +166,11 @@ public class SysManagerController {
      * 获取当前登入管理员信息
      *
      * @param
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.util.Map<java.lang.String,java.lang.Object>>
      */
     @GetMapping("/getCurrentManagerMsg")
     @ApiOperation("获取当前登入管理员信息")
-    public ApiResult getCurrentManagerMsg() {
+    public ApiResult<Map<String, Object>> getCurrentManagerMsg() {
         Map<String, Object> currentManagerMsg = sysManagerService.getCurrentManagerMsg();
         return ApiResult.success("获取成功", currentManagerMsg);
     }

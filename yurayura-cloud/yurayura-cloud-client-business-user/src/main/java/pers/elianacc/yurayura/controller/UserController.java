@@ -2,6 +2,7 @@ package pers.elianacc.yurayura.controller;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.baomidou.lock.annotation.Lock4j;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import pers.elianacc.yurayura.controller.block.UserBlockHandler;
 import pers.elianacc.yurayura.dto.IdDto;
 import pers.elianacc.yurayura.dto.UserSelectDto;
 import pers.elianacc.yurayura.dto.UserUpdateStatusDto;
+import pers.elianacc.yurayura.entity.user.User;
 import pers.elianacc.yurayura.service.UserService;
 import pers.elianacc.yurayura.vo.ApiResult;
 
@@ -31,14 +33,14 @@ public class UserController {
      * 分页查询用户
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<PageInfo<User>>
      */
     @PostMapping("/getPage")
     @SentinelResource(value = "user-getPage",
             blockHandlerClass = UserBlockHandler.class,
             blockHandler = "getPageBlockHandler")
     @ApiOperation("分页查询用户")
-    public ApiResult getPage(@RequestBody UserSelectDto dto) {
+    public ApiResult<PageInfo<User>> getPage(@RequestBody UserSelectDto dto) {
         return userService.getPage(dto);
     }
 
@@ -46,12 +48,12 @@ public class UserController {
      * 修改状态（根据用户id）
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PutMapping("/updateStatus")
     @Lock4j(keys = {"#dto.id"}, autoRelease = false)
     @ApiOperation("修改状态（根据用户id）")
-    public ApiResult updateStatus(@RequestBody UserUpdateStatusDto dto) {
+    public ApiResult<String> updateStatus(@RequestBody UserUpdateStatusDto dto) {
         return userService.updateStatus(dto);
     }
 
@@ -59,11 +61,11 @@ public class UserController {
      * 重置为默认头像（根据用户id）
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PutMapping("/updateAvatarDefault")
     @ApiOperation("重置为默认头像（根据用户id）")
-    public ApiResult updateAvatarDefault(@RequestBody IdDto dto) {
+    public ApiResult<String> updateAvatarDefault(@RequestBody IdDto dto) {
         return userService.updateAvatarDefault(dto);
     }
 

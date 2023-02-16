@@ -1,5 +1,6 @@
 package pers.elianacc.yurayura.feign;
 
+import com.github.pagehelper.PageInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import pers.elianacc.yurayura.dto.IdDto;
 import pers.elianacc.yurayura.dto.UserSelectDto;
 import pers.elianacc.yurayura.dto.UserUpdateStatusDto;
+import pers.elianacc.yurayura.entity.user.User;
 import pers.elianacc.yurayura.vo.ApiResult;
 
 /**
@@ -19,12 +21,12 @@ import pers.elianacc.yurayura.vo.ApiResult;
 public interface UserFeignClient {
 
     @PostMapping("/user/getPage")
-    public ApiResult getPage(@RequestBody UserSelectDto dto);
+    public ApiResult<PageInfo<User>> getPage(@RequestBody UserSelectDto dto);
 
     @PutMapping("/user/updateStatus")
-    public ApiResult updateStatus(@RequestBody UserUpdateStatusDto dto);
+    public ApiResult<String> updateStatus(@RequestBody UserUpdateStatusDto dto);
 
     @PutMapping("/user/updateAvatarDefault")
-    public ApiResult updateAvatarDefault(@RequestBody IdDto dto);
+    public ApiResult<String> updateAvatarDefault(@RequestBody IdDto dto);
 
 }

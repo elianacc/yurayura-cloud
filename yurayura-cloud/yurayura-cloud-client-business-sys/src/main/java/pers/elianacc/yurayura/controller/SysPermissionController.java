@@ -2,6 +2,7 @@ package pers.elianacc.yurayura.controller;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.baomidou.lock.annotation.Lock4j;
+import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,12 @@ import pers.elianacc.yurayura.controller.block.SysPermissionBlockHandler;
 import pers.elianacc.yurayura.dto.SysPermissionInsertDto;
 import pers.elianacc.yurayura.dto.SysPermissionSelectDto;
 import pers.elianacc.yurayura.dto.SysPermissionUpdateDto;
+import pers.elianacc.yurayura.entity.sys.permission.SysPermission;
 import pers.elianacc.yurayura.service.SysPermissionService;
 import pers.elianacc.yurayura.vo.ApiResult;
+import pers.elianacc.yurayura.vo.SysPermissionAuthorTreeSelectVo;
+
+import java.util.List;
 
 /**
  * 系统权限 controller
@@ -31,14 +36,14 @@ public class SysPermissionController {
      * 分页查询系统权限
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<PageInfo<SysPermission>>
      */
     @PostMapping("/getPage")
     @SentinelResource(value = "sys-permission-getPage",
             blockHandlerClass = SysPermissionBlockHandler.class,
             blockHandler = "getPageBlockHandler")
     @ApiOperation("分页查询系统权限")
-    public ApiResult getPage(@RequestBody SysPermissionSelectDto dto) {
+    public ApiResult<PageInfo<SysPermission>> getPage(@RequestBody SysPermissionSelectDto dto) {
         return sysPermissionService.getPage(dto);
     }
 
@@ -46,12 +51,12 @@ public class SysPermissionController {
      * 添加系统权限
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PostMapping("/insert")
     @Lock4j(keys = {"#dto.permissionType", "#dto.permissionBelongSubmenuName"}, autoRelease = false)
     @ApiOperation("添加系统权限")
-    public ApiResult insert(@RequestBody SysPermissionInsertDto dto) {
+    public ApiResult<String> insert(@RequestBody SysPermissionInsertDto dto) {
         return sysPermissionService.insert(dto);
     }
 
@@ -59,12 +64,12 @@ public class SysPermissionController {
      * 修改系统权限
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PutMapping("/update")
     @Lock4j(keys = {"#dto.id"}, autoRelease = false)
     @ApiOperation("修改系统权限")
-    public ApiResult update(@RequestBody SysPermissionUpdateDto dto) {
+    public ApiResult<String> update(@RequestBody SysPermissionUpdateDto dto) {
         return sysPermissionService.update(dto);
     }
 
@@ -72,11 +77,11 @@ public class SysPermissionController {
      * 查询权限授权树
      *
      * @param
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.util.List<pers.elianacc.yurayura.vo.SysPermissionAuthorTreeSelectVo>>
      */
     @GetMapping("/getPermissionAuthorTree")
     @ApiOperation("查询权限授权树")
-    public ApiResult getPermissionAuthorTree() {
+    public ApiResult<List<SysPermissionAuthorTreeSelectVo>> getPermissionAuthorTree() {
         return sysPermissionService.getPermissionAuthorTree();
     }
 

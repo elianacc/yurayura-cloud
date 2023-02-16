@@ -9,6 +9,7 @@ import pers.elianacc.yurayura.dto.IdDto;
 import pers.elianacc.yurayura.dto.SysManagerInsertDto;
 import pers.elianacc.yurayura.dto.SysManagerSelectDto;
 import pers.elianacc.yurayura.dto.SysManagerUpdateDto;
+import pers.elianacc.yurayura.entity.sys.manager.SysManager;
 import pers.elianacc.yurayura.service.ISysManagerService;
 import pers.elianacc.yurayura.vo.ApiResult;
 
@@ -31,10 +32,10 @@ public class SysManagerController {
      * 查询系统管理员（根据系统管理员id）
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<pers.elianacc.yurayura.entity.sys.manager.SysManager>
      */
     @GetMapping("/getById")
-    public ApiResult getById(IdDto dto) {
+    public ApiResult<SysManager> getById(IdDto dto) {
         if (ObjectUtils.isEmpty(dto.getId())) {
             return ApiResult.warn("id不能为空");
         }
@@ -45,10 +46,10 @@ public class SysManagerController {
      * 分页查询系统管理员
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<PageInfo<Map<String,Object>>>
      */
     @PostMapping("/getPage")
-    public ApiResult getPage(@RequestBody SysManagerSelectDto dto) {
+    public ApiResult<PageInfo<Map<String, Object>>> getPage(@RequestBody SysManagerSelectDto dto) {
         if (ObjectUtils.isEmpty(dto.getPageNum())) {
             return ApiResult.warn("页码不能为空");
         } else if (ObjectUtils.isEmpty(dto.getPageSize())) {
@@ -65,10 +66,10 @@ public class SysManagerController {
      * 添加系统管理员
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PostMapping("/insert")
-    public ApiResult insert(@RequestBody SysManagerInsertDto dto) {
+    public ApiResult<String> insert(@RequestBody SysManagerInsertDto dto) {
         if (ObjectUtils.isEmpty(dto.getManagerName())) {
             return ApiResult.warn("管理员名不能为空");
         } else if (ObjectUtils.isEmpty(dto.getManagerPassword())) {
@@ -89,10 +90,10 @@ public class SysManagerController {
      * 修改系统管理员
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PutMapping("/update")
-    public ApiResult update(@RequestBody SysManagerUpdateDto dto) {
+    public ApiResult<String> update(@RequestBody SysManagerUpdateDto dto) {
         if (ObjectUtils.isEmpty(dto.getId())) {
             return ApiResult.warn("id不能为空");
         } else if (ObjectUtils.isEmpty(dto.getManagerStatus())) {
@@ -109,10 +110,10 @@ public class SysManagerController {
      * 查询管理员拥有角色的所有权限（根据管理员id）
      *
      * @param managerId
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @RequestMapping("/getManagerRolePermission")
-    public ApiResult getManagerRolePermission(@RequestParam Integer managerId) {
+    public ApiResult<String> getManagerRolePermission(@RequestParam Integer managerId) {
         if (ObjectUtils.isEmpty(managerId)) {
             return ApiResult.warn("id不能为空");
         }
@@ -123,10 +124,10 @@ public class SysManagerController {
      * 查询启用的管理员（根据管理员名）
      *
      * @param managerName
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<pers.elianacc.yurayura.entity.sys.manager.SysManager>
      */
     @RequestMapping("/getEnableManagerByName")
-    public ApiResult getEnableManagerByName(@RequestParam String managerName) {
+    public ApiResult<SysManager> getEnableManagerByName(@RequestParam String managerName) {
         if (ObjectUtils.isEmpty(managerName)) {
             return ApiResult.warn("管理员名不能为空");
         }

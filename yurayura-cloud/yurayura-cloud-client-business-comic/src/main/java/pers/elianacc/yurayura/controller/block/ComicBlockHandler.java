@@ -1,7 +1,9 @@
 package pers.elianacc.yurayura.controller.block;
 
 import com.alibaba.csp.sentinel.slots.block.BlockException;
+import com.github.pagehelper.PageInfo;
 import pers.elianacc.yurayura.dto.ComicSelectDto;
+import pers.elianacc.yurayura.entity.comic.Comic;
 import pers.elianacc.yurayura.vo.ApiResult;
 
 /**
@@ -12,7 +14,7 @@ import pers.elianacc.yurayura.vo.ApiResult;
  */
 public class ComicBlockHandler {
 
-    public static ApiResult getPageBlockHandler(ComicSelectDto dto, BlockException exception) {
+    public static ApiResult<PageInfo<Comic>> getPageBlockHandler(ComicSelectDto dto, BlockException exception) {
         return ApiResult.warn("操作过于频繁！");
     }
 

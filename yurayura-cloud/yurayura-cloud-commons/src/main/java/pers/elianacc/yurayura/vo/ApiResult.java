@@ -1,17 +1,26 @@
 package pers.elianacc.yurayura.vo;
 
-import lombok.Getter;
-import lombok.Setter;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
 
 /**
- * 通用返回信息处理 vo
+ * 接口返回 vo
  *
  * @author ELiaNaCc
- * @since 2019-1-1
+ * @since 2023-02-16
  */
-@Getter
-@Setter
-public class ApiResult {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ApiModel(value = "接口返回Vo", description = "接口返回对象")
+public class ApiResult<T> implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private final static int SUCCESS_CODE = 200; // 服务器处理成功状态码
     private final static int FAIL_CODE = 500; // 服务器错误状态码
@@ -23,72 +32,93 @@ public class ApiResult {
     private final static String NOT_AUTHENTICATION_MSG = "登入认证过期，请重新登入"; // 未认证提示信息
     private final static String NOT_AUTHORIZATION_MSG = "还未授权此操作"; // 未授权提示信息
 
-    // 状态码
+    /**
+     * 状态码
+     */
+    @ApiModelProperty("状态码")
     private Integer code;
-    // 用户要返回给浏览器的数据
-    private Object data;
-    // 提示信息
+    /**
+     * 返回体
+     */
+    @ApiModelProperty("返回体")
+    private T data;
+    /**
+     * 返回信息
+     */
+    @ApiModelProperty("返回信息")
     private String msg;
+    /**
+     * 时间戳
+     */
+    @ApiModelProperty("时间戳")
+    private long timestamp = System.currentTimeMillis();
 
-    public static ApiResult success() {
-        ApiResult result = new ApiResult();
-        result.setCode(SUCCESS_CODE);
-        return result;
+    public static <T> ApiResult<T> success() {
+        ApiResult<T> r = new ApiResult();
+        r.setCode(SUCCESS_CODE);
+        return r;
     }
 
-    public static ApiResult success(String msg) {
-        ApiResult result = new ApiResult();
-        result.setCode(SUCCESS_CODE);
-        result.setMsg(msg);
-        return result;
+    public static <T> ApiResult<T> success(String msg) {
+        ApiResult<T> r = new ApiResult();
+        r.setCode(SUCCESS_CODE);
+        r.setMsg(msg);
+        return r;
     }
 
-    public static ApiResult success(String msg, Object data) {
-        ApiResult result = new ApiResult();
-        result.setCode(SUCCESS_CODE);
-        result.setData(data);
-        result.setMsg(msg);
-        return result;
+    public static <T> ApiResult<T> success(T data) {
+        ApiResult<T> r = new ApiResult();
+        r.setCode(SUCCESS_CODE);
+        r.setData(data);
+        return r;
     }
 
-    public static ApiResult warn() {
-        ApiResult result = new ApiResult();
-        result.setCode(WARN_CODE);
-        return result;
+    public static <T> ApiResult<T> success(String msg, T data) {
+        ApiResult<T> r = new ApiResult();
+        r.setCode(SUCCESS_CODE);
+        r.setMsg(msg);
+        r.setData(data);
+        return r;
     }
 
-    public static ApiResult warn(String msg) {
-        ApiResult result = new ApiResult();
-        result.setCode(WARN_CODE);
-        result.setMsg(msg);
-        return result;
+    public static <T> ApiResult<T> warn() {
+        ApiResult<T> r = new ApiResult();
+        r.setCode(WARN_CODE);
+        return r;
     }
 
-    public static ApiResult fail() {
-        ApiResult result = new ApiResult();
-        result.setCode(FAIL_CODE);
-        return result;
+    public static <T> ApiResult<T> warn(String msg) {
+        ApiResult<T> r = new ApiResult();
+        r.setCode(WARN_CODE);
+        r.setMsg(msg);
+        return r;
     }
 
-    public static ApiResult fail(String msg) {
-        ApiResult result = new ApiResult();
-        result.setCode(FAIL_CODE);
-        result.setMsg(msg);
-        return result;
+    public static <T> ApiResult<T> fail() {
+        ApiResult<T> r = new ApiResult();
+        r.setCode(FAIL_CODE);
+        return r;
     }
 
-    public static ApiResult notAuthentication() {
-        ApiResult result = new ApiResult();
-        result.setCode(NOT_AUTHENTICATION);
-        result.setMsg(NOT_AUTHENTICATION_MSG);
-        return result;
+    public static <T> ApiResult<T> fail(String msg) {
+        ApiResult<T> r = new ApiResult();
+        r.setCode(FAIL_CODE);
+        r.setMsg(msg);
+        return r;
     }
 
-    public static ApiResult notAuthorization() {
-        ApiResult result = new ApiResult();
-        result.setCode(NOT_AUTHORIZATION);
-        result.setMsg(NOT_AUTHORIZATION_MSG);
-        return result;
+    public static <T> ApiResult<T> notAuthentication() {
+        ApiResult<T> r = new ApiResult();
+        r.setCode(NOT_AUTHENTICATION);
+        r.setMsg(NOT_AUTHENTICATION_MSG);
+        return r;
+    }
+
+    public static <T> ApiResult<T> notAuthorization() {
+        ApiResult<T> r = new ApiResult();
+        r.setCode(NOT_AUTHORIZATION);
+        r.setMsg(NOT_AUTHORIZATION_MSG);
+        return r;
     }
 
 }

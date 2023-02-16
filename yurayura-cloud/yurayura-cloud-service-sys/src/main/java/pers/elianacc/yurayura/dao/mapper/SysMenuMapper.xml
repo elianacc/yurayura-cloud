@@ -13,7 +13,7 @@
         <result column="menu_status" property="menuStatus"/>
     </resultMap>
 
-    <resultMap id="getTreeListResultMap" type="pers.elianacc.yurayura.bo.SysMenuTreeSelectBo">
+    <resultMap id="getTreeListResultMap" type="pers.elianacc.yurayura.vo.SysMenuTreeSelectVo">
         <id column="id" property="id"/>
         <result column="menu_title" property="menuTitle"/>
         <result column="menu_name" property="menuName"/>

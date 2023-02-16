@@ -46,7 +46,7 @@ public class UserRealm extends AuthorizingRealm {
 
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
-        info.addStringPermission(sysFeignClient.getManagerRolePermission(currentSysManager.getId()).getData().toString());
+        info.addStringPermission(sysFeignClient.getManagerRolePermission(currentSysManager.getId()).getData());
 
         return info;
     }
@@ -62,7 +62,7 @@ public class UserRealm extends AuthorizingRealm {
         UsernamePasswordToken userToken = (UsernamePasswordToken) authenticationToken;
 
         String username = userToken.getUsername();
-        ApiResult apiResult = sysFeignClient.getEnableManagerByName(username);
+        ApiResult<SysManager> apiResult = sysFeignClient.getEnableManagerByName(username);
         SysManager sysManager = JSON.toJavaObject(JSON.parseObject(JSON.toJSONString(apiResult.getData())), SysManager.class);
 
         // 判断用户是否存在

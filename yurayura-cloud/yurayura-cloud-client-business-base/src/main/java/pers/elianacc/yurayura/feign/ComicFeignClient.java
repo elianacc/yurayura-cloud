@@ -1,12 +1,17 @@
 package pers.elianacc.yurayura.feign;
 
+import com.github.pagehelper.PageInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestPart;
 import pers.elianacc.yurayura.dto.ComicInsertDto;
 import pers.elianacc.yurayura.dto.ComicSelectDto;
 import pers.elianacc.yurayura.dto.ComicUpdateDto;
 import pers.elianacc.yurayura.dto.IdsDto;
+import pers.elianacc.yurayura.entity.comic.Comic;
 import pers.elianacc.yurayura.vo.ApiResult;
 
 /**
@@ -19,15 +24,15 @@ import pers.elianacc.yurayura.vo.ApiResult;
 public interface ComicFeignClient {
 
     @PostMapping("/comic/getPage")
-    public ApiResult getPage(@RequestBody ComicSelectDto dto);
+    public ApiResult<PageInfo<Comic>> getPage(@RequestBody ComicSelectDto dto);
 
     @PostMapping(value = "/comic/insert", headers = "content-type=" + MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ApiResult insert(@RequestPart ComicInsertDto dto);
+    public ApiResult<String> insert(@RequestPart ComicInsertDto dto);
 
     @PutMapping("/comic/deleteBatchByIds")
-    public ApiResult deleteBatchByIds(@RequestBody IdsDto dto);
+    public ApiResult<String> deleteBatchByIds(@RequestBody IdsDto dto);
 
     @PutMapping(value = "/comic/update", headers = "content-type=" + MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ApiResult update(@RequestPart ComicUpdateDto dto);
+    public ApiResult<String> update(@RequestPart ComicUpdateDto dto);
 
 }

@@ -73,6 +73,7 @@ public class CodeGenerator {
                 .injectionConfig(builder -> {
                     Map<String, Object> parmMap = new HashMap<>();
                     parmMap.put("sysModulePath", generatorTable.get().contains("_sys_") ? "/sys/" : "/");
+                    parmMap.put("entityPackagePath", generatorTable.get().contains("_sys_") ? ".sys." : ".");
                     parmMap.put("packageParentPath", "pers.elianacc.yurayura");
                     builder.customMap(parmMap);
                 })

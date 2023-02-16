@@ -1,8 +1,10 @@
 package pers.elianacc.yurayura.service;
 
+import com.github.pagehelper.PageInfo;
 import pers.elianacc.yurayura.dto.IdDto;
 import pers.elianacc.yurayura.dto.UserSelectDto;
 import pers.elianacc.yurayura.dto.UserUpdateStatusDto;
+import pers.elianacc.yurayura.entity.user.User;
 import pers.elianacc.yurayura.vo.ApiResult;
 
 /**
@@ -17,24 +19,24 @@ public interface UserService {
      * 分页查询用户
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<PageInfo<User>>
      */
-    public ApiResult getPage(UserSelectDto dto);
+    public ApiResult<PageInfo<User>> getPage(UserSelectDto dto);
 
     /**
      * 修改状态（根据用户id）
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
-    public ApiResult updateStatus(UserUpdateStatusDto dto);
+    public ApiResult<String> updateStatus(UserUpdateStatusDto dto);
 
     /**
      * 重置为默认头像（根据用户id）
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
-    public ApiResult updateAvatarDefault(IdDto dto);
+    public ApiResult<String> updateAvatarDefault(IdDto dto);
 
 }

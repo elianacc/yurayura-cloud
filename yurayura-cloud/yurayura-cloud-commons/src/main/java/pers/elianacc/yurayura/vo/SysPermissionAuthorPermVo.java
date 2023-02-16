@@ -1,4 +1,4 @@
-package pers.elianacc.yurayura.bo;
+package pers.elianacc.yurayura.vo;
 
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @since 2021-08-14
  */
 @Data
-public class SysPermissionAuthorPermBo implements Serializable {
+public class SysPermissionAuthorPermVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

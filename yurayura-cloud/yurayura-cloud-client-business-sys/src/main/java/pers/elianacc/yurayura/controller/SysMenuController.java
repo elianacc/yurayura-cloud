@@ -12,6 +12,9 @@ import pers.elianacc.yurayura.dto.SysMenuInsertDto;
 import pers.elianacc.yurayura.dto.SysMenuUpdateDto;
 import pers.elianacc.yurayura.service.SysMenuService;
 import pers.elianacc.yurayura.vo.ApiResult;
+import pers.elianacc.yurayura.vo.SysMenuTreeSelectVo;
+
+import java.util.List;
 
 /**
  * 系统菜单 controller
@@ -31,11 +34,11 @@ public class SysMenuController {
      * 查询系统侧边菜单
      *
      * @param
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<List<SysMenuTreeSelectVo>>
      */
     @GetMapping("/getSysSideMenu")
     @ApiOperation("查询系统侧边菜单")
-    public ApiResult getSysSideMenu() {
+    public ApiResult<List<SysMenuTreeSelectVo>> getSysSideMenu() {
         return sysMenuService.getTreeListForCurrentManager();
     }
 
@@ -43,14 +46,14 @@ public class SysMenuController {
      * 查询系统菜单树形列表
      *
      * @param
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<List<SysMenuTreeSelectVo>>
      */
     @GetMapping("/getTreeList")
     @SentinelResource(value = "sys-menu-getTree",
             blockHandlerClass = SysMenuBlockHandler.class,
             blockHandler = "getTreeListBlockHandler")
     @ApiOperation("查询系统菜单树形列表")
-    public ApiResult getTreeList() {
+    public ApiResult<List<SysMenuTreeSelectVo>> getTreeList() {
         return sysMenuService.getTreeList();
     }
 
@@ -58,12 +61,12 @@ public class SysMenuController {
      * 添加系统菜单
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PostMapping("/insert")
     @Lock4j(keys = {"#dto.menuName"}, autoRelease = false)
     @ApiOperation("添加系统菜单")
-    public ApiResult insert(@RequestBody SysMenuInsertDto dto) {
+    public ApiResult<String> insert(@RequestBody SysMenuInsertDto dto) {
         return sysMenuService.insert(dto);
     }
 
@@ -71,12 +74,12 @@ public class SysMenuController {
      * 修改系统菜单
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PutMapping("/update")
     @Lock4j(keys = {"#dto.id"}, autoRelease = false)
     @ApiOperation("修改系统菜单")
-    public ApiResult update(@RequestBody SysMenuUpdateDto dto) {
+    public ApiResult<String> update(@RequestBody SysMenuUpdateDto dto) {
         return sysMenuService.update(dto);
     }
 
@@ -84,11 +87,11 @@ public class SysMenuController {
      * 删除系统菜单（根据系统菜单id）
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PutMapping("/deleteById")
     @ApiOperation("删除系统菜单（根据系统菜单id）")
-    public ApiResult deleteById(@RequestBody IdDto dto) {
+    public ApiResult<String> deleteById(@RequestBody IdDto dto) {
         return sysMenuService.deleteById(dto);
     }
 

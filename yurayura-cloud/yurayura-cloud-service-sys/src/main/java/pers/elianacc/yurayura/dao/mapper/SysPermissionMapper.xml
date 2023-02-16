@@ -13,14 +13,14 @@
         <result column="permission_seq" property="permissionSeq"/>
     </resultMap>
 
-    <resultMap id="getAuthorTreeListResultMap" type="pers.elianacc.yurayura.bo.SysPermissionAuthorTreeSelectBo">
+    <resultMap id="getAuthorTreeListResultMap" type="pers.elianacc.yurayura.vo.SysPermissionAuthorTreeSelectVo">
         <id column="id" property="id"/>
         <result column="submenu_title" property="title"/>
-        <collection property="permissionList" ofType="pers.elianacc.yurayura.bo.SysPermissionAuthorPermBo"
+        <collection property="permissionList" ofType="pers.elianacc.yurayura.vo.SysPermissionAuthorPermVo"
                     resultMap="permissionResultMap"/>
     </resultMap>
 
-    <resultMap id="permissionResultMap" type="pers.elianacc.yurayura.bo.SysPermissionAuthorPermBo">
+    <resultMap id="permissionResultMap" type="pers.elianacc.yurayura.vo.SysPermissionAuthorPermVo">
         <id column="permission_id" property="id"/>
         <result column="permission_name" property="title"/>
     </resultMap>

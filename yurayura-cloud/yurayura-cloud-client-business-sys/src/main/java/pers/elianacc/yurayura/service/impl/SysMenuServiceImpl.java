@@ -12,6 +12,9 @@ import pers.elianacc.yurayura.exception.BusinessException;
 import pers.elianacc.yurayura.feign.SysFeignClient;
 import pers.elianacc.yurayura.service.SysMenuService;
 import pers.elianacc.yurayura.vo.ApiResult;
+import pers.elianacc.yurayura.vo.SysMenuTreeSelectVo;
+
+import java.util.List;
 
 /**
  * 系统菜单 service impl
@@ -26,8 +29,8 @@ public class SysMenuServiceImpl implements SysMenuService {
     private SysFeignClient sysFeignClient;
 
     @Override
-    public ApiResult getTreeList() {
-        ApiResult apiResult = sysFeignClient.getMenuTreeList();
+    public ApiResult<List<SysMenuTreeSelectVo>> getTreeList() {
+        ApiResult<List<SysMenuTreeSelectVo>> apiResult = sysFeignClient.getMenuTreeList();
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
@@ -35,9 +38,9 @@ public class SysMenuServiceImpl implements SysMenuService {
     }
 
     @Override
-    public ApiResult getTreeListForCurrentManager() {
+    public ApiResult<List<SysMenuTreeSelectVo>> getTreeListForCurrentManager() {
         SysManager currentSysManager = (SysManager) SecurityUtils.getSubject().getPrincipal();
-        ApiResult apiResult = sysFeignClient.getMenuTreeListByManagerId(currentSysManager.getId());
+        ApiResult<List<SysMenuTreeSelectVo>> apiResult = sysFeignClient.getMenuTreeListByManagerId(currentSysManager.getId());
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
@@ -46,8 +49,8 @@ public class SysMenuServiceImpl implements SysMenuService {
 
     @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @Override
-    public ApiResult insert(SysMenuInsertDto dto) {
-        ApiResult apiResult = sysFeignClient.insert(dto);
+    public ApiResult<String> insert(SysMenuInsertDto dto) {
+        ApiResult<String> apiResult = sysFeignClient.insert(dto);
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
@@ -56,8 +59,8 @@ public class SysMenuServiceImpl implements SysMenuService {
 
     @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @Override
-    public ApiResult update(SysMenuUpdateDto dto) {
-        ApiResult apiResult = sysFeignClient.update(dto);
+    public ApiResult<String> update(SysMenuUpdateDto dto) {
+        ApiResult<String> apiResult = sysFeignClient.update(dto);
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
@@ -66,8 +69,8 @@ public class SysMenuServiceImpl implements SysMenuService {
 
     @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @Override
-    public ApiResult deleteById(IdDto dto) {
-        ApiResult apiResult = sysFeignClient.deleteMenuById(dto);
+    public ApiResult<String> deleteById(IdDto dto) {
+        ApiResult<String> apiResult = sysFeignClient.deleteMenuById(dto);
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }

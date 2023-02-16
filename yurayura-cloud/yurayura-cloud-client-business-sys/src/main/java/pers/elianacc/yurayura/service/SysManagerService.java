@@ -1,5 +1,6 @@
 package pers.elianacc.yurayura.service;
 
+import com.github.pagehelper.PageInfo;
 import pers.elianacc.yurayura.dto.SysManagerInsertDto;
 import pers.elianacc.yurayura.dto.SysManagerLoginDto;
 import pers.elianacc.yurayura.dto.SysManagerSelectDto;
@@ -21,25 +22,25 @@ public interface SysManagerService {
      * 分页查询系统管理员
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<PageInfo<Map<String,Object>>>
      */
-    public ApiResult getPage(SysManagerSelectDto dto);
+    public ApiResult<PageInfo<Map<String, Object>>> getPage(SysManagerSelectDto dto);
 
     /**
      * 添加系统管理员
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
-    public ApiResult insert(SysManagerInsertDto dto);
+    public ApiResult<String> insert(SysManagerInsertDto dto);
 
     /**
      * 修改系统管理员
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
-    public ApiResult update(SysManagerUpdateDto dto);
+    public ApiResult<String> update(SysManagerUpdateDto dto);
 
     /**
      * 系统管理员登入

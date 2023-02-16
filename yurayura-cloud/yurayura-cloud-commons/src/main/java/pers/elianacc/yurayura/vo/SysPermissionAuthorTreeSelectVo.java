@@ -1,4 +1,4 @@
-package pers.elianacc.yurayura.bo;
+package pers.elianacc.yurayura.vo;
 
 import lombok.Data;
 
@@ -12,7 +12,7 @@ import java.util.List;
  * @since 2021-08-14
  */
 @Data
-public class SysPermissionAuthorTreeSelectBo implements Serializable {
+public class SysPermissionAuthorTreeSelectVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,5 +29,5 @@ public class SysPermissionAuthorTreeSelectBo implements Serializable {
     /**
      * 权限列表
      */
-    private List<SysPermissionAuthorPermBo> permissionList;
+    private List<SysPermissionAuthorPermVo> permissionList;
 }

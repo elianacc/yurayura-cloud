@@ -1,13 +1,17 @@
 package pers.elianacc.yurayura.controller;
 
-import pers.elianacc.yurayura.dto.IdDto;
-import pers.elianacc.yurayura.dto.SysMenuInsertDto;
-import pers.elianacc.yurayura.dto.SysMenuUpdateDto;
-import pers.elianacc.yurayura.service.ISysMenuService;
-import pers.elianacc.yurayura.vo.ApiResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
+import pers.elianacc.yurayura.dto.IdDto;
+import pers.elianacc.yurayura.dto.SysMenuInsertDto;
+import pers.elianacc.yurayura.dto.SysMenuUpdateDto;
+import pers.elianacc.yurayura.entity.sys.menu.SysMenu;
+import pers.elianacc.yurayura.service.ISysMenuService;
+import pers.elianacc.yurayura.vo.ApiResult;
+import pers.elianacc.yurayura.vo.SysMenuTreeSelectVo;
+
+import java.util.List;
 
 /**
  * 系统菜单 controller
@@ -26,10 +30,10 @@ public class SysMenuController {
      * 查询系统菜单（根据系统菜单id）
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<SysMenu>
      */
     @GetMapping("/getById")
-    public ApiResult getById(IdDto dto) {
+    public ApiResult<SysMenu> getById(IdDto dto) {
         if (ObjectUtils.isEmpty(dto.getId())) {
             return ApiResult.warn("id不能为空");
         }
@@ -40,10 +44,10 @@ public class SysMenuController {
      * 查询系统菜单树形列表
      *
      * @param
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<List<SysMenuTreeSelectVo>>
      */
     @GetMapping("/getTreeList")
-    public ApiResult getTreeList() {
+    public ApiResult<List<SysMenuTreeSelectVo>> getTreeList() {
         return ApiResult.success("树形列表查询成功", iSysMenuService.getTreeList());
     }
 
@@ -51,10 +55,10 @@ public class SysMenuController {
      * 查询系统菜单树形列表（根据管理员id）
      *
      * @param managerId
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<List<SysMenuTreeSelectVo>>
      */
     @GetMapping("/getTreeListByManagerId")
-    public ApiResult getTreeListByManagerId(@RequestParam Integer managerId) {
+    public ApiResult<List<SysMenuTreeSelectVo>> getTreeListByManagerId(@RequestParam Integer managerId) {
         if (ObjectUtils.isEmpty(managerId)) {
             return ApiResult.warn("id不能为空");
         }
@@ -65,10 +69,10 @@ public class SysMenuController {
      * 添加系统菜单
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PostMapping("/insert")
-    public ApiResult insert(@RequestBody SysMenuInsertDto dto) {
+    public ApiResult<String> insert(@RequestBody SysMenuInsertDto dto) {
         if (ObjectUtils.isEmpty(dto.getMenuTitle())) {
             return ApiResult.warn("标题不能为空");
         } else if (ObjectUtils.isEmpty(dto.getMenuName())) {
@@ -95,10 +99,10 @@ public class SysMenuController {
      * 修改系统菜单
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PutMapping("/update")
-    public ApiResult update(@RequestBody SysMenuUpdateDto dto) {
+    public ApiResult<String> update(@RequestBody SysMenuUpdateDto dto) {
         if (ObjectUtils.isEmpty(dto.getId())) {
             return ApiResult.warn("id不能为空");
         } else if (ObjectUtils.isEmpty(dto.getMenuTitle())) {
@@ -123,10 +127,10 @@ public class SysMenuController {
      * 删除系统菜单（根据系统菜单id）
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PutMapping("/deleteById")
-    public ApiResult deleteById(@RequestBody IdDto dto) {
+    public ApiResult<String> deleteById(@RequestBody IdDto dto) {
         if (ObjectUtils.isEmpty(dto.getId())) {
             return ApiResult.warn("id不能为空");
         }

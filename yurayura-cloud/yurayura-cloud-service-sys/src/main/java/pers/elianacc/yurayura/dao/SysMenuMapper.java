@@ -1,6 +1,6 @@
 package pers.elianacc.yurayura.dao;
 
-import pers.elianacc.yurayura.bo.SysMenuTreeSelectBo;
+import pers.elianacc.yurayura.vo.SysMenuTreeSelectVo;
 import pers.elianacc.yurayura.entity.sys.menu.SysMenu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
@@ -19,15 +19,15 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * @param
      * @return java.util.List<pers.elianacc.yurayura.bo.MenuBo>
      */
-    List<SysMenuTreeSelectBo> getTreeList();
+    List<SysMenuTreeSelectVo> getTreeList();
 
     /**
      * 查询系统菜单树形列表（根据管理员id）
      *
      * @param managerId
-     * @return java.util.List<pers.elianacc.yurayura.bo.SysMenuTreeSelectBo>
+     * @return java.util.List<pers.elianacc.yurayura.vo.SysMenuTreeSelectBo>
      */
-    List<SysMenuTreeSelectBo> getTreeListByManagerId(Integer managerId);
+    List<SysMenuTreeSelectVo> getTreeListByManagerId(Integer managerId);
 
     /**
      * 查询系统菜单，子菜单标识

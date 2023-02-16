@@ -4,6 +4,9 @@ import pers.elianacc.yurayura.dto.IdDto;
 import pers.elianacc.yurayura.dto.SysMenuInsertDto;
 import pers.elianacc.yurayura.dto.SysMenuUpdateDto;
 import pers.elianacc.yurayura.vo.ApiResult;
+import pers.elianacc.yurayura.vo.SysMenuTreeSelectVo;
+
+import java.util.List;
 
 /**
  * 系统菜单 service
@@ -17,40 +20,40 @@ public interface SysMenuService {
      * 查询系统菜单树形列表
      *
      * @param
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<List<SysMenuTreeSelectVo>>
      */
-    public ApiResult getTreeList();
+    public ApiResult<List<SysMenuTreeSelectVo>> getTreeList();
 
     /**
      * 查询系统菜单树形列表（当前管理员有权限的）
      *
      * @param
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<List<SysMenuTreeSelectVo>>
      */
-    public ApiResult getTreeListForCurrentManager();
+    public ApiResult<List<SysMenuTreeSelectVo>> getTreeListForCurrentManager();
 
     /**
      * 添加系统菜单
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
-    public ApiResult insert(SysMenuInsertDto dto);
+    public ApiResult<String> insert(SysMenuInsertDto dto);
 
     /**
      * 修改系统菜单
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
-    public ApiResult update(SysMenuUpdateDto dto);
+    public ApiResult<String> update(SysMenuUpdateDto dto);
 
     /**
      * 删除系统菜单（根据系统菜单id）
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
-    public ApiResult deleteById(IdDto dto);
+    public ApiResult<String> deleteById(IdDto dto);
 
 }

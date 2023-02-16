@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pers.elianacc.yurayura.bo.SysMenuTreeSelectBo;
+import pers.elianacc.yurayura.vo.SysMenuTreeSelectVo;
 import pers.elianacc.yurayura.dao.SysMenuMapper;
 import pers.elianacc.yurayura.dao.SysMenuSubMapper;
 import pers.elianacc.yurayura.dao.SysPermissionMapper;
@@ -40,12 +40,12 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     private SysRoleMapper sysRoleMapper;
 
     @Override
-    public List<SysMenuTreeSelectBo> getTreeList() {
+    public List<SysMenuTreeSelectVo> getTreeList() {
         return sysMenuMapper.getTreeList();
     }
 
     @Override
-    public List<SysMenuTreeSelectBo> getTreeListByManagerId(Integer managerId) {
+    public List<SysMenuTreeSelectVo> getTreeListByManagerId(Integer managerId) {
         return sysMenuMapper.getTreeListByManagerId(managerId);
     }
 

@@ -29,10 +29,10 @@ public class UserController {
      * 查询用户（根据用户id）
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<pers.elianacc.yurayura.entity.user.User>
      */
     @GetMapping("/getById")
-    public ApiResult getById(IdDto dto) {
+    public ApiResult<User> getById(IdDto dto) {
         if (ObjectUtils.isEmpty(dto.getId())) {
             return ApiResult.warn("id不能为空");
         }
@@ -43,10 +43,10 @@ public class UserController {
      * 分页查询用户
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<PageInfo<User>>
      */
     @PostMapping("/getPage")
-    public ApiResult getPage(@RequestBody UserSelectDto dto) {
+    public ApiResult<PageInfo<User>> getPage(@RequestBody UserSelectDto dto) {
         if (ObjectUtils.isEmpty(dto.getPageNum())) {
             return ApiResult.warn("页码不能为空");
         } else if (ObjectUtils.isEmpty(dto.getPageSize())) {
@@ -63,10 +63,10 @@ public class UserController {
      * 修改状态（根据用户id）
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PutMapping("/updateStatus")
-    public ApiResult updateStatus(@RequestBody UserUpdateStatusDto dto) {
+    public ApiResult<String> updateStatus(@RequestBody UserUpdateStatusDto dto) {
         if (ObjectUtils.isEmpty(dto.getId())) {
             return ApiResult.warn("id不能为空");
         } else if (ObjectUtils.isEmpty(dto.getUserStatus())) {
@@ -80,10 +80,10 @@ public class UserController {
      * 重置为默认头像（根据用户id）
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PutMapping("/updateAvatarDefault")
-    public ApiResult updateAvatarDefault(@RequestBody IdDto dto) {
+    public ApiResult<String> updateAvatarDefault(@RequestBody IdDto dto) {
         if (ObjectUtils.isEmpty(dto.getId())) {
             return ApiResult.warn("id不能为空");
         }

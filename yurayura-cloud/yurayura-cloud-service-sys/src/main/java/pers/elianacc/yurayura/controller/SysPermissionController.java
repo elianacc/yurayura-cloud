@@ -1,6 +1,9 @@
 package pers.elianacc.yurayura.controller;
 
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.*;
 import pers.elianacc.yurayura.dto.IdDto;
 import pers.elianacc.yurayura.dto.SysPermissionInsertDto;
 import pers.elianacc.yurayura.dto.SysPermissionSelectDto;
@@ -9,9 +12,9 @@ import pers.elianacc.yurayura.entity.sys.permission.SysPermission;
 import pers.elianacc.yurayura.enumerate.SysPermissionTypeEnum;
 import pers.elianacc.yurayura.service.ISysPermissionService;
 import pers.elianacc.yurayura.vo.ApiResult;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.*;
+import pers.elianacc.yurayura.vo.SysPermissionAuthorTreeSelectVo;
+
+import java.util.List;
 
 /**
  * 系统权限 controller
@@ -30,10 +33,10 @@ public class SysPermissionController {
      * 查询系统权限（根据系统权限id）
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<pers.elianacc.yurayura.entity.sys.permission.SysPermission>
      */
     @GetMapping("/getById")
-    public ApiResult getById(IdDto dto) {
+    public ApiResult<SysPermission> getById(IdDto dto) {
         if (ObjectUtils.isEmpty(dto.getId())) {
             return ApiResult.warn("id不能为空");
         }
@@ -44,10 +47,10 @@ public class SysPermissionController {
      * 分页查询系统权限
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<PageInfo<SysPermission>>
      */
     @PostMapping("/getPage")
-    public ApiResult getPage(@RequestBody SysPermissionSelectDto dto) {
+    public ApiResult<PageInfo<SysPermission>> getPage(@RequestBody SysPermissionSelectDto dto) {
         if (ObjectUtils.isEmpty(dto.getPageNum())) {
             return ApiResult.warn("页码不能为空");
         } else if (ObjectUtils.isEmpty(dto.getPageSize())) {
@@ -64,10 +67,10 @@ public class SysPermissionController {
      * 添加系统权限
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PostMapping("/insert")
-    public ApiResult insert(@RequestBody SysPermissionInsertDto dto) {
+    public ApiResult<String> insert(@RequestBody SysPermissionInsertDto dto) {
         if (ObjectUtils.isEmpty(dto.getPermissionName())) {
             return ApiResult.warn("权限名称不能为空");
         } else if (ObjectUtils.isEmpty(dto.getPermissionBelongSubmenuName())) {
@@ -94,10 +97,10 @@ public class SysPermissionController {
      * 修改系统权限
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PutMapping("/update")
-    public ApiResult update(@RequestBody SysPermissionUpdateDto dto) {
+    public ApiResult<String> update(@RequestBody SysPermissionUpdateDto dto) {
         if (ObjectUtils.isEmpty(dto.getId())) {
             return ApiResult.warn("id不能为空");
         } else if (ObjectUtils.isEmpty(dto.getPermissionName())) {
@@ -120,10 +123,10 @@ public class SysPermissionController {
      * 查询权限授权树
      *
      * @param
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.util.List<pers.elianacc.yurayura.vo.SysPermissionAuthorTreeSelectVo>>
      */
     @GetMapping("/getPermissionAuthorTree")
-    public ApiResult getPermissionAuthorTree() {
+    public ApiResult<List<SysPermissionAuthorTreeSelectVo>> getPermissionAuthorTree() {
         return ApiResult.success("权限授权树查询成功", iSysPermissionService.getPermissionAuthorTree());
     }
 

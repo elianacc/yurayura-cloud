@@ -1,16 +1,18 @@
 package pers.elianacc.yurayura.controller;
 
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.bind.annotation.*;
 import pers.elianacc.yurayura.dto.IdDto;
 import pers.elianacc.yurayura.dto.SysRoleInsertDto;
 import pers.elianacc.yurayura.dto.SysRoleSelectDto;
 import pers.elianacc.yurayura.dto.SysRoleUpdateDto;
+import pers.elianacc.yurayura.entity.sys.role.SysRole;
 import pers.elianacc.yurayura.service.ISysRoleService;
 import pers.elianacc.yurayura.vo.ApiResult;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,10 +32,10 @@ public class SysRoleController {
      * 查询系统角色（根据系统角色id）
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<pers.elianacc.yurayura.entity.sys.role.SysRole>
      */
     @GetMapping("/getById")
-    public ApiResult getById(IdDto dto) {
+    public ApiResult<SysRole> getById(IdDto dto) {
         if (ObjectUtils.isEmpty(dto.getId())) {
             return ApiResult.warn("id不能为空");
         }
@@ -44,10 +46,10 @@ public class SysRoleController {
      * 分页查询系统角色
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<PageInfo<Map<String,Object>>>
      */
     @PostMapping("/getPage")
-    public ApiResult getPage(@RequestBody SysRoleSelectDto dto) {
+    public ApiResult<PageInfo<Map<String, Object>>> getPage(@RequestBody SysRoleSelectDto dto) {
         if (ObjectUtils.isEmpty(dto.getPageNum())) {
             return ApiResult.warn("页码不能为空");
         } else if (ObjectUtils.isEmpty(dto.getPageSize())) {
@@ -64,10 +66,10 @@ public class SysRoleController {
      * 添加系统角色
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PostMapping("/insert")
-    public ApiResult insert(@RequestBody SysRoleInsertDto dto) {
+    public ApiResult<String> insert(@RequestBody SysRoleInsertDto dto) {
         if (ObjectUtils.isEmpty(dto.getRoleName())) {
             return ApiResult.warn("角色名不能为空");
         } else if (ObjectUtils.isEmpty(dto.getRoleStatus())) {
@@ -86,10 +88,10 @@ public class SysRoleController {
      * 修改系统角色
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PutMapping("/update")
-    public ApiResult update(@RequestBody SysRoleUpdateDto dto) {
+    public ApiResult<String> update(@RequestBody SysRoleUpdateDto dto) {
         if (ObjectUtils.isEmpty(dto.getId())) {
             return ApiResult.warn("id不能为空");
         } else if (ObjectUtils.isEmpty(dto.getRoleName())) {
@@ -110,10 +112,10 @@ public class SysRoleController {
      * 查询所有系统角色
      *
      * @param
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.util.List<pers.elianacc.yurayura.entity.sys.role.SysRole>>
      */
     @GetMapping("/getAll")
-    public ApiResult getAll() {
+    public ApiResult<List<SysRole>> getAll() {
         return ApiResult.success("查询成功", iSysRoleService.getAll());
     }
 }

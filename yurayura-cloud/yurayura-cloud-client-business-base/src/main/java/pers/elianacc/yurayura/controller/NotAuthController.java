@@ -19,11 +19,11 @@ public class NotAuthController {
      * 未认证
      *
      * @param
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<T>
      */
     @RequestMapping("/notAuthentication")
     @ApiIgnore
-    public ApiResult notAuthentication() {
+    public <T> ApiResult<T> notAuthentication() {
         return ApiResult.notAuthentication();
     }
 
@@ -31,13 +31,12 @@ public class NotAuthController {
      * 未授权
      *
      * @param
-     * @return pers.elianacc.yurayura.vo.ApiResult
+     * @return pers.elianacc.yurayura.vo.ApiResult<T>
      */
     @RequestMapping("/notAuthorization")
     @ApiIgnore
-    public ApiResult notAuthorization() {
+    public <T> ApiResult<T> notAuthorization() {
         return ApiResult.notAuthorization();
     }
-
 
 }

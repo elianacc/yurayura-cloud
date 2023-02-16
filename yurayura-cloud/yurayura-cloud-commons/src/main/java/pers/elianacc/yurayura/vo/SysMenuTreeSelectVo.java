@@ -1,4 +1,4 @@
-package pers.elianacc.yurayura.bo;
+package pers.elianacc.yurayura.vo;
 
 import lombok.Data;
 import pers.elianacc.yurayura.entity.sys.menu.SysMenuSub;
@@ -13,7 +13,7 @@ import java.util.List;
  * @since 2021-03-16
  */
 @Data
-public class SysMenuTreeSelectBo implements Serializable {
+public class SysMenuTreeSelectVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

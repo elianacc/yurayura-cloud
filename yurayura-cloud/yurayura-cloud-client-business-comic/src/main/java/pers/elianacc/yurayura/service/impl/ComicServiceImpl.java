@@ -1,5 +1,6 @@
 package pers.elianacc.yurayura.service.impl;
 
+import com.github.pagehelper.PageInfo;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,6 +8,7 @@ import pers.elianacc.yurayura.dto.ComicInsertDto;
 import pers.elianacc.yurayura.dto.ComicSelectDto;
 import pers.elianacc.yurayura.dto.ComicUpdateDto;
 import pers.elianacc.yurayura.dto.IdsDto;
+import pers.elianacc.yurayura.entity.comic.Comic;
 import pers.elianacc.yurayura.exception.BusinessException;
 import pers.elianacc.yurayura.feign.ComicFeignClient;
 import pers.elianacc.yurayura.service.ComicService;
@@ -25,8 +27,8 @@ public class ComicServiceImpl implements ComicService {
     private ComicFeignClient comicFeignClient;
 
     @Override
-    public ApiResult getPage(ComicSelectDto dto) {
-        ApiResult apiResult = comicFeignClient.getPage(dto);
+    public ApiResult<PageInfo<Comic>> getPage(ComicSelectDto dto) {
+        ApiResult<PageInfo<Comic>> apiResult = comicFeignClient.getPage(dto);
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
@@ -35,8 +37,8 @@ public class ComicServiceImpl implements ComicService {
 
     @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @Override
-    public ApiResult insert(ComicInsertDto dto) {
-        ApiResult apiResult = comicFeignClient.insert(dto);
+    public ApiResult<String> insert(ComicInsertDto dto) {
+        ApiResult<String> apiResult = comicFeignClient.insert(dto);
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
@@ -45,8 +47,8 @@ public class ComicServiceImpl implements ComicService {
 
     @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @Override
-    public ApiResult deleteBatchByIds(IdsDto dto) {
-        ApiResult apiResult = comicFeignClient.deleteBatchByIds(dto);
+    public ApiResult<String> deleteBatchByIds(IdsDto dto) {
+        ApiResult<String> apiResult = comicFeignClient.deleteBatchByIds(dto);
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
@@ -55,8 +57,8 @@ public class ComicServiceImpl implements ComicService {
 
     @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @Override
-    public ApiResult update(ComicUpdateDto dto) {
-        ApiResult apiResult = comicFeignClient.update(dto);
+    public ApiResult<String> update(ComicUpdateDto dto) {
+        ApiResult<String> apiResult = comicFeignClient.update(dto);
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }

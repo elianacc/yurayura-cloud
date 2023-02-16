@@ -6,10 +6,13 @@ import org.springframework.stereotype.Service;
 import pers.elianacc.yurayura.dto.IdDto;
 import pers.elianacc.yurayura.dto.SysMenuSubInsertDto;
 import pers.elianacc.yurayura.dto.SysMenuSubUpdateDto;
+import pers.elianacc.yurayura.entity.sys.menu.SysMenuSub;
 import pers.elianacc.yurayura.exception.BusinessException;
 import pers.elianacc.yurayura.feign.SysFeignClient;
 import pers.elianacc.yurayura.service.SysMenuSubService;
 import pers.elianacc.yurayura.vo.ApiResult;
+
+import java.util.List;
 
 /**
  * 系统子菜单 service impl
@@ -25,8 +28,8 @@ public class SysMenuSubServiceImpl implements SysMenuSubService {
 
     @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @Override
-    public ApiResult insert(SysMenuSubInsertDto dto) {
-        ApiResult apiResult = sysFeignClient.insert(dto);
+    public ApiResult<String> insert(SysMenuSubInsertDto dto) {
+        ApiResult<String> apiResult = sysFeignClient.insert(dto);
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
@@ -35,8 +38,8 @@ public class SysMenuSubServiceImpl implements SysMenuSubService {
 
     @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @Override
-    public ApiResult deleteById(IdDto dto) {
-        ApiResult apiResult = sysFeignClient.deleteMenuSubById(dto);
+    public ApiResult<String> deleteById(IdDto dto) {
+        ApiResult<String> apiResult = sysFeignClient.deleteMenuSubById(dto);
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
@@ -45,8 +48,8 @@ public class SysMenuSubServiceImpl implements SysMenuSubService {
 
     @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @Override
-    public ApiResult update(SysMenuSubUpdateDto dto) {
-        ApiResult apiResult = sysFeignClient.update(dto);
+    public ApiResult<String> update(SysMenuSubUpdateDto dto) {
+        ApiResult<String> apiResult = sysFeignClient.update(dto);
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
@@ -54,8 +57,8 @@ public class SysMenuSubServiceImpl implements SysMenuSubService {
     }
 
     @Override
-    public ApiResult getByIndex(String index) {
-        ApiResult apiResult = sysFeignClient.getMenuSubByIndex(index);
+    public ApiResult<SysMenuSub> getByIndex(String index) {
+        ApiResult<SysMenuSub> apiResult = sysFeignClient.getMenuSubByIndex(index);
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
@@ -63,8 +66,8 @@ public class SysMenuSubServiceImpl implements SysMenuSubService {
     }
 
     @Override
-    public ApiResult getAll() {
-        ApiResult apiResult = sysFeignClient.getAllMenuSub();
+    public ApiResult<List<SysMenuSub>> getAll() {
+        ApiResult<List<SysMenuSub>> apiResult = sysFeignClient.getAllMenuSub();
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }

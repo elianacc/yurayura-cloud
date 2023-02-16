@@ -45,10 +45,10 @@ public class ${table.controllerName} {
      * 查询$!{table.comment}（根据$!{table.comment}id）
      *
      * @param dto
-     * @return ${packageParentPath}.vo.ApiResult
+     * @return ${packageParentPath}.vo.ApiResult<${packageParentPath}.entity${entityPackagePath}#if(${entity.toLowerCase().startsWith("sys")})${entity.toLowerCase().substring(3)}#else${entity.toLowerCase()}#end.${entity}>
      */
     @GetMapping("/getById")
-    public ApiResult getById(IdDto dto) {
+    public ApiResult<${entity}> getById(IdDto dto) {
         if (ObjectUtils.isEmpty(dto.getId())) {
             return ApiResult.warn("id不能为空");
         }

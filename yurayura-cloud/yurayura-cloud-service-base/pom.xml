@@ -41,12 +41,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- github-PageHelper 依赖 -->
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper</artifactId>
-        </dependency>
-
     </dependencies>
 
 </project>
