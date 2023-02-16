@@ -11,13 +11,14 @@
 
     <modules>
         <module>yurayura-cloud-commons</module>
+        <module>yurayura-cloud-service-base</module>
         <module>yurayura-cloud-service-comic</module>
         <module>yurayura-cloud-service-user</module>
         <module>yurayura-cloud-service-sys</module>
+        <module>yurayura-cloud-client-business-base</module>
         <module>yurayura-cloud-client-business-comic</module>
         <module>yurayura-cloud-client-business-user</module>
         <module>yurayura-cloud-client-business-sys</module>
-        <module>yurayura-cloud-client-business-base</module>
     </modules>
 
     <!-- 项目父模块依赖版本统一设置 -->

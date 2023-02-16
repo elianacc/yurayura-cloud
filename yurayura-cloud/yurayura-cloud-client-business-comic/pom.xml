@@ -18,6 +18,13 @@
 
     <dependencies>
 
+        <!-- SpringBoot lombok 依赖 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <!-- 项目本身服务消费者整合 依赖 -->
         <dependency>
             <groupId>pers.elianacc</groupId>
