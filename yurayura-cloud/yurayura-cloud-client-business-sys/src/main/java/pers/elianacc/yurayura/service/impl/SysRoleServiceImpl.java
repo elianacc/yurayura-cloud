@@ -12,6 +12,7 @@ import pers.elianacc.yurayura.exception.BusinessException;
 import pers.elianacc.yurayura.feign.SysFeignClient;
 import pers.elianacc.yurayura.service.SysRoleService;
 import pers.elianacc.yurayura.vo.ApiResult;
+import pers.elianacc.yurayura.vo.SysRoleAndPermissionVo;
 
 import java.util.List;
 import java.util.Map;
@@ -29,8 +30,8 @@ public class SysRoleServiceImpl implements SysRoleService {
     private SysFeignClient sysFeignClient;
 
     @Override
-    public ApiResult<PageInfo<Map<String, Object>>> getPage(SysRoleSelectDto dto) {
-        ApiResult<PageInfo<Map<String, Object>>> apiResult = sysFeignClient.getPage(dto);
+    public ApiResult<PageInfo<SysRoleAndPermissionVo>> getPage(SysRoleSelectDto dto) {
+        ApiResult<PageInfo<SysRoleAndPermissionVo>> apiResult = sysFeignClient.getPage(dto);
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }

@@ -6,7 +6,7 @@ import pers.elianacc.yurayura.dto.SysPermissionSelectDto;
 import pers.elianacc.yurayura.dto.SysPermissionUpdateDto;
 import pers.elianacc.yurayura.entity.sys.permission.SysPermission;
 import pers.elianacc.yurayura.vo.ApiResult;
-import pers.elianacc.yurayura.vo.SysPermissionAuthorTreeSelectVo;
+import pers.elianacc.yurayura.vo.SysPermissionAuthorTreeVo;
 
 import java.util.List;
 
@@ -46,7 +46,7 @@ public interface SysPermissionService {
      * 查询权限授权树
      *
      * @param
-     * @return pers.elianacc.yurayura.vo.ApiResult<java.util.List<pers.elianacc.yurayura.vo.SysPermissionAuthorTreeSelectVo>>
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.util.List<pers.elianacc.yurayura.vo.SysPermissionAuthorTreeVo>>
      */
-    public ApiResult<List<SysPermissionAuthorTreeSelectVo>> getPermissionAuthorTree();
+    public ApiResult<List<SysPermissionAuthorTreeVo>> getPermissionAuthorTree();
 }

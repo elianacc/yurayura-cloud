@@ -12,7 +12,7 @@ import pers.elianacc.yurayura.exception.BusinessException;
 import pers.elianacc.yurayura.feign.SysFeignClient;
 import pers.elianacc.yurayura.service.SysMenuService;
 import pers.elianacc.yurayura.vo.ApiResult;
-import pers.elianacc.yurayura.vo.SysMenuTreeSelectVo;
+import pers.elianacc.yurayura.vo.SysMenuTreeVo;
 
 import java.util.List;
 
@@ -29,8 +29,8 @@ public class SysMenuServiceImpl implements SysMenuService {
     private SysFeignClient sysFeignClient;
 
     @Override
-    public ApiResult<List<SysMenuTreeSelectVo>> getTreeList() {
-        ApiResult<List<SysMenuTreeSelectVo>> apiResult = sysFeignClient.getMenuTreeList();
+    public ApiResult<List<SysMenuTreeVo>> getTreeList() {
+        ApiResult<List<SysMenuTreeVo>> apiResult = sysFeignClient.getMenuTreeList();
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
@@ -38,9 +38,9 @@ public class SysMenuServiceImpl implements SysMenuService {
     }
 
     @Override
-    public ApiResult<List<SysMenuTreeSelectVo>> getTreeListForCurrentManager() {
+    public ApiResult<List<SysMenuTreeVo>> getTreeListForCurrentManager() {
         SysManager currentSysManager = (SysManager) SecurityUtils.getSubject().getPrincipal();
-        ApiResult<List<SysMenuTreeSelectVo>> apiResult = sysFeignClient.getMenuTreeListByManagerId(currentSysManager.getId());
+        ApiResult<List<SysMenuTreeVo>> apiResult = sysFeignClient.getMenuTreeListByManagerId(currentSysManager.getId());
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }

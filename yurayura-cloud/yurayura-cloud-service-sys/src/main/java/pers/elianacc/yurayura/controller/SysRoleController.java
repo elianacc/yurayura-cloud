@@ -11,6 +11,7 @@ import pers.elianacc.yurayura.dto.SysRoleUpdateDto;
 import pers.elianacc.yurayura.entity.sys.role.SysRole;
 import pers.elianacc.yurayura.service.ISysRoleService;
 import pers.elianacc.yurayura.vo.ApiResult;
+import pers.elianacc.yurayura.vo.SysRoleAndPermissionVo;
 
 import java.util.List;
 import java.util.Map;
@@ -46,16 +47,16 @@ public class SysRoleController {
      * 分页查询系统角色
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult<PageInfo<Map<String,Object>>>
+     * @return pers.elianacc.yurayura.vo.ApiResult<com.github.pagehelper.PageInfo<pers.elianacc.yurayura.vo.SysRoleAndPermissionVo>>
      */
     @PostMapping("/getPage")
-    public ApiResult<PageInfo<Map<String, Object>>> getPage(@RequestBody SysRoleSelectDto dto) {
+    public ApiResult<PageInfo<SysRoleAndPermissionVo>> getPage(@RequestBody SysRoleSelectDto dto) {
         if (ObjectUtils.isEmpty(dto.getPageNum())) {
             return ApiResult.warn("页码不能为空");
         } else if (ObjectUtils.isEmpty(dto.getPageSize())) {
             dto.setPageSize(10); // 页记录数默认10
         }
-        PageInfo<Map<String, Object>> pageInfo = iSysRoleService.getPage(dto);
+        PageInfo<SysRoleAndPermissionVo> pageInfo = iSysRoleService.getPage(dto);
         if (pageInfo.getTotal() == 0) {
             return ApiResult.warn("查询不到数据");
         }

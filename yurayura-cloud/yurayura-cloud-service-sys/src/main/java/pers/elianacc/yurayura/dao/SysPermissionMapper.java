@@ -1,7 +1,7 @@
 package pers.elianacc.yurayura.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import pers.elianacc.yurayura.vo.SysPermissionAuthorTreeSelectVo;
+import pers.elianacc.yurayura.vo.SysPermissionAuthorTreeVo;
 import pers.elianacc.yurayura.entity.sys.permission.SysPermission;
 
 import java.util.List;
@@ -20,6 +20,6 @@ public interface SysPermissionMapper extends BaseMapper<SysPermission> {
      * @param
      * @return java.util.List<pers.elianacc.yurayura.vo.SysPermissionAuthorTreeSelectBo>
      */
-    List<SysPermissionAuthorTreeSelectVo> getPermissionAuthorTree();
+    List<SysPermissionAuthorTreeVo> getPermissionAuthorTree();
 
 }

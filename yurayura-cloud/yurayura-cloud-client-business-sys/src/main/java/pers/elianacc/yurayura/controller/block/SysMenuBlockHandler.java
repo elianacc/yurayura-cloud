@@ -2,7 +2,7 @@ package pers.elianacc.yurayura.controller.block;
 
 import com.alibaba.csp.sentinel.slots.block.BlockException;
 import pers.elianacc.yurayura.vo.ApiResult;
-import pers.elianacc.yurayura.vo.SysMenuTreeSelectVo;
+import pers.elianacc.yurayura.vo.SysMenuTreeVo;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class SysMenuBlockHandler {
 
-    public static ApiResult<List<SysMenuTreeSelectVo>> getTreeListBlockHandler(BlockException exception) {
+    public static ApiResult<List<SysMenuTreeVo>> getTreeListBlockHandler(BlockException exception) {
         return ApiResult.warn("操作过于频繁！");
     }
 

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.pagehelper.PageInfo;
 import pers.elianacc.yurayura.dto.*;
 import pers.elianacc.yurayura.entity.sys.manager.SysManager;
+import pers.elianacc.yurayura.vo.SysManagerAndRoleVo;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
@@ -20,9 +21,9 @@ public interface ISysManagerService extends IService<SysManager> {
      * 分页查询系统管理员
      *
      * @param dto
-     * @return com.github.pagehelper.PageInfo<java.util.Map<java.lang.String,java.lang.Object>>
+     * @return com.github.pagehelper.PageInfo<pers.elianacc.yurayura.vo.SysManagerAndRoleVo>
      */
-    public PageInfo<Map<String, Object>> getPage(SysManagerSelectDto dto);
+    public PageInfo<SysManagerAndRoleVo> getPage(SysManagerSelectDto dto);
 
     /**
      * 添加系统管理员

@@ -2,7 +2,7 @@ package pers.elianacc.yurayura.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.pagehelper.PageInfo;
-import pers.elianacc.yurayura.vo.SysPermissionAuthorTreeSelectVo;
+import pers.elianacc.yurayura.vo.SysPermissionAuthorTreeVo;
 import pers.elianacc.yurayura.dto.SysPermissionInsertDto;
 import pers.elianacc.yurayura.dto.SysPermissionSelectDto;
 import pers.elianacc.yurayura.dto.SysPermissionUpdateDto;
@@ -48,6 +48,6 @@ public interface ISysPermissionService extends IService<SysPermission> {
      * @param
      * @return java.util.List<pers.elianacc.yurayura.vo.SysPermissionAuthorTreeSelectBo>
      */
-    public List<SysPermissionAuthorTreeSelectVo> getPermissionAuthorTree();
+    public List<SysPermissionAuthorTreeVo> getPermissionAuthorTree();
 
 }

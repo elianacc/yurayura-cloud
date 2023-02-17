@@ -19,6 +19,7 @@ import pers.elianacc.yurayura.dto.SysManagerUpdateDto;
 import pers.elianacc.yurayura.entity.sys.manager.SysManager;
 import pers.elianacc.yurayura.enumerate.EnableStatusEnum;
 import pers.elianacc.yurayura.service.ISysManagerService;
+import pers.elianacc.yurayura.vo.SysManagerAndRoleVo;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,10 +42,10 @@ public class SysManagerServiceImpl extends ServiceImpl<SysManagerMapper, SysMana
     private SysRoleMapper sysRoleMapper;
 
     @Override
-    public PageInfo<Map<String, Object>> getPage(SysManagerSelectDto dto) {
+    public PageInfo<SysManagerAndRoleVo> getPage(SysManagerSelectDto dto) {
         // 设置分页
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
-        List<Map<String, Object>> managerAndPermissionList = sysManagerMapper.getManagerAndRoleListBySelectDto(dto);
+        List<SysManagerAndRoleVo> managerAndPermissionList = sysManagerMapper.getManagerAndRoleListBySelectDto(dto);
         return new PageInfo<>(managerAndPermissionList, 5);
     }
 

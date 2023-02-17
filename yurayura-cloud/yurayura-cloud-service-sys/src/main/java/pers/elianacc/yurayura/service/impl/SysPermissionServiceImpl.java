@@ -8,7 +8,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import pers.elianacc.yurayura.vo.SysPermissionAuthorTreeSelectVo;
+import pers.elianacc.yurayura.vo.SysPermissionAuthorTreeVo;
 import pers.elianacc.yurayura.dao.SysPermissionMapper;
 import pers.elianacc.yurayura.dao.SysRoleMapper;
 import pers.elianacc.yurayura.dto.SysPermissionInsertDto;
@@ -90,7 +90,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
     }
 
     @Override
-    public List<SysPermissionAuthorTreeSelectVo> getPermissionAuthorTree() {
+    public List<SysPermissionAuthorTreeVo> getPermissionAuthorTree() {
         return sysPermissionMapper.getPermissionAuthorTree();
     }
 

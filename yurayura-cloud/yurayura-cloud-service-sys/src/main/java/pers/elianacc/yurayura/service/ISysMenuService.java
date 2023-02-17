@@ -1,7 +1,7 @@
 package pers.elianacc.yurayura.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import pers.elianacc.yurayura.vo.SysMenuTreeSelectVo;
+import pers.elianacc.yurayura.vo.SysMenuTreeVo;
 import pers.elianacc.yurayura.dto.IdDto;
 import pers.elianacc.yurayura.dto.SysMenuInsertDto;
 import pers.elianacc.yurayura.dto.SysMenuUpdateDto;
@@ -21,17 +21,17 @@ public interface ISysMenuService extends IService<SysMenu> {
      * 查询系统菜单树形列表
      *
      * @param
-     * @return java.util.List<pers.elianacc.yurayura.bo.MenuBo>
+     * @return java.util.List<pers.elianacc.yurayura.vo.SysMenuTreeVo>
      */
-    public List<SysMenuTreeSelectVo> getTreeList();
+    public List<SysMenuTreeVo> getTreeList();
 
     /**
      * 查询系统菜单树形列表（根据管理员id）
      *
      * @param managerId
-     * @return java.util.List<pers.elianacc.yurayura.vo.SysMenuTreeSelectBo>
+     * @return java.util.List<pers.elianacc.yurayura.vo.SysMenuTreeVo>
      */
-    public List<SysMenuTreeSelectVo> getTreeListByManagerId(Integer managerId);
+    public List<SysMenuTreeVo> getTreeListByManagerId(Integer managerId);
 
     /**
      * 添加系统菜单

@@ -12,7 +12,7 @@ import pers.elianacc.yurayura.exception.BusinessException;
 import pers.elianacc.yurayura.feign.SysFeignClient;
 import pers.elianacc.yurayura.service.SysPermissionService;
 import pers.elianacc.yurayura.vo.ApiResult;
-import pers.elianacc.yurayura.vo.SysPermissionAuthorTreeSelectVo;
+import pers.elianacc.yurayura.vo.SysPermissionAuthorTreeVo;
 
 import java.util.List;
 
@@ -58,8 +58,8 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     }
 
     @Override
-    public ApiResult<List<SysPermissionAuthorTreeSelectVo>> getPermissionAuthorTree() {
-        ApiResult<List<SysPermissionAuthorTreeSelectVo>> apiResult = sysFeignClient.getPermissionAuthorTree();
+    public ApiResult<List<SysPermissionAuthorTreeVo>> getPermissionAuthorTree() {
+        ApiResult<List<SysPermissionAuthorTreeVo>> apiResult = sysFeignClient.getPermissionAuthorTree();
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }

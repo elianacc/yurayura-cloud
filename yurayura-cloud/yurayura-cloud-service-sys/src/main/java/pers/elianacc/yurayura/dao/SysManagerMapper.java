@@ -4,6 +4,7 @@ import pers.elianacc.yurayura.dto.SysManagerSelectDto;
 import pers.elianacc.yurayura.entity.sys.manager.SysManager;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.data.repository.query.Param;
+import pers.elianacc.yurayura.vo.SysManagerAndRoleVo;
 
 import java.util.List;
 import java.util.Map;
@@ -45,9 +46,9 @@ public interface SysManagerMapper extends BaseMapper<SysManager> {
      * 查询管理员及其拥有角色（根据系统管理员查询dto）
      *
      * @param dto
-     * @return java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     * @return java.util.List<pers.elianacc.yurayura.vo.SysManagerAndRoleVo>
      */
-    List<Map<String, Object>> getManagerAndRoleListBySelectDto(SysManagerSelectDto dto);
+    List<SysManagerAndRoleVo> getManagerAndRoleListBySelectDto(SysManagerSelectDto dto);
 
     /**
      * 删除管理员角色（根据角色id）

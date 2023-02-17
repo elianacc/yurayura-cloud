@@ -18,6 +18,8 @@ import pers.elianacc.yurayura.dto.SysManagerUpdateDto;
 import pers.elianacc.yurayura.service.SysManagerService;
 import pers.elianacc.yurayura.util.VerifyCodeUtil;
 import pers.elianacc.yurayura.vo.ApiResult;
+import pers.elianacc.yurayura.vo.SysManagerAndRoleVo;
+import pers.elianacc.yurayura.vo.SysManagerMsgVo;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.imageio.ImageIO;
@@ -46,14 +48,14 @@ public class SysManagerController {
      * 分页查询系统管理员
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult<PageInfo<Map<String,Object>>>
+     * @return pers.elianacc.yurayura.vo.ApiResult<com.github.pagehelper.PageInfo<pers.elianacc.yurayura.vo.SysManagerAndRoleVo>>
      */
     @PostMapping("/getPage")
     @SentinelResource(value = "sys-manager-getPage",
             blockHandlerClass = SysManagerBlockHandler.class,
             blockHandler = "getPageBlockHandler")
     @ApiOperation("分页查询系统管理员")
-    public ApiResult<PageInfo<Map<String, Object>>> getPage(@RequestBody SysManagerSelectDto dto) {
+    public ApiResult<PageInfo<SysManagerAndRoleVo>> getPage(@RequestBody SysManagerSelectDto dto) {
         return sysManagerService.getPage(dto);
     }
 
@@ -166,13 +168,12 @@ public class SysManagerController {
      * 获取当前登入管理员信息
      *
      * @param
-     * @return pers.elianacc.yurayura.vo.ApiResult<java.util.Map<java.lang.String,java.lang.Object>>
+     * @return pers.elianacc.yurayura.vo.ApiResult<pers.elianacc.yurayura.vo.SysManagerMsgVo>
      */
     @GetMapping("/getCurrentManagerMsg")
     @ApiOperation("获取当前登入管理员信息")
-    public ApiResult<Map<String, Object>> getCurrentManagerMsg() {
-        Map<String, Object> currentManagerMsg = sysManagerService.getCurrentManagerMsg();
-        return ApiResult.success("获取成功", currentManagerMsg);
+    public ApiResult<SysManagerMsgVo> getCurrentManagerMsg() {
+        return ApiResult.success("获取成功", sysManagerService.getCurrentManagerMsg());
     }
 
 }

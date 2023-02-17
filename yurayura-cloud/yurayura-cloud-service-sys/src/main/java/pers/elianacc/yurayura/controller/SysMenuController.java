@@ -9,7 +9,7 @@ import pers.elianacc.yurayura.dto.SysMenuUpdateDto;
 import pers.elianacc.yurayura.entity.sys.menu.SysMenu;
 import pers.elianacc.yurayura.service.ISysMenuService;
 import pers.elianacc.yurayura.vo.ApiResult;
-import pers.elianacc.yurayura.vo.SysMenuTreeSelectVo;
+import pers.elianacc.yurayura.vo.SysMenuTreeVo;
 
 import java.util.List;
 
@@ -44,10 +44,10 @@ public class SysMenuController {
      * 查询系统菜单树形列表
      *
      * @param
-     * @return pers.elianacc.yurayura.vo.ApiResult<List<SysMenuTreeSelectVo>>
+     * @return pers.elianacc.yurayura.vo.ApiResult<List<SysMenuTreeVo>>
      */
     @GetMapping("/getTreeList")
-    public ApiResult<List<SysMenuTreeSelectVo>> getTreeList() {
+    public ApiResult<List<SysMenuTreeVo>> getTreeList() {
         return ApiResult.success("树形列表查询成功", iSysMenuService.getTreeList());
     }
 
@@ -55,10 +55,10 @@ public class SysMenuController {
      * 查询系统菜单树形列表（根据管理员id）
      *
      * @param managerId
-     * @return pers.elianacc.yurayura.vo.ApiResult<List<SysMenuTreeSelectVo>>
+     * @return pers.elianacc.yurayura.vo.ApiResult<List<SysMenuTreeVo>>
      */
     @GetMapping("/getTreeListByManagerId")
-    public ApiResult<List<SysMenuTreeSelectVo>> getTreeListByManagerId(@RequestParam Integer managerId) {
+    public ApiResult<List<SysMenuTreeVo>> getTreeListByManagerId(@RequestParam Integer managerId) {
         if (ObjectUtils.isEmpty(managerId)) {
             return ApiResult.warn("id不能为空");
         }

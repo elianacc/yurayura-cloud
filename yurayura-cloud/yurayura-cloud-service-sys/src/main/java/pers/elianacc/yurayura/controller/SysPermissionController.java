@@ -12,7 +12,7 @@ import pers.elianacc.yurayura.entity.sys.permission.SysPermission;
 import pers.elianacc.yurayura.enumerate.SysPermissionTypeEnum;
 import pers.elianacc.yurayura.service.ISysPermissionService;
 import pers.elianacc.yurayura.vo.ApiResult;
-import pers.elianacc.yurayura.vo.SysPermissionAuthorTreeSelectVo;
+import pers.elianacc.yurayura.vo.SysPermissionAuthorTreeVo;
 
 import java.util.List;
 
@@ -123,10 +123,10 @@ public class SysPermissionController {
      * 查询权限授权树
      *
      * @param
-     * @return pers.elianacc.yurayura.vo.ApiResult<java.util.List<pers.elianacc.yurayura.vo.SysPermissionAuthorTreeSelectVo>>
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.util.List<pers.elianacc.yurayura.vo.SysPermissionAuthorTreeVo>>
      */
     @GetMapping("/getPermissionAuthorTree")
-    public ApiResult<List<SysPermissionAuthorTreeSelectVo>> getPermissionAuthorTree() {
+    public ApiResult<List<SysPermissionAuthorTreeVo>> getPermissionAuthorTree() {
         return ApiResult.success("权限授权树查询成功", iSysPermissionService.getPermissionAuthorTree());
     }
 

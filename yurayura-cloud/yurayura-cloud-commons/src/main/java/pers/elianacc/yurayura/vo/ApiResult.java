@@ -15,9 +15,7 @@ import java.io.Serializable;
  * @since 2023-02-16
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@ApiModel(value = "接口返回Vo", description = "接口返回对象")
+@ApiModel(value = "接口返回VO", description = "接口返回对象")
 public class ApiResult<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;

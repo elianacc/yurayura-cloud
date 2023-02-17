@@ -21,6 +21,8 @@ import pers.elianacc.yurayura.exception.BusinessException;
 import pers.elianacc.yurayura.feign.SysFeignClient;
 import pers.elianacc.yurayura.service.SysManagerService;
 import pers.elianacc.yurayura.vo.ApiResult;
+import pers.elianacc.yurayura.vo.SysManagerAndRoleVo;
+import pers.elianacc.yurayura.vo.SysManagerMsgVo;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -40,8 +42,8 @@ public class SysManagerServiceImpl implements SysManagerService {
     private SysFeignClient sysFeignClient;
 
     @Override
-    public ApiResult<PageInfo<Map<String, Object>>> getPage(SysManagerSelectDto dto) {
-        ApiResult<PageInfo<Map<String, Object>>> apiResult = sysFeignClient.getPage(dto);
+    public ApiResult<PageInfo<SysManagerAndRoleVo>> getPage(SysManagerSelectDto dto) {
+        ApiResult<PageInfo<SysManagerAndRoleVo>> apiResult = sysFeignClient.getPage(dto);
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
@@ -100,16 +102,16 @@ public class SysManagerServiceImpl implements SysManagerService {
     }
 
     @Override
-    public Map<String, Object> getCurrentManagerMsg() {
+    public SysManagerMsgVo getCurrentManagerMsg() {
         SysManager currentSysManager = (SysManager) SecurityUtils.getSubject().getPrincipal();
-        Map<String, Object> currentManagerMsg = new HashMap<>();
-        currentManagerMsg.put("managerName", currentSysManager.getManagerName());
+        SysManagerMsgVo sysManagerMsgVo = new SysManagerMsgVo();
+        sysManagerMsgVo.setManagerName(currentSysManager.getManagerName());
         ApiResult<String> apiResult = sysFeignClient.getManagerRolePermission(currentSysManager.getId());
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
-        currentManagerMsg.put("managerPermission", apiResult.getData());
-        return currentManagerMsg;
+        sysManagerMsgVo.setManagerPermission(apiResult.getData());
+        return sysManagerMsgVo;
     }
 
 }

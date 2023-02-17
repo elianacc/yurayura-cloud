@@ -47,19 +47,19 @@
         delete from yurayura_sys_manager_role where role_id = #{roleId}
     </delete>
 
-    <select id="getManagerAndRoleListBySelectDto" resultType="java.util.Map">
+    <select id="getManagerAndRoleListBySelectDto" resultType="pers.elianacc.yurayura.vo.SysManagerAndRoleVo">
         SELECT
-            mng.id id,
-            mng.manager_name managerName,
-            mng.manager_status managerStatus,
-            DATE_FORMAT(mng.manager_create_time,'%Y-%m-%d %H:%i:%s') managerCreateTime,
-            DATE_FORMAT(mng.manager_update_time,'%Y-%m-%d %H:%i:%s') managerUpdateTime,
-            GROUP_CONCAT(r.id) roleIdsStr,
-            GROUP_CONCAT(r.role_name) roleNamesStr
+        mng.id id,
+        mng.manager_name managerName,
+        mng.manager_status managerStatus,
+        DATE_FORMAT(mng.manager_create_time,'%Y-%m-%d %H:%i:%s') managerCreateTime,
+        DATE_FORMAT(mng.manager_update_time,'%Y-%m-%d %H:%i:%s') managerUpdateTime,
+        GROUP_CONCAT(r.id) roleIdsStr,
+        GROUP_CONCAT(r.role_name) roleNamesStr
         FROM
-            yurayura_sys_manager mng
-                LEFT JOIN yurayura_sys_manager_role mr ON mng.id = mr.manager_id
-                LEFT JOIN yurayura_sys_role r ON mr.role_id = r.id
+        yurayura_sys_manager mng
+        LEFT JOIN yurayura_sys_manager_role mr ON mng.id = mr.manager_id
+        LEFT JOIN yurayura_sys_role r ON mr.role_id = r.id
         <where>
             <if test="managerName != null and managerName != ''">
                 and mng.manager_name like CONCAT('%',#{managerName},'%')
@@ -69,7 +69,7 @@
             </if>
         </where>
         GROUP BY
-            mng.id
+        mng.id
     </select>
 
 </mapper>

@@ -12,6 +12,7 @@ import pers.elianacc.yurayura.dto.SysManagerUpdateDto;
 import pers.elianacc.yurayura.entity.sys.manager.SysManager;
 import pers.elianacc.yurayura.service.ISysManagerService;
 import pers.elianacc.yurayura.vo.ApiResult;
+import pers.elianacc.yurayura.vo.SysManagerAndRoleVo;
 
 import java.util.Map;
 
@@ -46,16 +47,16 @@ public class SysManagerController {
      * 分页查询系统管理员
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult<PageInfo<Map<String,Object>>>
+     * @return pers.elianacc.yurayura.vo.ApiResult<com.github.pagehelper.PageInfo<pers.elianacc.yurayura.vo.SysManagerAndRoleVo>>
      */
     @PostMapping("/getPage")
-    public ApiResult<PageInfo<Map<String, Object>>> getPage(@RequestBody SysManagerSelectDto dto) {
+    public ApiResult<PageInfo<SysManagerAndRoleVo>> getPage(@RequestBody SysManagerSelectDto dto) {
         if (ObjectUtils.isEmpty(dto.getPageNum())) {
             return ApiResult.warn("页码不能为空");
         } else if (ObjectUtils.isEmpty(dto.getPageSize())) {
             dto.setPageSize(10); // 页记录数默认10
         }
-        PageInfo<Map<String, Object>> pageInfo = iSysManagerService.getPage(dto);
+        PageInfo<SysManagerAndRoleVo> pageInfo = iSysManagerService.getPage(dto);
         if (pageInfo.getTotal() == 0) {
             return ApiResult.warn("查询不到数据");
         }

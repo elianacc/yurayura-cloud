@@ -12,7 +12,7 @@ import pers.elianacc.yurayura.dto.SysMenuInsertDto;
 import pers.elianacc.yurayura.dto.SysMenuUpdateDto;
 import pers.elianacc.yurayura.service.SysMenuService;
 import pers.elianacc.yurayura.vo.ApiResult;
-import pers.elianacc.yurayura.vo.SysMenuTreeSelectVo;
+import pers.elianacc.yurayura.vo.SysMenuTreeVo;
 
 import java.util.List;
 
@@ -34,11 +34,11 @@ public class SysMenuController {
      * 查询系统侧边菜单
      *
      * @param
-     * @return pers.elianacc.yurayura.vo.ApiResult<List<SysMenuTreeSelectVo>>
+     * @return pers.elianacc.yurayura.vo.ApiResult<List<SysMenuTreeVo>>
      */
     @GetMapping("/getSysSideMenu")
     @ApiOperation("查询系统侧边菜单")
-    public ApiResult<List<SysMenuTreeSelectVo>> getSysSideMenu() {
+    public ApiResult<List<SysMenuTreeVo>> getSysSideMenu() {
         return sysMenuService.getTreeListForCurrentManager();
     }
 
@@ -46,14 +46,14 @@ public class SysMenuController {
      * 查询系统菜单树形列表
      *
      * @param
-     * @return pers.elianacc.yurayura.vo.ApiResult<List<SysMenuTreeSelectVo>>
+     * @return pers.elianacc.yurayura.vo.ApiResult<List<SysMenuTreeVo>>
      */
     @GetMapping("/getTreeList")
     @SentinelResource(value = "sys-menu-getTree",
             blockHandlerClass = SysMenuBlockHandler.class,
             blockHandler = "getTreeListBlockHandler")
     @ApiOperation("查询系统菜单树形列表")
-    public ApiResult<List<SysMenuTreeSelectVo>> getTreeList() {
+    public ApiResult<List<SysMenuTreeVo>> getTreeList() {
         return sysMenuService.getTreeList();
     }
 

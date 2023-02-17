@@ -6,6 +6,8 @@ import pers.elianacc.yurayura.dto.SysManagerLoginDto;
 import pers.elianacc.yurayura.dto.SysManagerSelectDto;
 import pers.elianacc.yurayura.dto.SysManagerUpdateDto;
 import pers.elianacc.yurayura.vo.ApiResult;
+import pers.elianacc.yurayura.vo.SysManagerAndRoleVo;
+import pers.elianacc.yurayura.vo.SysManagerMsgVo;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
@@ -22,9 +24,9 @@ public interface SysManagerService {
      * 分页查询系统管理员
      *
      * @param dto
-     * @return pers.elianacc.yurayura.vo.ApiResult<PageInfo<Map<String,Object>>>
+     * @return pers.elianacc.yurayura.vo.ApiResult<com.github.pagehelper.PageInfo<pers.elianacc.yurayura.vo.SysManagerAndRoleVo>>
      */
-    public ApiResult<PageInfo<Map<String, Object>>> getPage(SysManagerSelectDto dto);
+    public ApiResult<PageInfo<SysManagerAndRoleVo>> getPage(SysManagerSelectDto dto);
 
     /**
      * 添加系统管理员
@@ -55,8 +57,8 @@ public interface SysManagerService {
      * 获取当前登入管理员信息
      *
      * @param
-     * @return java.util.Map<java.lang.String, java.lang.Object>
+     * @return pers.elianacc.yurayura.vo.SysManagerMsgVo
      */
-    public Map<String, Object> getCurrentManagerMsg();
+    public SysManagerMsgVo getCurrentManagerMsg();
 
 }

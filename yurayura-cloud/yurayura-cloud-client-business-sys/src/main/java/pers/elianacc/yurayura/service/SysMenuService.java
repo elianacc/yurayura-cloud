@@ -4,7 +4,7 @@ import pers.elianacc.yurayura.dto.IdDto;
 import pers.elianacc.yurayura.dto.SysMenuInsertDto;
 import pers.elianacc.yurayura.dto.SysMenuUpdateDto;
 import pers.elianacc.yurayura.vo.ApiResult;
-import pers.elianacc.yurayura.vo.SysMenuTreeSelectVo;
+import pers.elianacc.yurayura.vo.SysMenuTreeVo;
 
 import java.util.List;
 
@@ -20,17 +20,17 @@ public interface SysMenuService {
      * 查询系统菜单树形列表
      *
      * @param
-     * @return pers.elianacc.yurayura.vo.ApiResult<List<SysMenuTreeSelectVo>>
+     * @return pers.elianacc.yurayura.vo.ApiResult<List<SysMenuTreeVo>>
      */
-    public ApiResult<List<SysMenuTreeSelectVo>> getTreeList();
+    public ApiResult<List<SysMenuTreeVo>> getTreeList();
 
     /**
      * 查询系统菜单树形列表（当前管理员有权限的）
      *
      * @param
-     * @return pers.elianacc.yurayura.vo.ApiResult<List<SysMenuTreeSelectVo>>
+     * @return pers.elianacc.yurayura.vo.ApiResult<List<SysMenuTreeVo>>
      */
-    public ApiResult<List<SysMenuTreeSelectVo>> getTreeListForCurrentManager();
+    public ApiResult<List<SysMenuTreeVo>> getTreeListForCurrentManager();
 
     /**
      * 添加系统菜单

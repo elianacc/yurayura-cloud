@@ -4,6 +4,7 @@ import pers.elianacc.yurayura.dto.SysRoleSelectDto;
 import pers.elianacc.yurayura.entity.sys.role.SysRole;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.data.repository.query.Param;
+import pers.elianacc.yurayura.vo.SysRoleAndPermissionVo;
 
 import java.util.List;
 import java.util.Map;
@@ -20,9 +21,9 @@ public interface SysRoleMapper extends BaseMapper<SysRole> {
      * 查询角色及其拥有权限（根据系统角色查询dto）
      *
      * @param dto
-     * @return java.util.List<java.util.Map<java.lang.String,java.lang.Object>>
+     * @return java.util.List<pers.elianacc.yurayura.vo.SysRoleAndPermissionVo>
      */
-    List<Map<String, Object>> getRoleAndPermissionListBySelectDto(SysRoleSelectDto dto);
+    List<SysRoleAndPermissionVo> getRoleAndPermissionListBySelectDto(SysRoleSelectDto dto);
 
     /**
      * 删除角色权限（根据权限id）

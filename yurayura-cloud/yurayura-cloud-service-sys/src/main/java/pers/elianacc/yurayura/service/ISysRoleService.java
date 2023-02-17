@@ -6,6 +6,7 @@ import pers.elianacc.yurayura.dto.SysRoleInsertDto;
 import pers.elianacc.yurayura.dto.SysRoleSelectDto;
 import pers.elianacc.yurayura.dto.SysRoleUpdateDto;
 import pers.elianacc.yurayura.entity.sys.role.SysRole;
+import pers.elianacc.yurayura.vo.SysRoleAndPermissionVo;
 
 import java.util.List;
 import java.util.Map;
@@ -22,9 +23,9 @@ public interface ISysRoleService extends IService<SysRole> {
      * 分页查询系统角色
      *
      * @param dto
-     * @return com.github.pagehelper.PageInfo<java.util.Map<java.lang.String,java.lang.Object>>
+     * @return com.github.pagehelper.PageInfo<pers.elianacc.yurayura.vo.SysRoleAndPermissionVo>
      */
-    public PageInfo<Map<String, Object>> getPage(SysRoleSelectDto dto);
+    public PageInfo<SysRoleAndPermissionVo> getPage(SysRoleSelectDto dto);
 
     /**
      * 查询所有系统角色

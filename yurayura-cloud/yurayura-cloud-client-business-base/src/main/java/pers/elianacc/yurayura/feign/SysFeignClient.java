@@ -9,9 +9,7 @@ import pers.elianacc.yurayura.entity.sys.manager.SysManager;
 import pers.elianacc.yurayura.entity.sys.menu.SysMenuSub;
 import pers.elianacc.yurayura.entity.sys.permission.SysPermission;
 import pers.elianacc.yurayura.entity.sys.role.SysRole;
-import pers.elianacc.yurayura.vo.ApiResult;
-import pers.elianacc.yurayura.vo.SysMenuTreeSelectVo;
-import pers.elianacc.yurayura.vo.SysPermissionAuthorTreeSelectVo;
+import pers.elianacc.yurayura.vo.*;
 
 import java.util.List;
 import java.util.Map;
@@ -43,7 +41,7 @@ public interface SysFeignClient {
 //----------------------------------------------------------------------------------------------------------------------
 
     @PostMapping("/sys/manager/getPage")
-    public ApiResult<PageInfo<Map<String, Object>>> getPage(@RequestBody SysManagerSelectDto dto);
+    public ApiResult<PageInfo<SysManagerAndRoleVo>> getPage(@RequestBody SysManagerSelectDto dto);
 
     @PostMapping("/sys/manager/insert")
     public ApiResult<String> insert(@RequestBody SysManagerInsertDto dto);
@@ -60,10 +58,10 @@ public interface SysFeignClient {
 //----------------------------------------------------------------------------------------------------------------------
 
     @GetMapping("/sys/menu/getTreeList")
-    public ApiResult<List<SysMenuTreeSelectVo>> getMenuTreeList();
+    public ApiResult<List<SysMenuTreeVo>> getMenuTreeList();
 
     @GetMapping("/sys/menu/getTreeListByManagerId")
-    public ApiResult<List<SysMenuTreeSelectVo>> getMenuTreeListByManagerId(@RequestParam Integer managerId);
+    public ApiResult<List<SysMenuTreeVo>> getMenuTreeListByManagerId(@RequestParam Integer managerId);
 
     @PostMapping("/sys/menu/insert")
     public ApiResult<String> insert(@RequestBody SysMenuInsertDto dto);
@@ -103,12 +101,12 @@ public interface SysFeignClient {
     public ApiResult<String> update(@RequestBody SysPermissionUpdateDto dto);
 
     @GetMapping("/sys/permission/getPermissionAuthorTree")
-    public ApiResult<List<SysPermissionAuthorTreeSelectVo>> getPermissionAuthorTree();
+    public ApiResult<List<SysPermissionAuthorTreeVo>> getPermissionAuthorTree();
 
 //----------------------------------------------------------------------------------------------------------------------
 
     @PostMapping("/sys/role/getPage")
-    public ApiResult<PageInfo<Map<String, Object>>> getPage(@RequestBody SysRoleSelectDto dto);
+    public ApiResult<PageInfo<SysRoleAndPermissionVo>> getPage(@RequestBody SysRoleSelectDto dto);
 
     @PostMapping("/sys/role/insert")
     public ApiResult<String> insert(@RequestBody SysRoleInsertDto dto);
