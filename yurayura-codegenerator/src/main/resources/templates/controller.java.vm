@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import ${package.Service}.${table.serviceName};
 import ${packageParentPath}.dto.IdDto;
+import ${packageParentPath}.entity${entityPackagePath}#if(${entity.toLowerCase().startsWith("sys")})${entity.toLowerCase().substring(3)}#else${entity.toLowerCase()}#end.${entity}
 import ${packageParentPath}.vo.ApiResult;
 #if(${restControllerStyle})
 import org.springframework.web.bind.annotation.RestController;

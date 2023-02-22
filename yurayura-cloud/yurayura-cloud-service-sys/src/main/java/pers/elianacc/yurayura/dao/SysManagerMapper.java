@@ -7,7 +7,6 @@ import org.springframework.data.repository.query.Param;
 import pers.elianacc.yurayura.vo.SysManagerAndRoleVo;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 系统管理员 mapper interface

@@ -28,7 +28,6 @@ import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Map;
 
 /**
  * 系统管理员 controller

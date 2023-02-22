@@ -25,7 +25,7 @@ public class CodeGenerator {
 
         String generatorDb = scanner("请输入需要生成的库名");
 
-        String generatorDbUrl = "jdbc:mysql://127.0.0.1:3306/" + generatorDb + "?serverTimezone=GMT%2B8&useSSL=false&useUnicode=true&characterEncoding=utf-8";
+        String generatorDbUrl = "jdbc:mysql://127.0.0.1:3306/" + generatorDb + "?serverTimezone=GMT%2B8&useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true";
 
         AtomicReference<String> generatorTable = new AtomicReference<>();
 
