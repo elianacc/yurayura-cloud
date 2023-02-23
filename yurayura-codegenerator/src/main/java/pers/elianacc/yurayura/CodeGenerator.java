@@ -28,6 +28,8 @@ public class CodeGenerator {
         String generatorDbUrl = "jdbc:mysql://127.0.0.1:3306/" + generatorDb + "?serverTimezone=GMT%2B8&useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true";
 
         AtomicReference<String> generatorTable = new AtomicReference<>();
+        AtomicReference<String> tablePrefixName = new AtomicReference<>();
+        AtomicReference<String> modulePackagePath = new AtomicReference<>();
 
         FastAutoGenerator.create(generatorDbUrl, "root", "123456")
                 // 全局配置(GlobalConfig)
@@ -40,20 +42,20 @@ public class CodeGenerator {
                 // 包配置(PackageConfig)
                 .packageConfig((scanner, builder) -> {
                     generatorTable.set(scanner.apply("请输入需要生成的表名"));
+                    tablePrefixName.set(generatorTable.get().substring(0, generatorTable.get().indexOf("_")));
                     if (!generatorTable.get().matches("^[a-zA-Z]([a-zA-Z0-9_]+)?$")) {
                         System.out.println("表名输入异常！");
                         System.exit(0);
                     }
-                    String modulePackagePath;
                     if (generatorTable.get().contains("_sys_")) {
-                        modulePackagePath = "sys." + generatorTable.get().substring(generatorTable.get().indexOf("_") + 5);
+                        modulePackagePath.set("sys." + generatorTable.get().substring(generatorTable.get().indexOf("_") + 5));
                     } else {
-                        modulePackagePath = generatorTable.get().substring(generatorTable.get().indexOf("_") + 1);
+                        modulePackagePath.set(generatorTable.get().substring(generatorTable.get().indexOf("_") + 1));
                     }
-                    modulePackagePath = modulePackagePath.contains("_") ? modulePackagePath.substring(0, modulePackagePath.indexOf("_")) : modulePackagePath;
+                    modulePackagePath.set(modulePackagePath.get().contains("_") ? modulePackagePath.get().substring(0, modulePackagePath.get().indexOf("_")) : modulePackagePath.get());
                     builder.parent("pers.elianacc")
-                            .moduleName("yurayura")
-                            .entity("entity." + modulePackagePath)
+                            .moduleName(tablePrefixName.get())
+                            .entity("entity." + modulePackagePath.get())
                             .xml("dao.mapper")
                             .mapper("dao")
                             .serviceImpl("service.impl")
@@ -73,13 +75,13 @@ public class CodeGenerator {
                 .injectionConfig(builder -> {
                     Map<String, Object> parmMap = new HashMap<>();
                     parmMap.put("sysModulePath", generatorTable.get().contains("_sys_") ? "/sys/" : "/");
-                    parmMap.put("entityPackagePath", generatorTable.get().contains("_sys_") ? ".sys." : ".");
-                    parmMap.put("packageParentPath", "pers.elianacc.yurayura");
+                    parmMap.put("modulePackagePath", modulePackagePath.get());
+                    parmMap.put("packageParentPath", "pers.elianacc." + tablePrefixName.get());
                     builder.customMap(parmMap);
                 })
                 // 策略配置(StrategyConfig)
                 .strategyConfig(builder -> {
-                    String tablePrefix = generatorTable.get().contains("_sys_") ? "yurayura_sys_" : "yurayura_";
+                    String tablePrefix = generatorTable.get().contains("_sys_") ? tablePrefixName.get() + "_sys_" : tablePrefixName.get() + "_";
                     String filePrefix = generatorTable.get().contains("_sys_") ? "Sys" : "";
                     builder.addInclude(generatorTable.get())
                             .addTablePrefix(tablePrefix)
