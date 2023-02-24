@@ -56,6 +56,12 @@ public class CodeGenerator {
                     builder.parent("pers.elianacc")
                             .moduleName(tablePrefixName.get())
                             .entity("entity." + modulePackagePath.get())
+                            // SpringBoot单体项目加上模块包路径
+//                            .xml("dao." + modulePackagePath.get() + ".mapper")
+//                            .mapper("dao." + modulePackagePath.get())
+//                            .serviceImpl("service." + modulePackagePath.get() + ".impl")
+//                            .service("service." + modulePackagePath.get())
+//                            .controller("controller." + modulePackagePath.get());
                             .xml("dao.mapper")
                             .mapper("dao")
                             .serviceImpl("service.impl")
