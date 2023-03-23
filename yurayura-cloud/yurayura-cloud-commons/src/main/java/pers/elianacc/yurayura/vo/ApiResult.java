@@ -20,10 +20,11 @@ public class ApiResult<T> implements Serializable {
 
     private final static int SUCCESS_CODE = 200; // 服务器处理成功状态码
     private final static int FAIL_CODE = 500; // 服务器错误状态码
-    private final static int WARN_CODE = 102; // 服务器警告状态码
 
     private final static int NOT_AUTHENTICATION = 401; // 未认证
     private final static int NOT_AUTHORIZATION = 405; // 未授权
+    private final static int FORBIDDEN = 403; // 服务器理解请求客户端的请求，但是拒绝执行此请求
+    private final static int BAD_REQUEST = 400; // 客户端请求的语法错误，服务器无法理解
 
     private final static String NOT_AUTHENTICATION_MSG = "登入认证过期，请重新登入"; // 未认证提示信息
     private final static String NOT_AUTHORIZATION_MSG = "还未授权此操作"; // 未授权提示信息
@@ -79,13 +80,13 @@ public class ApiResult<T> implements Serializable {
 
     public static <T> ApiResult<T> warn() {
         ApiResult<T> r = new ApiResult();
-        r.setCode(WARN_CODE);
+        r.setCode(FORBIDDEN);
         return r;
     }
 
     public static <T> ApiResult<T> warn(String msg) {
         ApiResult<T> r = new ApiResult();
-        r.setCode(WARN_CODE);
+        r.setCode(FORBIDDEN);
         r.setMsg(msg);
         return r;
     }
@@ -114,6 +115,13 @@ public class ApiResult<T> implements Serializable {
         ApiResult<T> r = new ApiResult();
         r.setCode(NOT_AUTHORIZATION);
         r.setMsg(NOT_AUTHORIZATION_MSG);
+        return r;
+    }
+
+    public static <T> ApiResult<T> badRequest(String msg) {
+        ApiResult<T> r = new ApiResult();
+        r.setCode(BAD_REQUEST);
+        r.setMsg(msg);
         return r;
     }
 

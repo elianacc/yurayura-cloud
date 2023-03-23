@@ -16,6 +16,8 @@ import pers.elianacc.yurayura.entity.comic.Comic;
 import pers.elianacc.yurayura.service.ComicService;
 import pers.elianacc.yurayura.vo.ApiResult;
 
+import javax.validation.Valid;
+
 /**
  * 番剧 controller
  *
@@ -41,7 +43,7 @@ public class ComicController {
             blockHandlerClass = ComicBlockHandler.class,
             blockHandler = "getPageBlockHandler")
     @ApiOperation("分页查询番剧")
-    public ApiResult<PageInfo<Comic>> getPage(@RequestBody ComicSelectDto dto) {
+    public ApiResult<PageInfo<Comic>> getPage(@Valid @RequestBody ComicSelectDto dto) {
         return comicService.getPage(dto);
     }
 
@@ -54,7 +56,7 @@ public class ComicController {
     @PostMapping("/insert")
     @Lock4j(keys = {"#dto.comicName"}, autoRelease = false)
     @ApiOperation("添加番剧")
-    public ApiResult<String> insert(ComicInsertDto dto) {
+    public ApiResult<String> insert(@Valid ComicInsertDto dto) {
         return comicService.insert(dto);
     }
 
@@ -66,7 +68,7 @@ public class ComicController {
      */
     @PutMapping("/deleteBatchByIds")
     @ApiOperation("批量删除番剧（根据番剧id组）")
-    public ApiResult<String> deleteBatchByIds(@RequestBody IdsDto dto) {
+    public ApiResult<String> deleteBatchByIds(@Valid @RequestBody IdsDto dto) {
         return comicService.deleteBatchByIds(dto);
     }
 
@@ -79,7 +81,7 @@ public class ComicController {
     @PutMapping("/update")
     @Lock4j(keys = {"#dto.id"}, autoRelease = false)
     @ApiOperation("修改番剧")
-    public ApiResult<String> update(ComicUpdateDto dto) {
+    public ApiResult<String> update(@Valid ComicUpdateDto dto) {
         return comicService.update(dto);
     }
 

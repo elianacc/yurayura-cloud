@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class IdsDto implements Serializable {
     /**
      * id组
      */
+    @Size(min = 1, message = "id组不能为空")
     @ApiModelProperty(value = "id组（例：[1,2]）", required = true)
     private List<Integer> ids;
 
