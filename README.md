@@ -125,9 +125,18 @@ spring:
   # 发送邮箱配置
   mail:
     host: smtp.126.com
+    port: 465
     username: (隐藏)@126.com
     password: (隐藏)
     default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+          starttls:
+            enable: true
   # 文件上传配置
   servlet:
     multipart:
@@ -286,11 +295,21 @@ spring:
     encoding: UTF-8
     cache: false
   # 发送邮箱配置
+  mail:  # 发送邮箱配置
   mail:
     host: smtp.126.com
+    port: 465
     username: (隐藏)@126.com
     password: (隐藏)
     default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+          starttls:
+            enable: true
   # 文件上传配置
   servlet:
     multipart:
