@@ -36,9 +36,6 @@ public class SysDictController {
      */
     @GetMapping("/getById")
     public ApiResult<SysDict> getById(IdDto dto) {
-        if (ObjectUtils.isEmpty(dto.getId())) {
-            return ApiResult.warn("id不能为空");
-        }
         return ApiResult.success("查询成功", iSysDictService.getById(dto.getId()));
     }
 
@@ -50,11 +47,6 @@ public class SysDictController {
      */
     @PostMapping("/getPage")
     public ApiResult<PageInfo<SysDict>> getPage(@RequestBody SysDictSelectDto dto) {
-        if (ObjectUtils.isEmpty(dto.getPageNum())) {
-            return ApiResult.warn("页码不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getPageSize())) {
-            dto.setPageSize(10); // 页记录数默认10
-        }
         PageInfo<SysDict> pageInfo = iSysDictService.getPage(dto);
         if (pageInfo.getTotal() == 0) {
             return ApiResult.warn("查询不到数据");
@@ -70,21 +62,6 @@ public class SysDictController {
      */
     @PostMapping("/insert")
     public ApiResult<String> insert(@RequestBody SysDictInsertDto dto) {
-        if (ObjectUtils.isEmpty(dto.getDictCode())) {
-            return ApiResult.warn("字典编码不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getDictName())) {
-            return ApiResult.warn("字典名不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getDictVal())) {
-            return ApiResult.warn("字典值不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getDictStatus())) {
-            return ApiResult.warn("状态不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getDictSeq())) {
-            return ApiResult.warn("序号不能为空");
-        } else if (dto.getDictCode().length() > 20 || dto.getDictName().length() > 20 || dto.getDictVal().length() > 20) {
-            return ApiResult.warn("字典编码、字典名、字典值不能超过20个字符");
-        } else if (!dto.getDictCode().matches("^[a-z][A-Za-z]*$")) {
-            return ApiResult.warn("字典编码只能包含字母，以小写字母开头");
-        }
         String warn = iSysDictService.insert(dto);
         if (!ObjectUtils.isEmpty(warn)) {
             return ApiResult.warn(warn);
@@ -100,17 +77,6 @@ public class SysDictController {
      */
     @PutMapping("/update")
     public ApiResult<String> update(@RequestBody SysDictUpdateDto dto) {
-        if (ObjectUtils.isEmpty(dto.getId())) {
-            return ApiResult.warn("id不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getDictName())) {
-            return ApiResult.warn("字典名不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getDictStatus())) {
-            return ApiResult.warn("状态不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getDictSeq())) {
-            return ApiResult.warn("序号不能为空");
-        } else if (dto.getDictName().length() > 20) {
-            return ApiResult.warn("字典名不能超过20个字符");
-        }
         String warn = iSysDictService.update(dto);
         if (!ObjectUtils.isEmpty(warn)) {
             return ApiResult.warn(warn);

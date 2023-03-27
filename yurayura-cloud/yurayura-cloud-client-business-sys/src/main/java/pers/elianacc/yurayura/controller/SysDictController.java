@@ -16,6 +16,7 @@ import pers.elianacc.yurayura.entity.sys.dict.SysDict;
 import pers.elianacc.yurayura.service.SysDictService;
 import pers.elianacc.yurayura.vo.ApiResult;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -43,7 +44,7 @@ public class SysDictController {
             blockHandlerClass = SysDictBlockHandler.class,
             blockHandler = "getPageBlockHandler")
     @ApiOperation("分页查询系统数据字典")
-    public ApiResult<PageInfo<SysDict>> getPage(@RequestBody SysDictSelectDto dto) {
+    public ApiResult<PageInfo<SysDict>> getPage(@Valid @RequestBody SysDictSelectDto dto) {
         return sysDictService.getPage(dto);
     }
 
@@ -56,7 +57,7 @@ public class SysDictController {
     @PostMapping("/insert")
     @Lock4j(keys = {"#dto.dictCode", "#dto.dictVal"}, autoRelease = false)
     @ApiOperation("添加系统数据字典")
-    public ApiResult<String> insert(@RequestBody SysDictInsertDto dto) {
+    public ApiResult<String> insert(@Valid @RequestBody SysDictInsertDto dto) {
         return sysDictService.insert(dto);
     }
 
@@ -69,7 +70,7 @@ public class SysDictController {
     @PutMapping("/update")
     @Lock4j(keys = {"#dto.id"}, autoRelease = false)
     @ApiOperation("修改系统数据字典")
-    public ApiResult<String> update(@RequestBody SysDictUpdateDto dto) {
+    public ApiResult<String> update(@Valid @RequestBody SysDictUpdateDto dto) {
         return sysDictService.update(dto);
     }
 

@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -45,13 +46,15 @@ public class UserSelectDto implements Serializable {
     /**
      * 页码
      */
+    @NotNull(message = "页码不能为空")
     @ApiModelProperty(value = "页码", required = true, example = "1")
     private Integer pageNum;
 
     /**
      * 页记录数
      */
-    @ApiModelProperty(value = "页记录数", example = "10")
+    @NotNull(message = "页记录数不能为空")
+    @ApiModelProperty(value = "页记录数", required = true, example = "10")
     private Integer pageSize;
 
 }

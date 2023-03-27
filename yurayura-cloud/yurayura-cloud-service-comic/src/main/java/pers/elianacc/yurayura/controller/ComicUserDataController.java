@@ -2,7 +2,6 @@ package pers.elianacc.yurayura.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,9 +31,6 @@ public class ComicUserDataController {
      */
     @GetMapping("/getById")
     public ApiResult<ComicUserData> getById(IdDto dto) {
-        if (ObjectUtils.isEmpty(dto.getId())) {
-            return ApiResult.warn("id不能为空");
-        }
         return ApiResult.success("查询成功", iComicUserDataService.getById(dto.getId()));
     }
 }

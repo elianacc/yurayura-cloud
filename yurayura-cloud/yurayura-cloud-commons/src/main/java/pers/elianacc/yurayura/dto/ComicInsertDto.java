@@ -27,13 +27,14 @@ public class ComicInsertDto implements Serializable {
      * 名称
      */
     @NotBlank(message = "名称不能为空")
-    @Size(min = 1, max = 30, message = "名称不能超过30个字符")
+    @Size(max = 30, message = "名称不能超过30个字符")
     @ApiModelProperty(value = "名称", required = true)
     private String comicName;
 
     /**
      * 评分
      */
+    @NotNull(message = "评分不能为空")
     @ApiModelProperty(value = "评分", required = true, example = "1.0")
     private Double comicScore;
 
@@ -67,6 +68,7 @@ public class ComicInsertDto implements Serializable {
     /**
      * 当前话数
      */
+    @NotNull(message = "当前话数不能为空")
     @ApiModelProperty(value = "当前话数", required = true, example = "1")
     private Integer comicCurrentEpisodes;
 

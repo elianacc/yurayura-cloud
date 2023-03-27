@@ -3,7 +3,6 @@ package pers.elianacc.yurayura.controller;
 
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import pers.elianacc.yurayura.dto.IdDto;
 import pers.elianacc.yurayura.dto.UserSelectDto;
@@ -33,9 +32,6 @@ public class UserController {
      */
     @GetMapping("/getById")
     public ApiResult<User> getById(IdDto dto) {
-        if (ObjectUtils.isEmpty(dto.getId())) {
-            return ApiResult.warn("id不能为空");
-        }
         return ApiResult.success("查询成功", iUserService.getById(dto.getId()));
     }
 
@@ -47,11 +43,6 @@ public class UserController {
      */
     @PostMapping("/getPage")
     public ApiResult<PageInfo<User>> getPage(@RequestBody UserSelectDto dto) {
-        if (ObjectUtils.isEmpty(dto.getPageNum())) {
-            return ApiResult.warn("页码不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getPageSize())) {
-            dto.setPageSize(10); // 页记录数默认10
-        }
         PageInfo<User> pageInfo = iUserService.getPage(dto);
         if (pageInfo.getTotal() == 0) {
             return ApiResult.warn("查询不到数据");
@@ -67,11 +58,6 @@ public class UserController {
      */
     @PutMapping("/updateStatus")
     public ApiResult<String> updateStatus(@RequestBody UserUpdateStatusDto dto) {
-        if (ObjectUtils.isEmpty(dto.getId())) {
-            return ApiResult.warn("id不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getUserStatus())) {
-            return ApiResult.warn("状态不能为空");
-        }
         iUserService.updateStatus(dto);
         return ApiResult.success("修改状态成功");
     }
@@ -84,9 +70,6 @@ public class UserController {
      */
     @PutMapping("/updateAvatarDefault")
     public ApiResult<String> updateAvatarDefault(@RequestBody IdDto dto) {
-        if (ObjectUtils.isEmpty(dto.getId())) {
-            return ApiResult.warn("id不能为空");
-        }
         iUserService.updateAvatarDefault(dto);
         return ApiResult.success("重置为默认头像成功");
     }
