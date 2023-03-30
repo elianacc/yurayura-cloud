@@ -93,7 +93,7 @@ public class SysDictController {
     @GetMapping("/getByDictCode")
     public ApiResult<List<SysDict>> getByDictCode(@RequestParam String dictCode) {
         if (ObjectUtils.isEmpty(dictCode)) {
-            return ApiResult.warn("字典编码不能为空");
+            return ApiResult.badRequest("字典编码不能为空");
         }
         List<SysDict> sysDictList = iSysDictService.getByDictCode(dictCode);
         if (sysDictList.isEmpty()) {

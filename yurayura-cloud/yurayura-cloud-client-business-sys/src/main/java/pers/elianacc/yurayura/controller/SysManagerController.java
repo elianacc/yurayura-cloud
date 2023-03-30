@@ -25,6 +25,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -54,7 +55,7 @@ public class SysManagerController {
             blockHandlerClass = SysManagerBlockHandler.class,
             blockHandler = "getPageBlockHandler")
     @ApiOperation("分页查询系统管理员")
-    public ApiResult<PageInfo<SysManagerAndRoleVo>> getPage(@RequestBody SysManagerSelectDto dto) {
+    public ApiResult<PageInfo<SysManagerAndRoleVo>> getPage(@Valid @RequestBody SysManagerSelectDto dto) {
         return sysManagerService.getPage(dto);
     }
 
@@ -67,7 +68,7 @@ public class SysManagerController {
     @PostMapping("/insert")
     @Lock4j(keys = {"#dto.managerName"}, autoRelease = false)
     @ApiOperation("添加系统管理员")
-    public ApiResult<String> insert(@RequestBody SysManagerInsertDto dto) {
+    public ApiResult<String> insert(@Valid @RequestBody SysManagerInsertDto dto) {
         return sysManagerService.insert(dto);
     }
 
@@ -80,7 +81,7 @@ public class SysManagerController {
     @PutMapping("/update")
     @Lock4j(keys = {"#dto.id"}, autoRelease = false)
     @ApiOperation("修改系统管理员")
-    public ApiResult<String> update(@RequestBody SysManagerUpdateDto dto) {
+    public ApiResult<String> update(@Valid @RequestBody SysManagerUpdateDto dto) {
         return sysManagerService.update(dto);
     }
 
@@ -118,14 +119,7 @@ public class SysManagerController {
     @PostMapping("/login")
     @Lock4j(keys = {"#dto.managerName"}, autoRelease = false)
     @ApiOperation("系统管理员登入")
-    public ApiResult<String> login(@RequestBody SysManagerLoginDto dto, @ApiIgnore HttpSession session) {
-        if (ObjectUtils.isEmpty(dto.getManagerName())) {
-            return ApiResult.warn("用户名不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getManagerPassword())) {
-            return ApiResult.warn("密码不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getVerifyCode())) {
-            return ApiResult.warn("验证码不能为空");
-        }
+    public ApiResult<String> login(@Valid @RequestBody SysManagerLoginDto dto, @ApiIgnore HttpSession session) {
         String warn = sysManagerService.login(dto, session);
         if (!ObjectUtils.isEmpty(warn)) {
             return ApiResult.warn(warn);

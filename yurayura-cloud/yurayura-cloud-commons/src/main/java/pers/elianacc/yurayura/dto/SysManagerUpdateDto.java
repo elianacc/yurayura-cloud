@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
 
@@ -22,6 +24,7 @@ public class SysManagerUpdateDto implements Serializable {
     /**
      * id
      */
+    @NotNull(message = "id不能为空")
     @ApiModelProperty(value = "id", required = true, example = "1")
     private Integer id;
 
@@ -34,12 +37,14 @@ public class SysManagerUpdateDto implements Serializable {
     /**
      * 状态- 0：禁用，1：启用
      */
+    @NotNull(message = "状态不能为空")
     @ApiModelProperty(value = "状态- 0：禁用，1：启用", required = true, example = "1")
     private Integer managerStatus;
 
     /**
      * 拥有角色id组
      */
+    @Size(min = 1, message = "至少分配一个角色")
     @ApiModelProperty(value = "拥有角色id组")
     private List<Integer> roleIdArr;
 

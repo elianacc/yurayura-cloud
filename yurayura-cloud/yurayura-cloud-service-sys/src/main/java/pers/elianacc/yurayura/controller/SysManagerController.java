@@ -36,9 +36,6 @@ public class SysManagerController {
      */
     @GetMapping("/getById")
     public ApiResult<SysManager> getById(IdDto dto) {
-        if (ObjectUtils.isEmpty(dto.getId())) {
-            return ApiResult.warn("id不能为空");
-        }
         return ApiResult.success("查询成功", iSysManagerService.getById(dto.getId()));
     }
 
@@ -50,11 +47,6 @@ public class SysManagerController {
      */
     @PostMapping("/getPage")
     public ApiResult<PageInfo<SysManagerAndRoleVo>> getPage(@RequestBody SysManagerSelectDto dto) {
-        if (ObjectUtils.isEmpty(dto.getPageNum())) {
-            return ApiResult.warn("页码不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getPageSize())) {
-            dto.setPageSize(10); // 页记录数默认10
-        }
         PageInfo<SysManagerAndRoleVo> pageInfo = iSysManagerService.getPage(dto);
         if (pageInfo.getTotal() == 0) {
             return ApiResult.warn("查询不到数据");
@@ -70,15 +62,6 @@ public class SysManagerController {
      */
     @PostMapping("/insert")
     public ApiResult<String> insert(@RequestBody SysManagerInsertDto dto) {
-        if (ObjectUtils.isEmpty(dto.getManagerName())) {
-            return ApiResult.warn("管理员名不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getManagerPassword())) {
-            return ApiResult.warn("管理员密码不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getManagerStatus())) {
-            return ApiResult.warn("状态不能为空");
-        } else if (dto.getManagerName().length() > 20) {
-            return ApiResult.warn("管理员名不能超过20个字符");
-        }
         String warn = iSysManagerService.insert(dto);
         if (!ObjectUtils.isEmpty(warn)) {
             return ApiResult.warn(warn);
@@ -94,11 +77,6 @@ public class SysManagerController {
      */
     @PutMapping("/update")
     public ApiResult<String> update(@RequestBody SysManagerUpdateDto dto) {
-        if (ObjectUtils.isEmpty(dto.getId())) {
-            return ApiResult.warn("id不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getManagerStatus())) {
-            return ApiResult.warn("状态不能为空");
-        }
         String warn = iSysManagerService.update(dto);
         if (!ObjectUtils.isEmpty(warn)) {
             return ApiResult.warn(warn);
@@ -115,7 +93,7 @@ public class SysManagerController {
     @RequestMapping("/getManagerRolePermission")
     public ApiResult<String> getManagerRolePermission(@RequestParam Integer managerId) {
         if (ObjectUtils.isEmpty(managerId)) {
-            return ApiResult.warn("id不能为空");
+            return ApiResult.badRequest("id不能为空");
         }
         return ApiResult.success("查询成功", iSysManagerService.getManagerRolePermission(managerId));
     }
@@ -129,7 +107,7 @@ public class SysManagerController {
     @RequestMapping("/getEnableManagerByName")
     public ApiResult<SysManager> getEnableManagerByName(@RequestParam String managerName) {
         if (ObjectUtils.isEmpty(managerName)) {
-            return ApiResult.warn("管理员名不能为空");
+            return ApiResult.badRequest("管理员名不能为空");
         }
         return ApiResult.success("查询成功", iSysManagerService.getEnableManagerByName(managerName));
     }

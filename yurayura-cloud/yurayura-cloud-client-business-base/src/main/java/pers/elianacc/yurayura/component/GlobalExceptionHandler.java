@@ -75,6 +75,8 @@ public class GlobalExceptionHandler {
     public ApiResult<String> businessExceptionHandler(BusinessException businessException) {
         if (businessException.getErrorCode() == 500) {
             return ApiResult.fail(businessException.getErrorMsg());
+        } else if (businessException.getErrorCode() == 400) {
+            return ApiResult.badRequest(businessException.getErrorMsg());
         } else {
             return ApiResult.warn(businessException.getErrorMsg());
         }
