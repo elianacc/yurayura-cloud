@@ -14,6 +14,7 @@ import pers.elianacc.yurayura.service.SysMenuService;
 import pers.elianacc.yurayura.vo.ApiResult;
 import pers.elianacc.yurayura.vo.SysMenuTreeVo;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -66,7 +67,7 @@ public class SysMenuController {
     @PostMapping("/insert")
     @Lock4j(keys = {"#dto.menuName"}, autoRelease = false)
     @ApiOperation("添加系统菜单")
-    public ApiResult<String> insert(@RequestBody SysMenuInsertDto dto) {
+    public ApiResult<String> insert(@Valid @RequestBody SysMenuInsertDto dto) {
         return sysMenuService.insert(dto);
     }
 
@@ -79,7 +80,7 @@ public class SysMenuController {
     @PutMapping("/update")
     @Lock4j(keys = {"#dto.id"}, autoRelease = false)
     @ApiOperation("修改系统菜单")
-    public ApiResult<String> update(@RequestBody SysMenuUpdateDto dto) {
+    public ApiResult<String> update(@Valid @RequestBody SysMenuUpdateDto dto) {
         return sysMenuService.update(dto);
     }
 
@@ -91,7 +92,7 @@ public class SysMenuController {
      */
     @PutMapping("/deleteById")
     @ApiOperation("删除系统菜单（根据系统菜单id）")
-    public ApiResult<String> deleteById(@RequestBody IdDto dto) {
+    public ApiResult<String> deleteById(@Valid @RequestBody IdDto dto) {
         return sysMenuService.deleteById(dto);
     }
 

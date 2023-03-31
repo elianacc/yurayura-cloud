@@ -34,9 +34,6 @@ public class SysMenuController {
      */
     @GetMapping("/getById")
     public ApiResult<SysMenu> getById(IdDto dto) {
-        if (ObjectUtils.isEmpty(dto.getId())) {
-            return ApiResult.warn("id不能为空");
-        }
         return ApiResult.success("查询成功", iSysMenuService.getById(dto.getId()));
     }
 
@@ -60,7 +57,7 @@ public class SysMenuController {
     @GetMapping("/getTreeListByManagerId")
     public ApiResult<List<SysMenuTreeVo>> getTreeListByManagerId(@RequestParam Integer managerId) {
         if (ObjectUtils.isEmpty(managerId)) {
-            return ApiResult.warn("id不能为空");
+            return ApiResult.badRequest("id不能为空");
         }
         return ApiResult.success("树形列表查询成功", iSysMenuService.getTreeListByManagerId(managerId));
     }
@@ -73,21 +70,6 @@ public class SysMenuController {
      */
     @PostMapping("/insert")
     public ApiResult<String> insert(@RequestBody SysMenuInsertDto dto) {
-        if (ObjectUtils.isEmpty(dto.getMenuTitle())) {
-            return ApiResult.warn("标题不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getMenuName())) {
-            return ApiResult.warn("标识不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getMenuIconClass())) {
-            return ApiResult.warn("图标样式不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getMenuSeq())) {
-            return ApiResult.warn("序号不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getMenuStatus())) {
-            return ApiResult.warn("状态不能为空");
-        } else if (!dto.getMenuName().matches("^[a-z][a-z_]*$")) {
-            return ApiResult.warn("标识只能包含小写字母下划线，以小写字母开头");
-        } else if (dto.getMenuTitle().length() > 20 || dto.getMenuName().length() > 20 || dto.getMenuIconClass().length() > 30) {
-            return ApiResult.warn("标题、标识不能超过20个字符，图标样式不能超过30个字符");
-        }
         String warn = iSysMenuService.insert(dto);
         if (!ObjectUtils.isEmpty(warn)) {
             return ApiResult.warn(warn);
@@ -103,19 +85,6 @@ public class SysMenuController {
      */
     @PutMapping("/update")
     public ApiResult<String> update(@RequestBody SysMenuUpdateDto dto) {
-        if (ObjectUtils.isEmpty(dto.getId())) {
-            return ApiResult.warn("id不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getMenuTitle())) {
-            return ApiResult.warn("标题不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getMenuIconClass())) {
-            return ApiResult.warn("图标样式不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getMenuStatus())) {
-            return ApiResult.warn("状态不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getMenuSeq())) {
-            return ApiResult.warn("序号不能为空");
-        } else if (dto.getMenuTitle().length() > 20 || dto.getMenuIconClass().length() > 30) {
-            return ApiResult.warn("标题不能超过20个字符，图标样式不能超过30个字符");
-        }
         String warn = iSysMenuService.update(dto);
         if (!ObjectUtils.isEmpty(warn)) {
             return ApiResult.warn(warn);
@@ -131,9 +100,6 @@ public class SysMenuController {
      */
     @PutMapping("/deleteById")
     public ApiResult<String> deleteById(@RequestBody IdDto dto) {
-        if (ObjectUtils.isEmpty(dto.getId())) {
-            return ApiResult.warn("id不能为空");
-        }
         iSysMenuService.deleteById(dto);
         return ApiResult.success("删除成功");
     }

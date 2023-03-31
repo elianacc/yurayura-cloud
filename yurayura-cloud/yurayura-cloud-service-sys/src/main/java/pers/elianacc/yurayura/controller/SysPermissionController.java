@@ -37,9 +37,6 @@ public class SysPermissionController {
      */
     @GetMapping("/getById")
     public ApiResult<SysPermission> getById(IdDto dto) {
-        if (ObjectUtils.isEmpty(dto.getId())) {
-            return ApiResult.warn("id不能为空");
-        }
         return ApiResult.success("查询成功", iSysPermissionService.getById(dto.getId()));
     }
 
@@ -51,11 +48,6 @@ public class SysPermissionController {
      */
     @PostMapping("/getPage")
     public ApiResult<PageInfo<SysPermission>> getPage(@RequestBody SysPermissionSelectDto dto) {
-        if (ObjectUtils.isEmpty(dto.getPageNum())) {
-            return ApiResult.warn("页码不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getPageSize())) {
-            dto.setPageSize(10); // 页记录数默认10
-        }
         PageInfo<SysPermission> pageInfo = iSysPermissionService.getPage(dto);
         if (pageInfo.getTotal() == 0) {
             return ApiResult.warn("查询不到数据");
@@ -71,20 +63,9 @@ public class SysPermissionController {
      */
     @PostMapping("/insert")
     public ApiResult<String> insert(@RequestBody SysPermissionInsertDto dto) {
-        if (ObjectUtils.isEmpty(dto.getPermissionName())) {
-            return ApiResult.warn("权限名称不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getPermissionBelongSubmenuName())) {
-            return ApiResult.warn("所属子菜单标识不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getPermissionType())) {
-            return ApiResult.warn("权限类型不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getPermissionStatus())) {
-            return ApiResult.warn("状态不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getPermissionSeq())) {
-            return ApiResult.warn("序号不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getPermissionBtnVal()) && dto.getPermissionType() == SysPermissionTypeEnum.BUTTON.getTypeId().intValue()) {
-            return ApiResult.warn("权限类型为按钮时权限按钮不能为空");
-        } else if (dto.getPermissionName().length() > 20) {
-            return ApiResult.warn("权限名称不能超过20个字符");
+        if (ObjectUtils.isEmpty(dto.getPermissionBtnVal())
+                && dto.getPermissionType() == SysPermissionTypeEnum.BUTTON.getTypeId().intValue()) {
+            return ApiResult.badRequest("权限类型为按钮时权限按钮不能为空");
         }
         String warn = iSysPermissionService.insert(dto);
         if (!ObjectUtils.isEmpty(warn)) {
@@ -101,17 +82,6 @@ public class SysPermissionController {
      */
     @PutMapping("/update")
     public ApiResult<String> update(@RequestBody SysPermissionUpdateDto dto) {
-        if (ObjectUtils.isEmpty(dto.getId())) {
-            return ApiResult.warn("id不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getPermissionName())) {
-            return ApiResult.warn("权限名称不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getPermissionStatus())) {
-            return ApiResult.warn("状态不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getPermissionSeq())) {
-            return ApiResult.warn("序号不能为空");
-        } else if (dto.getPermissionName().length() > 20) {
-            return ApiResult.warn("权限名称不能超过20个字符");
-        }
         String warn = iSysPermissionService.update(dto);
         if (!ObjectUtils.isEmpty(warn)) {
             return ApiResult.warn(warn);

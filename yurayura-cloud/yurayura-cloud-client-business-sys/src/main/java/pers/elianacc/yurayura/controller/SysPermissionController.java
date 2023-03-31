@@ -16,6 +16,7 @@ import pers.elianacc.yurayura.service.SysPermissionService;
 import pers.elianacc.yurayura.vo.ApiResult;
 import pers.elianacc.yurayura.vo.SysPermissionAuthorTreeVo;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -43,7 +44,7 @@ public class SysPermissionController {
             blockHandlerClass = SysPermissionBlockHandler.class,
             blockHandler = "getPageBlockHandler")
     @ApiOperation("分页查询系统权限")
-    public ApiResult<PageInfo<SysPermission>> getPage(@RequestBody SysPermissionSelectDto dto) {
+    public ApiResult<PageInfo<SysPermission>> getPage(@Valid @RequestBody SysPermissionSelectDto dto) {
         return sysPermissionService.getPage(dto);
     }
 
@@ -56,7 +57,7 @@ public class SysPermissionController {
     @PostMapping("/insert")
     @Lock4j(keys = {"#dto.permissionType", "#dto.permissionBelongSubmenuName"}, autoRelease = false)
     @ApiOperation("添加系统权限")
-    public ApiResult<String> insert(@RequestBody SysPermissionInsertDto dto) {
+    public ApiResult<String> insert(@Valid @RequestBody SysPermissionInsertDto dto) {
         return sysPermissionService.insert(dto);
     }
 
@@ -69,7 +70,7 @@ public class SysPermissionController {
     @PutMapping("/update")
     @Lock4j(keys = {"#dto.id"}, autoRelease = false)
     @ApiOperation("修改系统权限")
-    public ApiResult<String> update(@RequestBody SysPermissionUpdateDto dto) {
+    public ApiResult<String> update(@Valid @RequestBody SysPermissionUpdateDto dto) {
         return sysPermissionService.update(dto);
     }
 

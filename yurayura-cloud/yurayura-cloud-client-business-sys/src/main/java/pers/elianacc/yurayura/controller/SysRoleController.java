@@ -16,6 +16,7 @@ import pers.elianacc.yurayura.service.SysRoleService;
 import pers.elianacc.yurayura.vo.ApiResult;
 import pers.elianacc.yurayura.vo.SysRoleAndPermissionVo;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -43,7 +44,7 @@ public class SysRoleController {
             blockHandlerClass = SysRoleBlockHandler.class,
             blockHandler = "getPageBlockHandler")
     @ApiOperation("分页查询系统角色")
-    public ApiResult<PageInfo<SysRoleAndPermissionVo>> getPage(@RequestBody SysRoleSelectDto dto) {
+    public ApiResult<PageInfo<SysRoleAndPermissionVo>> getPage(@Valid @RequestBody SysRoleSelectDto dto) {
         return sysRoleService.getPage(dto);
     }
 
@@ -56,7 +57,7 @@ public class SysRoleController {
     @PostMapping("/insert")
     @Lock4j(keys = {"#dto.roleName"}, autoRelease = false)
     @ApiOperation("添加系统角色")
-    public ApiResult<String> insert(@RequestBody SysRoleInsertDto dto) {
+    public ApiResult<String> insert(@Valid @RequestBody SysRoleInsertDto dto) {
         return sysRoleService.insert(dto);
     }
 
@@ -69,7 +70,7 @@ public class SysRoleController {
     @PutMapping("/update")
     @Lock4j(keys = {"#dto.id"}, autoRelease = false)
     @ApiOperation("修改系统角色")
-    public ApiResult<String> update(@RequestBody SysRoleUpdateDto dto) {
+    public ApiResult<String> update(@Valid @RequestBody SysRoleUpdateDto dto) {
         return sysRoleService.update(dto);
     }
 

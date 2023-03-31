@@ -36,9 +36,6 @@ public class SysRoleController {
      */
     @GetMapping("/getById")
     public ApiResult<SysRole> getById(IdDto dto) {
-        if (ObjectUtils.isEmpty(dto.getId())) {
-            return ApiResult.warn("id不能为空");
-        }
         return ApiResult.success("查询成功", iSysRoleService.getById(dto.getId()));
     }
 
@@ -50,11 +47,6 @@ public class SysRoleController {
      */
     @PostMapping("/getPage")
     public ApiResult<PageInfo<SysRoleAndPermissionVo>> getPage(@RequestBody SysRoleSelectDto dto) {
-        if (ObjectUtils.isEmpty(dto.getPageNum())) {
-            return ApiResult.warn("页码不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getPageSize())) {
-            dto.setPageSize(10); // 页记录数默认10
-        }
         PageInfo<SysRoleAndPermissionVo> pageInfo = iSysRoleService.getPage(dto);
         if (pageInfo.getTotal() == 0) {
             return ApiResult.warn("查询不到数据");
@@ -70,13 +62,6 @@ public class SysRoleController {
      */
     @PostMapping("/insert")
     public ApiResult<String> insert(@RequestBody SysRoleInsertDto dto) {
-        if (ObjectUtils.isEmpty(dto.getRoleName())) {
-            return ApiResult.warn("角色名不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getRoleStatus())) {
-            return ApiResult.warn("状态不能为空");
-        } else if (dto.getRoleName().length() > 20) {
-            return ApiResult.warn("角色名不能超过20个字符");
-        }
         String warn = iSysRoleService.insert(dto);
         if (!ObjectUtils.isEmpty(warn)) {
             return ApiResult.warn(warn);
@@ -92,15 +77,6 @@ public class SysRoleController {
      */
     @PutMapping("/update")
     public ApiResult<String> update(@RequestBody SysRoleUpdateDto dto) {
-        if (ObjectUtils.isEmpty(dto.getId())) {
-            return ApiResult.warn("id不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getRoleName())) {
-            return ApiResult.warn("角色名不能为空");
-        } else if (ObjectUtils.isEmpty(dto.getRoleStatus())) {
-            return ApiResult.warn("状态不能为空");
-        } else if (dto.getRoleName().length() > 20) {
-            return ApiResult.warn("角色名不能超过20个字符");
-        }
         String warn = iSysRoleService.update(dto);
         if (!ObjectUtils.isEmpty(warn)) {
             return ApiResult.warn(warn);
