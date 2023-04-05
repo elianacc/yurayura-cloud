@@ -446,7 +446,7 @@ yurayura:
   swagger:
     enable: true
   # 接收邮箱
-  receive-email: elianacc@126.com
+  receive-email: (隐藏)@126.com
   # 上传文件对外暴露的访问路径(虚拟路径)
   upload-file:
     virtual-path: /upload
