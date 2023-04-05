@@ -44,6 +44,7 @@ yurayura-codegenerator  ----- 服务生产者代码生成器
 | 在线接口文档生成    | Knife4j（swagger2增强）             | 3.0.3                       |
 | JSON处理工具        | FastJson                            | 1.2.83                      |
 | 工具类库            | Hutool                              | 5.8.9                       |
+| 应用许可证书        | Truelicense                         | 1.33                        |
 
 ## 常用功能实现
 
@@ -57,6 +58,7 @@ yurayura-codegenerator  ----- 服务生产者代码生成器
 -  发送Email工具
 -  redis常用操作工具
 -  跨域处理
+-  应用的证书加密
 -  系统数据字典
 -  系统菜单设置
 -  系统管理员角色分配
@@ -431,17 +433,23 @@ management:
     metrics:
       enabled: true
 
+# 本应用许可信息
+license:
+  public-alias: publicCert
+  public-store-pass: (隐藏)
+  license-path: D:\license\yurayura-dev-home\license.lic
+  public-keys-store-path: D:\license\yurayura-dev-home\publicCerts.store
+
 # 自定义配置
 yurayura:
   # swagger是否启用
   swagger:
     enable: true
   # 接收邮箱
-  receive-email: (隐藏)@126.com
+  receive-email: elianacc@126.com
   # 上传文件对外暴露的访问路径(虚拟路径)
   upload-file:
     virtual-path: /upload
-
 ```
 
 ## 开发工具
@@ -451,6 +459,7 @@ yurayura:
 -  数据库可视化： Navicat Premium
 -  Redis可视化： RedisDesktopManager
 -  maven私服工具： Nexus
+-  密钥生成工具： KeyTool
 -  页面访问及调试： Google Chrome
 -  markdown： Typora
 -  截图： Snipaste

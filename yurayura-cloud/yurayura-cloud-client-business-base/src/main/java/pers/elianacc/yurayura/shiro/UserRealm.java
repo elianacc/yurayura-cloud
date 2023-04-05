@@ -11,6 +11,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.util.ObjectUtils;
 import pers.elianacc.yurayura.entity.sys.manager.SysManager;
 import pers.elianacc.yurayura.feign.SysFeignClient;
+import pers.elianacc.yurayura.license.LicenseVerify;
 import pers.elianacc.yurayura.vo.ApiResult;
 
 import javax.annotation.Resource;
@@ -25,6 +26,8 @@ public class UserRealm extends AuthorizingRealm {
 
     @Resource
     private SysFeignClient sysFeignClient;
+    @Resource
+    private LicenseVerify licenseVerify;
 
     /**
      * 用户授权
@@ -37,6 +40,13 @@ public class UserRealm extends AuthorizingRealm {
         Subject subject = SecurityUtils.getSubject();
         // 当前用户未认证，清空授权信息
         if (!subject.isAuthenticated()) {
+            doClearCache(principalCollection);
+            subject.logout();
+            return null;
+        }
+
+        // 应用未许可，清空授权信息
+        if (!licenseVerify.verify()) {
             doClearCache(principalCollection);
             subject.logout();
             return null;

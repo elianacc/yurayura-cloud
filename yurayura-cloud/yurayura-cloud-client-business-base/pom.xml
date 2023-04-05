@@ -77,6 +77,22 @@
             <artifactId>shiro-spring</artifactId>
         </dependency>
 
+        <!-- 许可证书相关 依赖 -->
+        <dependency>
+            <groupId>org.lee</groupId>
+            <artifactId>license-generate</artifactId>
+            <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/license-generate-1.0.0.jar</systemPath>
+        </dependency>
+
+        <!-- truelicense 依赖 -->
+        <dependency>
+            <groupId>de.schlichtherle.truelicense</groupId>
+            <artifactId>truelicense-core</artifactId>
+            <version>1.33</version>
+        </dependency>
+
     </dependencies>
 
 </project>
