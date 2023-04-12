@@ -297,7 +297,6 @@ spring:
     encoding: UTF-8
     cache: false
   # 发送邮箱配置
-  mail:  # 发送邮箱配置
   mail:
     host: smtp.126.com
     port: 465
