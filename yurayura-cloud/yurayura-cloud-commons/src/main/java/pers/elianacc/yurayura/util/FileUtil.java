@@ -18,8 +18,6 @@ import java.util.UUID;
 @Component
 public class FileUtil {
 
-    private FileUtil(){}
-
     private static String uploadPath;
 
     @Value("${spring.servlet.multipart.location}")
