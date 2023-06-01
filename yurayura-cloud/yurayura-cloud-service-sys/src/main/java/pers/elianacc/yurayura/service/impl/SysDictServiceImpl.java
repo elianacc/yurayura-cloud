@@ -41,8 +41,9 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     public PageInfo<SysDict> getPage(SysDictSelectDto dto) {
         // 设置分页
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
-        List<SysDict> sysDictList = sysDictMapper.selectList(Wrappers.<SysDict>lambdaQuery()
-                .like(!ObjectUtils.isEmpty(dto.getDictCode()), SysDict::getDictCode, dto.getDictCode())
+        List<SysDict> sysDictList = sysDictMapper
+                .selectList(Wrappers.<SysDict>lambdaQuery()
+                .apply(!ObjectUtils.isEmpty(dto.getDictCode()), "instr(dict_code, {0}) > 0", dto.getDictCode())
                 .eq(!ObjectUtils.isEmpty(dto.getDictStatus()), SysDict::getDictStatus, dto.getDictStatus())
                 .orderByAsc(SysDict::getDictCode, SysDict::getDictSeq));
         return new PageInfo<>(sysDictList, 5);
@@ -51,7 +52,8 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     @Override
     public String insert(SysDictInsertDto dto) {
         String warn = "";
-        List<SysDict> sysDictList = sysDictMapper.selectList(Wrappers.<SysDict>lambdaQuery()
+        List<SysDict> sysDictList = sysDictMapper
+                .selectList(Wrappers.<SysDict>lambdaQuery()
                 .eq(SysDict::getDictCode, dto.getDictCode())
                 .eq(SysDict::getDictVal, dto.getDictVal()));
         if (sysDictList.isEmpty()) {
@@ -105,7 +107,8 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
             List<SysDict> sysDictList = JSON.parseArray(JSON.toJSONString(objList), SysDict.class);
             return sysDictList.stream().sorted(Comparator.comparing(SysDict::getDictSeq)).collect(Collectors.toList());
         }
-        return sysDictMapper.selectList(Wrappers.<SysDict>lambdaQuery()
+        return sysDictMapper
+                .selectList(Wrappers.<SysDict>lambdaQuery()
                 .eq(SysDict::getDictCode, dictCode)
                 .eq(SysDict::getDictStatus, EnableStatusEnum.ENABLE.getStatusId())
                 .orderByAsc(SysDict::getDictSeq));

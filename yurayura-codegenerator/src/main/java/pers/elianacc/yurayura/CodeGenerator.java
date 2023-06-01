@@ -25,7 +25,8 @@ public class CodeGenerator {
 
         String generatorDb = scanner("请输入需要生成的库名");
 
-        String generatorDbUrl = "jdbc:mysql://127.0.0.1:3306/" + generatorDb + "?serverTimezone=GMT%2B8&useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true";
+        String generatorDbUrl = "jdbc:mysql://127.0.0.1:3306/" + generatorDb
+                + "?serverTimezone=GMT%2B8&useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true";
 
         AtomicReference<String> generatorTable = new AtomicReference<>();
         AtomicReference<String> tablePrefixName = new AtomicReference<>();
@@ -52,7 +53,8 @@ public class CodeGenerator {
                     } else {
                         modulePackagePath.set(generatorTable.get().substring(generatorTable.get().indexOf("_") + 1));
                     }
-                    modulePackagePath.set(modulePackagePath.get().contains("_") ? modulePackagePath.get().substring(0, modulePackagePath.get().indexOf("_")) : modulePackagePath.get());
+                    modulePackagePath.set(modulePackagePath.get().contains("_")
+                            ? modulePackagePath.get().substring(0, modulePackagePath.get().indexOf("_")) : modulePackagePath.get());
                     builder.parent("pers.elianacc")
                             .moduleName(tablePrefixName.get())
                             .entity("entity." + modulePackagePath.get())
@@ -87,7 +89,8 @@ public class CodeGenerator {
                 })
                 // 策略配置(StrategyConfig)
                 .strategyConfig(builder -> {
-                    String tablePrefix = generatorTable.get().contains("_sys_") ? tablePrefixName.get() + "_sys_" : tablePrefixName.get() + "_";
+                    String tablePrefix = generatorTable.get().contains("_sys_")
+                            ? tablePrefixName.get() + "_sys_" : tablePrefixName.get() + "_";
                     String filePrefix = generatorTable.get().contains("_sys_") ? "Sys" : "";
                     builder.addInclude(generatorTable.get())
                             .addTablePrefix(tablePrefix)

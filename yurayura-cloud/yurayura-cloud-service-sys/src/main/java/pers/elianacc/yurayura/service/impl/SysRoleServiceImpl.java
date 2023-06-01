@@ -54,7 +54,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public String insert(SysRoleInsertDto dto) {
         String warn = "";
-        List<SysRole> sysRoleList = sysRoleMapper.selectList(Wrappers.<SysRole>lambdaQuery()
+        List<SysRole> sysRoleList = sysRoleMapper
+                .selectList(Wrappers.<SysRole>lambdaQuery()
                 .eq(SysRole::getRoleName, dto.getRoleName()));
         if (sysRoleList.isEmpty()) {
             SysRole sysRole = new SysRole();
@@ -62,8 +63,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             sysRole.setRoleCreateTime(LocalDateTime.now());
             sysRoleMapper.insert(sysRole);
             if (!dto.getPermissionIdArr().isEmpty()) {
-                List<Integer> permissionIdExistList = dto.getPermissionIdArr().stream()
-                        .filter(permissionId -> !(sysPermissionMapper.selectById(permissionId).getPermissionStatus() == EnableStatusEnum.DISABLE.getStatusId().intValue()))
+                List<Integer> permissionIdExistList = dto.getPermissionIdArr()
+                        .stream()
+                        .filter(permissionId -> !(sysPermissionMapper
+                                .selectById(permissionId).getPermissionStatus() == EnableStatusEnum.DISABLE.getStatusId().intValue()))
                         .collect(Collectors.toList());
                 if (!permissionIdExistList.isEmpty()) {
                     sysRoleMapper.insertBatchRolePermission(permissionIdExistList, sysRole.getId());
@@ -94,8 +97,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             sysRoleMapper.updateById(sysRole);
             sysRoleMapper.deleteRolePermissionByRoleId(sysRole.getId());
             if (!dto.getPermissionIdArr().isEmpty()) {
-                List<Integer> permissionIdExistList = dto.getPermissionIdArr().stream()
-                        .filter(permissionId -> !(sysPermissionMapper.selectById(permissionId).getPermissionStatus() == EnableStatusEnum.DISABLE.getStatusId().intValue()))
+                List<Integer> permissionIdExistList = dto.getPermissionIdArr()
+                        .stream()
+                        .filter(permissionId -> !(sysPermissionMapper
+                                .selectById(permissionId).getPermissionStatus() == EnableStatusEnum.DISABLE.getStatusId().intValue()))
                         .collect(Collectors.toList());
                 if (!permissionIdExistList.isEmpty()) {
                     sysRoleMapper.insertBatchRolePermission(permissionIdExistList, sysRole.getId());

@@ -39,11 +39,16 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
     public PageInfo<SysPermission> getPage(SysPermissionSelectDto dto) {
         // 设置分页
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
-        List<SysPermission> sysPermissionList = sysPermissionMapper.selectList(Wrappers.<SysPermission>lambdaQuery()
-                .like(!ObjectUtils.isEmpty(dto.getPermissionCode()), SysPermission::getPermissionCode, dto.getPermissionCode())
-                .eq(!ObjectUtils.isEmpty(dto.getPermissionType()), SysPermission::getPermissionType, dto.getPermissionType())
-                .eq(!ObjectUtils.isEmpty(dto.getPermissionStatus()), SysPermission::getPermissionStatus, dto.getPermissionStatus())
-                .eq(!ObjectUtils.isEmpty(dto.getPermissionBelongSubmenuName()), SysPermission::getPermissionBelongSubmenuName, dto.getPermissionBelongSubmenuName())
+        List<SysPermission> sysPermissionList = sysPermissionMapper
+                .selectList(Wrappers.<SysPermission>lambdaQuery()
+                .apply(!ObjectUtils.isEmpty(dto.getPermissionCode())
+                        , "instr(permission_code, {0}) > 0", dto.getPermissionCode())
+                .eq(!ObjectUtils.isEmpty(dto.getPermissionType())
+                        , SysPermission::getPermissionType, dto.getPermissionType())
+                .eq(!ObjectUtils.isEmpty(dto.getPermissionStatus())
+                        , SysPermission::getPermissionStatus, dto.getPermissionStatus())
+                .eq(!ObjectUtils.isEmpty(dto.getPermissionBelongSubmenuName())
+                        , SysPermission::getPermissionBelongSubmenuName, dto.getPermissionBelongSubmenuName())
                 .orderByAsc(SysPermission::getPermissionBelongSubmenuName, SysPermission::getPermissionSeq)
         );
         return new PageInfo<>(sysPermissionList, 5);
@@ -57,7 +62,8 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
         if (ObjectUtils.isEmpty(dto.getPermissionBtnVal())) {
             sysPermission.setPermissionCode(sysPermission.getPermissionBelongSubmenuName() + "_select");
         } else {
-            sysPermission.setPermissionCode(sysPermission.getPermissionBelongSubmenuName() + "_" + dto.getPermissionBtnVal());
+            sysPermission.setPermissionCode(sysPermission
+                    .getPermissionBelongSubmenuName() + "_" + dto.getPermissionBtnVal());
         }
         List<SysPermission> existPermList = sysPermissionMapper.selectList(Wrappers.<SysPermission>lambdaQuery()
                 .eq(SysPermission::getPermissionCode, sysPermission.getPermissionCode()));

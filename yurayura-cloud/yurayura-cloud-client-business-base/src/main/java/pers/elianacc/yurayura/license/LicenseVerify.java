@@ -77,7 +77,9 @@ public class LicenseVerify {
             LicenseContent licenseContent = licenseManager.install(new File(licensePath));
             installSuccess = true;
             log.info("------------------------------- 许可证书验证成功 -------------------------------");
-            log.info("证书有效期：{} - {}", DateUtil.format(licenseContent.getNotBefore(), DatePattern.NORM_DATETIME_PATTERN), DateUtil.format(licenseContent.getNotAfter(), DatePattern.NORM_DATETIME_PATTERN));
+            log.info("证书有效期：{} - {}", DateUtil.format(licenseContent.getNotBefore()
+                    , DatePattern.NORM_DATETIME_PATTERN), DateUtil.format(licenseContent.getNotAfter()
+                    , DatePattern.NORM_DATETIME_PATTERN));
         } catch (Exception e) {
             installSuccess = false;
             e.printStackTrace();

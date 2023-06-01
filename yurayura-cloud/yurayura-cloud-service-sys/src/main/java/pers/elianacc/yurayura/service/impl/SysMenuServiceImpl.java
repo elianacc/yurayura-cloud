@@ -67,13 +67,17 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public void deleteById(IdDto dto) {
         sysMenuMapper.deleteById(dto.getId());
-        List<SysMenuSub> deleteSysMenuSubs = sysMenuSubMapper.selectList(Wrappers.<SysMenuSub>lambdaQuery()
+        List<SysMenuSub> deleteSysMenuSubs = sysMenuSubMapper
+                .selectList(Wrappers.<SysMenuSub>lambdaQuery()
                 .eq(SysMenuSub::getMenuPid, dto.getId()));
         deleteSysMenuSubs.forEach(menuSub -> {
-            List<SysPermission> deleteSysPermissions = sysPermissionMapper.selectList(Wrappers.<SysPermission>lambdaQuery()
+            List<SysPermission> deleteSysPermissions = sysPermissionMapper
+                    .selectList(Wrappers.<SysPermission>lambdaQuery()
                     .eq(SysPermission::getPermissionBelongSubmenuName, menuSub.getMenuName()));
-            deleteSysPermissions.forEach(permission -> sysRoleMapper.deleteRolePermissionByPermissionId(permission.getId()));
-            sysPermissionMapper.delete(Wrappers.<SysPermission>lambdaQuery()
+            deleteSysPermissions.forEach(permission -> sysRoleMapper
+                    .deleteRolePermissionByPermissionId(permission.getId()));
+            sysPermissionMapper
+                    .delete(Wrappers.<SysPermission>lambdaQuery()
                     .eq(SysPermission::getPermissionBelongSubmenuName, menuSub.getMenuName()));
         });
         sysMenuSubMapper.delete(Wrappers.<SysMenuSub>lambdaQuery().eq(SysMenuSub::getMenuPid, dto.getId()));

@@ -58,14 +58,16 @@ public class ComicServiceImpl extends ServiceImpl<ComicMapper, Comic> implements
         String warn = "";
         Integer comicStatus;
         // 更新状态为非完结，且更新时间不为空，更新状态为更新时间
-        if (dto.getComicStatus().intValue() == ComicStatusEnum.UPDATING.getStatusId() && !ObjectUtils.isEmpty(dto.getComicUdTime())) {
+        if (dto.getComicStatus().intValue() == ComicStatusEnum.UPDATING.getStatusId()
+                && !ObjectUtils.isEmpty(dto.getComicUdTime())) {
             comicStatus = dto.getComicUdTime();
         } else {
             comicStatus = dto.getComicStatus();
         }
 
         // 获取图片上传结果
-        String imgUplRes = FileUtil.imageUpload(dto.getComicImgFile(), 100, ImgUploadCategoryEnum.COMICIMG.getCategory());
+        String imgUplRes = FileUtil.imageUpload(dto.getComicImgFile()
+                , 100, ImgUploadCategoryEnum.COMICIMG.getCategory());
 
         Comic comic = new Comic();
         ComicUserData comicUserData = new ComicUserData();
@@ -118,14 +120,16 @@ public class ComicServiceImpl extends ServiceImpl<ComicMapper, Comic> implements
         String warn = "";
         Integer comicStatus;
         // 更新状态为非完结，且更新时间不为空，更新状态为更新时间
-        if (dto.getComicStatus().intValue() == ComicStatusEnum.UPDATING.getStatusId() && !ObjectUtils.isEmpty(dto.getComicUdTime())) {
+        if (dto.getComicStatus().intValue() == ComicStatusEnum.UPDATING.getStatusId()
+                && !ObjectUtils.isEmpty(dto.getComicUdTime())) {
             comicStatus = dto.getComicUdTime();
         } else {
             comicStatus = dto.getComicStatus();
         }
 
         // 获取图片上传结果
-        String imgUplRes = FileUtil.imageUpload(dto.getComicImgFile(), 100, ImgUploadCategoryEnum.COMICIMG.getCategory());
+        String imgUplRes = FileUtil.imageUpload(dto.getComicImgFile()
+                , 100, ImgUploadCategoryEnum.COMICIMG.getCategory());
 
         Comic comic = new Comic();
 

@@ -31,9 +31,11 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.OAS_30)
                 .pathMapping("/")
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("pers.elianacc.yurayura.controller"))
+                .apis(RequestHandlerSelectors
+                        .basePackage("pers.elianacc.yurayura.controller"))
                 .paths(PathSelectors.any())
-                .build().apiInfo(new ApiInfoBuilder()
+                .build()
+                .apiInfo(new ApiInfoBuilder()
                         .title("YuraYura Cloud Client Business API")
                         .description("在线接口文档")
                         .version("1.0.2-SNAPSHOT")

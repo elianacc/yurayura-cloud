@@ -51,7 +51,8 @@ public class SysManagerServiceImpl extends ServiceImpl<SysManagerMapper, SysMana
     @Override
     public String insert(SysManagerInsertDto dto) {
         String warn = "";
-        List<SysManager> sysManagerList = sysManagerMapper.selectList(Wrappers.<SysManager>lambdaQuery()
+        List<SysManager> sysManagerList = sysManagerMapper
+                .selectList(Wrappers.<SysManager>lambdaQuery()
                 .eq(SysManager::getManagerName, dto.getManagerName()));
         if (sysManagerList.isEmpty()) {
             SysManager sysManager = new SysManager();
@@ -61,8 +62,10 @@ public class SysManagerServiceImpl extends ServiceImpl<SysManagerMapper, SysMana
             sysManager.setManagerUpdateTime(null);
             sysManagerMapper.insert(sysManager);
             if (!dto.getRoleIdArr().isEmpty()) {
-                List<Integer> roleIdExistList = dto.getRoleIdArr().stream()
-                        .filter(roleId -> !(sysRoleMapper.selectById(roleId).getRoleStatus() == EnableStatusEnum.DISABLE.getStatusId().intValue()))
+                List<Integer> roleIdExistList = dto.getRoleIdArr()
+                        .stream()
+                        .filter(roleId -> !(sysRoleMapper
+                                .selectById(roleId).getRoleStatus() == EnableStatusEnum.DISABLE.getStatusId().intValue()))
                         .collect(Collectors.toList());
                 if (!roleIdExistList.isEmpty()) {
                     sysManagerMapper.insertBatchManagerRole(roleIdExistList, sysManager.getId());
@@ -99,8 +102,10 @@ public class SysManagerServiceImpl extends ServiceImpl<SysManagerMapper, SysMana
         sysManagerMapper.updateById(sysManager);
         sysManagerMapper.deleteManagerRoleByManagerId(sysManager.getId());
         if (!dto.getRoleIdArr().isEmpty()) {
-            List<Integer> roleIdExistList = dto.getRoleIdArr().stream()
-                    .filter(roleId -> !(sysRoleMapper.selectById(roleId).getRoleStatus() == EnableStatusEnum.DISABLE.getStatusId().intValue()))
+            List<Integer> roleIdExistList = dto.getRoleIdArr()
+                    .stream()
+                    .filter(roleId -> !(sysRoleMapper
+                            .selectById(roleId).getRoleStatus() == EnableStatusEnum.DISABLE.getStatusId().intValue()))
                     .collect(Collectors.toList());
             if (!roleIdExistList.isEmpty()) {
                 sysManagerMapper.insertBatchManagerRole(roleIdExistList, sysManager.getId());
@@ -116,7 +121,8 @@ public class SysManagerServiceImpl extends ServiceImpl<SysManagerMapper, SysMana
 
     @Override
     public SysManager getEnableManagerByName(String managerName) {
-        return sysManagerMapper.selectOne(Wrappers.<SysManager>lambdaQuery()
+        return sysManagerMapper
+                .selectOne(Wrappers.<SysManager>lambdaQuery()
                 .eq(SysManager::getManagerName, managerName)
                 .eq(SysManager::getManagerStatus, EnableStatusEnum.ENABLE.getStatusId()));
     }

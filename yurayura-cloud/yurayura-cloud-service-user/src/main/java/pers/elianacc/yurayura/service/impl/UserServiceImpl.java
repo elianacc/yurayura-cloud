@@ -36,11 +36,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public PageInfo<User> getPage(UserSelectDto dto) {
         // 设置分页
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
-        List<User> userList = userMapper.selectList(Wrappers.<User>lambdaQuery()
+        List<User> userList = userMapper
+                .selectList(Wrappers.<User>lambdaQuery()
                 .select(User.class, i -> !i.getColumn().equals("user_password"))
-                .nested(!ObjectUtils.isEmpty(dto.getUserNameKeyword()), i -> i.like(User::getUserName, dto.getUserNameKeyword())
+                .nested(!ObjectUtils.isEmpty(dto.getUserNameKeyword()), i -> i
+                        .apply("instr(user_name, {0}) > 0", dto.getUserNameKeyword())
                         .or()
-                        .like(User::getUserNickname, dto.getUserNameKeyword())
+                        .apply("instr(user_nickname, {0}) > 0", dto.getUserNameKeyword())
                 )
                 .eq(!ObjectUtils.isEmpty(dto.getUserSex()), User::getUserSex, dto.getUserSex())
                 .eq(!ObjectUtils.isEmpty(dto.getUserStatus()), User::getUserStatus, dto.getUserStatus())

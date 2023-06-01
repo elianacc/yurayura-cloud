@@ -35,6 +35,7 @@
         <knife4j.version>3.0.3</knife4j.version>
         <shiro.version>1.7.1</shiro.version>
         <hutool.version>5.8.9</hutool.version>
+        <truelicense.version>1.33</truelicense.version>
     </properties>
 
     <distributionManagement>
@@ -123,6 +124,13 @@
                 <groupId>org.apache.shiro</groupId>
                 <artifactId>shiro-spring</artifactId>
                 <version>${shiro.version}</version>
+            </dependency>
+
+            <!-- truelicense 依赖 -->
+            <dependency>
+                <groupId>de.schlichtherle.truelicense</groupId>
+                <artifactId>truelicense-core</artifactId>
+                <version>${truelicense.version}</version>
             </dependency>
 
             <!-- Hutool 依赖 -->
