@@ -38,16 +38,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         List<User> userList = userMapper
                 .selectList(Wrappers.<User>lambdaQuery()
-                .select(User.class, i -> !i.getColumn().equals("user_password"))
-                .nested(!ObjectUtils.isEmpty(dto.getUserNameKeyword()), i -> i
-                        .apply("instr(user_name, {0}) > 0", dto.getUserNameKeyword())
-                        .or()
-                        .apply("instr(user_nickname, {0}) > 0", dto.getUserNameKeyword())
-                )
-                .eq(!ObjectUtils.isEmpty(dto.getUserSex()), User::getUserSex, dto.getUserSex())
-                .eq(!ObjectUtils.isEmpty(dto.getUserStatus()), User::getUserStatus, dto.getUserStatus())
-                .eq(!ObjectUtils.isEmpty(dto.getUserPhoneNumber()), User::getUserPhoneNumber, dto.getUserPhoneNumber())
-                .orderByDesc(User::getId));
+                        .select(User.class, i -> !i.getColumn().equals("user_password"))
+                        .nested(!ObjectUtils.isEmpty(dto.getUserNameKeyword()), i -> i
+                                .apply("instr(user_name, {0}) > 0", dto.getUserNameKeyword())
+                                .or()
+                                .apply("instr(user_nickname, {0}) > 0", dto.getUserNameKeyword())
+                        )
+                        .eq(!ObjectUtils.isEmpty(dto.getUserSex()), User::getUserSex, dto.getUserSex())
+                        .eq(!ObjectUtils.isEmpty(dto.getUserStatus()), User::getUserStatus, dto.getUserStatus())
+                        .eq(!ObjectUtils.isEmpty(dto.getUserPhoneNumber())
+                                , User::getUserPhoneNumber, dto.getUserPhoneNumber())
+                        .orderByDesc(User::getId));
         return new PageInfo<>(userList, 5);
     }
 

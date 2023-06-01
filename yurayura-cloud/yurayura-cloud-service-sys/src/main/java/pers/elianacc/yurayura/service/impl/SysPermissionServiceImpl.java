@@ -41,16 +41,16 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         List<SysPermission> sysPermissionList = sysPermissionMapper
                 .selectList(Wrappers.<SysPermission>lambdaQuery()
-                .apply(!ObjectUtils.isEmpty(dto.getPermissionCode())
-                        , "instr(permission_code, {0}) > 0", dto.getPermissionCode())
-                .eq(!ObjectUtils.isEmpty(dto.getPermissionType())
-                        , SysPermission::getPermissionType, dto.getPermissionType())
-                .eq(!ObjectUtils.isEmpty(dto.getPermissionStatus())
-                        , SysPermission::getPermissionStatus, dto.getPermissionStatus())
-                .eq(!ObjectUtils.isEmpty(dto.getPermissionBelongSubmenuName())
-                        , SysPermission::getPermissionBelongSubmenuName, dto.getPermissionBelongSubmenuName())
-                .orderByAsc(SysPermission::getPermissionBelongSubmenuName, SysPermission::getPermissionSeq)
-        );
+                        .apply(!ObjectUtils.isEmpty(dto.getPermissionCode())
+                                , "instr(permission_code, {0}) > 0", dto.getPermissionCode())
+                        .eq(!ObjectUtils.isEmpty(dto.getPermissionType())
+                                , SysPermission::getPermissionType, dto.getPermissionType())
+                        .eq(!ObjectUtils.isEmpty(dto.getPermissionStatus())
+                                , SysPermission::getPermissionStatus, dto.getPermissionStatus())
+                        .eq(!ObjectUtils.isEmpty(dto.getPermissionBelongSubmenuName())
+                                , SysPermission::getPermissionBelongSubmenuName, dto.getPermissionBelongSubmenuName())
+                        .orderByAsc(SysPermission::getPermissionBelongSubmenuName, SysPermission::getPermissionSeq)
+                );
         return new PageInfo<>(sysPermissionList, 5);
     }
 

@@ -53,7 +53,7 @@ public class SysManagerServiceImpl extends ServiceImpl<SysManagerMapper, SysMana
         String warn = "";
         List<SysManager> sysManagerList = sysManagerMapper
                 .selectList(Wrappers.<SysManager>lambdaQuery()
-                .eq(SysManager::getManagerName, dto.getManagerName()));
+                        .eq(SysManager::getManagerName, dto.getManagerName()));
         if (sysManagerList.isEmpty()) {
             SysManager sysManager = new SysManager();
             BeanUtils.copyProperties(dto, sysManager);
@@ -123,8 +123,8 @@ public class SysManagerServiceImpl extends ServiceImpl<SysManagerMapper, SysMana
     public SysManager getEnableManagerByName(String managerName) {
         return sysManagerMapper
                 .selectOne(Wrappers.<SysManager>lambdaQuery()
-                .eq(SysManager::getManagerName, managerName)
-                .eq(SysManager::getManagerStatus, EnableStatusEnum.ENABLE.getStatusId()));
+                        .eq(SysManager::getManagerName, managerName)
+                        .eq(SysManager::getManagerStatus, EnableStatusEnum.ENABLE.getStatusId()));
     }
 
 }

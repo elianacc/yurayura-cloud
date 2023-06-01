@@ -43,9 +43,10 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         List<SysDict> sysDictList = sysDictMapper
                 .selectList(Wrappers.<SysDict>lambdaQuery()
-                .apply(!ObjectUtils.isEmpty(dto.getDictCode()), "instr(dict_code, {0}) > 0", dto.getDictCode())
-                .eq(!ObjectUtils.isEmpty(dto.getDictStatus()), SysDict::getDictStatus, dto.getDictStatus())
-                .orderByAsc(SysDict::getDictCode, SysDict::getDictSeq));
+                        .apply(!ObjectUtils.isEmpty(dto.getDictCode())
+                                , "instr(dict_code, {0}) > 0", dto.getDictCode())
+                        .eq(!ObjectUtils.isEmpty(dto.getDictStatus()), SysDict::getDictStatus, dto.getDictStatus())
+                        .orderByAsc(SysDict::getDictCode, SysDict::getDictSeq));
         return new PageInfo<>(sysDictList, 5);
     }
 
@@ -54,8 +55,8 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         String warn = "";
         List<SysDict> sysDictList = sysDictMapper
                 .selectList(Wrappers.<SysDict>lambdaQuery()
-                .eq(SysDict::getDictCode, dto.getDictCode())
-                .eq(SysDict::getDictVal, dto.getDictVal()));
+                        .eq(SysDict::getDictCode, dto.getDictCode())
+                        .eq(SysDict::getDictVal, dto.getDictVal()));
         if (sysDictList.isEmpty()) {
             SysDict sysDict = new SysDict();
             BeanUtils.copyProperties(dto, sysDict);
@@ -105,13 +106,16 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         if (RedisUtil.hasKey(dictCode) && !RedisUtil.lGet(dictCode, 0, -1).isEmpty()) {
             List<Object> objList = RedisUtil.lGet(dictCode, 0, -1);
             List<SysDict> sysDictList = JSON.parseArray(JSON.toJSONString(objList), SysDict.class);
-            return sysDictList.stream().sorted(Comparator.comparing(SysDict::getDictSeq)).collect(Collectors.toList());
+            return sysDictList
+                    .stream()
+                    .sorted(Comparator.comparing(SysDict::getDictSeq))
+                    .collect(Collectors.toList());
         }
         return sysDictMapper
                 .selectList(Wrappers.<SysDict>lambdaQuery()
-                .eq(SysDict::getDictCode, dictCode)
-                .eq(SysDict::getDictStatus, EnableStatusEnum.ENABLE.getStatusId())
-                .orderByAsc(SysDict::getDictSeq));
+                        .eq(SysDict::getDictCode, dictCode)
+                        .eq(SysDict::getDictStatus, EnableStatusEnum.ENABLE.getStatusId())
+                        .orderByAsc(SysDict::getDictSeq));
     }
 
     @Override

@@ -56,7 +56,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         String warn = "";
         List<SysRole> sysRoleList = sysRoleMapper
                 .selectList(Wrappers.<SysRole>lambdaQuery()
-                .eq(SysRole::getRoleName, dto.getRoleName()));
+                        .eq(SysRole::getRoleName, dto.getRoleName()));
         if (sysRoleList.isEmpty()) {
             SysRole sysRole = new SysRole();
             BeanUtils.copyProperties(dto, sysRole);

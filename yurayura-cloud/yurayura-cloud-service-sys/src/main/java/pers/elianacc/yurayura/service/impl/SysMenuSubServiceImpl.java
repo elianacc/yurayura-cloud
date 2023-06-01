@@ -72,11 +72,11 @@ public class SysMenuSubServiceImpl extends ServiceImpl<SysMenuSubMapper, SysMenu
         SysMenuSub deleteSysMenuSub = sysMenuSubMapper.selectById(dto.getId());
         List<SysPermission> deleteSysPermissions = sysPermissionMapper
                 .selectList(Wrappers.<SysPermission>lambdaQuery()
-                .eq(SysPermission::getPermissionBelongSubmenuName, deleteSysMenuSub.getMenuName()));
+                        .eq(SysPermission::getPermissionBelongSubmenuName, deleteSysMenuSub.getMenuName()));
         deleteSysPermissions.forEach(permission -> sysRoleMapper.deleteRolePermissionByPermissionId(permission.getId()));
         sysPermissionMapper
                 .delete(Wrappers.<SysPermission>lambdaQuery()
-                .eq(SysPermission::getPermissionBelongSubmenuName, deleteSysMenuSub.getMenuName()));
+                        .eq(SysPermission::getPermissionBelongSubmenuName, deleteSysMenuSub.getMenuName()));
         sysMenuSubMapper.deleteById(dto.getId());
     }
 
@@ -93,7 +93,7 @@ public class SysMenuSubServiceImpl extends ServiceImpl<SysMenuSubMapper, SysMenu
     public SysMenuSub getByIndex(String index) {
         return sysMenuSubMapper
                 .selectOne(Wrappers.<SysMenuSub>lambdaQuery()
-                .eq(SysMenuSub::getMenuIndex, index));
+                        .eq(SysMenuSub::getMenuIndex, index));
     }
 
     @Override
