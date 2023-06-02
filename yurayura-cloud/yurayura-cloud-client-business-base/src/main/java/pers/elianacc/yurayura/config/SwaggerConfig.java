@@ -38,7 +38,7 @@ public class SwaggerConfig {
                 .apiInfo(new ApiInfoBuilder()
                         .title("YuraYura Cloud Client Business API")
                         .description("在线接口文档")
-                        .version("1.0.2-SNAPSHOT")
+                        .version("1.0.3")
                         .contact(new Contact("EliaNaCc", "https://github.com/elianacc/yurayura-cloud"
                                 , "438507003@qq.com"))
                         .termsOfServiceUrl("http://yurayura.org/")
