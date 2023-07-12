@@ -180,7 +180,7 @@ public class RedisUtil {
         if (delta < 0) {
             throw new RuntimeException("递减因子必须大于 0");
         }
-        return redisTemplate.opsForValue().increment(key, delta);
+        return redisTemplate.opsForValue().decrement(key, delta);
     }
 
 //    ============================== Hash ==============================
