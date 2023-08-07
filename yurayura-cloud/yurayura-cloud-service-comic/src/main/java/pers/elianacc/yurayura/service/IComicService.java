@@ -28,9 +28,9 @@ public interface IComicService extends IService<Comic> {
      * 添加番剧
      *
      * @param dto
-     * @return java.lang.String
+     * @return void
      */
-    public String insert(ComicInsertDto dto);
+    public void insert(ComicInsertDto dto);
 
     /**
      * 批量删除番剧（根据番剧id组）
@@ -44,8 +44,8 @@ public interface IComicService extends IService<Comic> {
      * 修改番剧
      *
      * @param dto
-     * @return java.lang.String
+     * @return void
      */
-    public String update(ComicUpdateDto dto);
+    public void update(ComicUpdateDto dto);
 
 }

@@ -2,14 +2,12 @@ package pers.elianacc.yurayura.controller;
 
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import pers.elianacc.yurayura.dto.IdDto;
 import pers.elianacc.yurayura.dto.SysPermissionInsertDto;
 import pers.elianacc.yurayura.dto.SysPermissionSelectDto;
 import pers.elianacc.yurayura.dto.SysPermissionUpdateDto;
 import pers.elianacc.yurayura.entity.sys.permission.SysPermission;
-import pers.elianacc.yurayura.enumerate.SysPermissionTypeEnum;
 import pers.elianacc.yurayura.service.ISysPermissionService;
 import pers.elianacc.yurayura.vo.ApiResult;
 import pers.elianacc.yurayura.vo.SysPermissionAuthorTreeVo;
@@ -48,11 +46,7 @@ public class SysPermissionController {
      */
     @PostMapping("/getPage")
     public ApiResult<PageInfo<SysPermission>> getPage(@RequestBody SysPermissionSelectDto dto) {
-        PageInfo<SysPermission> pageInfo = iSysPermissionService.getPage(dto);
-        if (pageInfo.getTotal() == 0) {
-            return ApiResult.warn("查询不到数据");
-        }
-        return ApiResult.success("分页查询成功", pageInfo);
+        return ApiResult.success("分页查询成功", iSysPermissionService.getPage(dto));
     }
 
     /**
@@ -63,14 +57,7 @@ public class SysPermissionController {
      */
     @PostMapping("/insert")
     public ApiResult<String> insert(@RequestBody SysPermissionInsertDto dto) {
-        if (ObjectUtils.isEmpty(dto.getPermissionBtnVal())
-                && dto.getPermissionType() == SysPermissionTypeEnum.BUTTON.getTypeId().intValue()) {
-            return ApiResult.badRequest("权限类型为按钮时权限按钮不能为空");
-        }
-        String warn = iSysPermissionService.insert(dto);
-        if (!ObjectUtils.isEmpty(warn)) {
-            return ApiResult.warn(warn);
-        }
+        iSysPermissionService.insert(dto);
         return ApiResult.success("添加成功");
     }
 
@@ -82,10 +69,7 @@ public class SysPermissionController {
      */
     @PutMapping("/update")
     public ApiResult<String> update(@RequestBody SysPermissionUpdateDto dto) {
-        String warn = iSysPermissionService.update(dto);
-        if (!ObjectUtils.isEmpty(warn)) {
-            return ApiResult.warn(warn);
-        }
+        iSysPermissionService.update(dto);
         return ApiResult.success("修改成功");
     }
 

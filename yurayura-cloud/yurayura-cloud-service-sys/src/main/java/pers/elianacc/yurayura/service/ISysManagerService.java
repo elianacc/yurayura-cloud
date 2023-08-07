@@ -27,9 +27,9 @@ public interface ISysManagerService extends IService<SysManager> {
      * 添加系统管理员
      *
      * @param dto
-     * @return java.lang.String
+     * @return void
      */
-    public String insert(SysManagerInsertDto dto);
+    public void insert(SysManagerInsertDto dto);
 
     /**
      * 批量删除系统管理员（根据系统管理员id组）
@@ -43,9 +43,9 @@ public interface ISysManagerService extends IService<SysManager> {
      * 修改系统管理员
      *
      * @param dto
-     * @return java.lang.String
+     * @return void
      */
-    public String update(SysManagerUpdateDto dto);
+    public void update(SysManagerUpdateDto dto);
 
     /**
      * 查询管理员拥有角色的所有权限（根据管理员id）

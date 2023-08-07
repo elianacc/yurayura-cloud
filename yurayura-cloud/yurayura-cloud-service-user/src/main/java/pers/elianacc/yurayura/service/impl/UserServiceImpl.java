@@ -1,5 +1,6 @@
 package pers.elianacc.yurayura.service.impl;
 
+import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -49,7 +50,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                         .eq(!ObjectUtils.isEmpty(dto.getUserPhoneNumber())
                                 , User::getUserPhoneNumber, dto.getUserPhoneNumber())
                         .orderByDesc(User::getId));
-        return new PageInfo<>(userList, 5);
+        PageInfo<User> pageInfo = new PageInfo<>(userList, 5);
+        Assert.isTrue(pageInfo.getTotal() != 0, "查询不到数据");
+        return pageInfo;
     }
 
     @Override

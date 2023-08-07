@@ -30,9 +30,9 @@ public interface ISysDictService extends IService<SysDict> {
      * 添加系统数据字典
      *
      * @param dto
-     * @return java.lang.String
+     * @return void
      */
-    public String insert(SysDictInsertDto dto);
+    public void insert(SysDictInsertDto dto);
 
     /**
      * 批量删除系统数据字典（根据系统数据字典id组）
@@ -46,9 +46,9 @@ public interface ISysDictService extends IService<SysDict> {
      * 修改系统数据字典
      *
      * @param dto
-     * @return java.lang.String
+     * @return void
      */
-    public String update(SysDictUpdateDto dto);
+    public void update(SysDictUpdateDto dto);
 
     /**
      * 查询系统数据字典（根据字典编码）

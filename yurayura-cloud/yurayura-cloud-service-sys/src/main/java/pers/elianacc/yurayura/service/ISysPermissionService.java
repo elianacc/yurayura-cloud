@@ -2,11 +2,11 @@ package pers.elianacc.yurayura.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.pagehelper.PageInfo;
-import pers.elianacc.yurayura.vo.SysPermissionAuthorTreeVo;
 import pers.elianacc.yurayura.dto.SysPermissionInsertDto;
 import pers.elianacc.yurayura.dto.SysPermissionSelectDto;
 import pers.elianacc.yurayura.dto.SysPermissionUpdateDto;
 import pers.elianacc.yurayura.entity.sys.permission.SysPermission;
+import pers.elianacc.yurayura.vo.SysPermissionAuthorTreeVo;
 
 import java.util.List;
 
@@ -30,17 +30,17 @@ public interface ISysPermissionService extends IService<SysPermission> {
      * 添加系统权限
      *
      * @param dto
-     * @return java.lang.String
+     * @return void
      */
-    public String insert(SysPermissionInsertDto dto);
+    public void insert(SysPermissionInsertDto dto);
 
     /**
      * 修改系统权限
      *
      * @param dto
-     * @return java.lang.String
+     * @return void
      */
-    public String update(SysPermissionUpdateDto dto);
+    public void update(SysPermissionUpdateDto dto);
 
     /**
      * 查询权限授权树

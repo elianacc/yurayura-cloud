@@ -1,5 +1,6 @@
 package pers.elianacc.yurayura.service.impl;
 
+import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
@@ -40,31 +41,23 @@ public class SysMenuSubServiceImpl extends ServiceImpl<SysMenuSubMapper, SysMenu
     private SysRoleMapper sysRoleMapper;
 
     @Override
-    public String insert(SysMenuSubInsertDto dto) {
-        String warn = "";
-        if (!("/business/" + dto.getMenuName()).equals(dto.getMenuIndex())) {
-            warn = "菜单路径不正确";
-        } else {
-            List<String> menuNameList = sysMenuMapper.getMenuNameAndMenuSubName();
-            if (menuNameList.contains(dto.getMenuName())) {
-                warn = "菜单标识已存在，请更换";
-            } else {
-                SysMenuSub sysMenuSub = new SysMenuSub();
-                BeanUtils.copyProperties(dto, sysMenuSub);
-                sysMenuSub.setMenuType(SysMenuTypeEnum.SECONDLEVEL.getTypeId());
-                sysMenuSubMapper.insert(sysMenuSub);
-                SysPermission sysPermission = new SysPermission();
-                sysPermission.setPermissionCode(sysMenuSub.getMenuName() + "_select");
-                sysPermission.setPermissionName(sysMenuSub.getMenuTitle() + "查看");
-                sysPermission.setPermissionType(SysPermissionTypeEnum.MENU.getTypeId());
-                sysPermission.setPermissionStatus(EnableStatusEnum.ENABLE.getStatusId());
-                sysPermission.setPermissionBelongSubmenuName(sysMenuSub.getMenuName());
-                sysPermission.setPermissionSeq(1);
-                sysPermissionMapper.insert(sysPermission);
-                sysRoleMapper.insertRolePermissionForAdmin(sysPermission.getId());
-            }
-        }
-        return warn;
+    public void insert(SysMenuSubInsertDto dto) {
+        Assert.isTrue(("/business/" + dto.getMenuName()).equals(dto.getMenuIndex()), "菜单路径不正确");
+        List<String> menuNameList = sysMenuMapper.getMenuNameAndMenuSubName();
+        Assert.isTrue(!menuNameList.contains(dto.getMenuName()), "菜单标识已存在，请更换");
+        SysMenuSub sysMenuSub = new SysMenuSub();
+        BeanUtils.copyProperties(dto, sysMenuSub);
+        sysMenuSub.setMenuType(SysMenuTypeEnum.SECONDLEVEL.getTypeId());
+        sysMenuSubMapper.insert(sysMenuSub);
+        SysPermission sysPermission = new SysPermission();
+        sysPermission.setPermissionCode(sysMenuSub.getMenuName() + "_select");
+        sysPermission.setPermissionName(sysMenuSub.getMenuTitle() + "查看");
+        sysPermission.setPermissionType(SysPermissionTypeEnum.MENU.getTypeId());
+        sysPermission.setPermissionStatus(EnableStatusEnum.ENABLE.getStatusId());
+        sysPermission.setPermissionBelongSubmenuName(sysMenuSub.getMenuName());
+        sysPermission.setPermissionSeq(1);
+        sysPermissionMapper.insert(sysPermission);
+        sysRoleMapper.insertRolePermissionForAdmin(sysPermission.getId());
     }
 
     @Override
@@ -81,12 +74,10 @@ public class SysMenuSubServiceImpl extends ServiceImpl<SysMenuSubMapper, SysMenu
     }
 
     @Override
-    public String update(SysMenuSubUpdateDto dto) {
-        String warn = "";
+    public void update(SysMenuSubUpdateDto dto) {
         SysMenuSub sysMenuSub = new SysMenuSub();
         BeanUtils.copyProperties(dto, sysMenuSub);
         sysMenuSubMapper.updateById(sysMenuSub);
-        return warn;
     }
 
     @Override

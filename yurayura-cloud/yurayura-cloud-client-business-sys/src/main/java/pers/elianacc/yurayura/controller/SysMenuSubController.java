@@ -5,6 +5,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pers.elianacc.yurayura.dto.IdDto;
 import pers.elianacc.yurayura.dto.SysMenuSubInsertDto;
@@ -13,7 +14,7 @@ import pers.elianacc.yurayura.entity.sys.menu.SysMenuSub;
 import pers.elianacc.yurayura.service.SysMenuSubService;
 import pers.elianacc.yurayura.vo.ApiResult;
 
-import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
@@ -25,6 +26,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/sys/menuSub")
 @Api(tags = "系统子菜单API")
+@Validated
 public class SysMenuSubController {
 
     @Autowired
@@ -39,7 +41,7 @@ public class SysMenuSubController {
     @PostMapping("/insert")
     @Lock4j(keys = {"#dto.menuName"}, autoRelease = false)
     @ApiOperation("添加系统子菜单")
-    public ApiResult<String> insert(@Valid @RequestBody SysMenuSubInsertDto dto) {
+    public ApiResult<String> insert(@Validated @RequestBody SysMenuSubInsertDto dto) {
         return sysMenuSubService.insert(dto);
     }
 
@@ -52,7 +54,7 @@ public class SysMenuSubController {
     @PutMapping("/update")
     @Lock4j(keys = {"#dto.id"}, autoRelease = false)
     @ApiOperation("修改系统子菜单")
-    public ApiResult<String> update(@Valid @RequestBody SysMenuSubUpdateDto dto) {
+    public ApiResult<String> update(@Validated @RequestBody SysMenuSubUpdateDto dto) {
         return sysMenuSubService.update(dto);
     }
 
@@ -64,7 +66,7 @@ public class SysMenuSubController {
      */
     @PutMapping("/deleteById")
     @ApiOperation("删除系统子菜单（根据系统子菜单id）")
-    public ApiResult<String> deleteById(@Valid @RequestBody IdDto dto) {
+    public ApiResult<String> deleteById(@Validated @RequestBody IdDto dto) {
         return sysMenuSubService.deleteById(dto);
     }
 
@@ -77,7 +79,7 @@ public class SysMenuSubController {
     @GetMapping("/getByIndex")
     @ApiOperation("查询系统子菜单（根据路径）")
     @ApiImplicitParam(name = "index", value = "路径", required = true, dataTypeClass = String.class)
-    public ApiResult<SysMenuSub> getByIndex(@RequestParam String index) {
+    public ApiResult<SysMenuSub> getByIndex(@NotBlank(message = "路径不能为空") @RequestParam String index) {
         return sysMenuSubService.getByIndex(index);
     }
 

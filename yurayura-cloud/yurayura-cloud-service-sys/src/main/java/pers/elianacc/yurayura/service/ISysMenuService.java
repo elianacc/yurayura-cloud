@@ -1,11 +1,11 @@
 package pers.elianacc.yurayura.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import pers.elianacc.yurayura.vo.SysMenuTreeVo;
 import pers.elianacc.yurayura.dto.IdDto;
 import pers.elianacc.yurayura.dto.SysMenuInsertDto;
 import pers.elianacc.yurayura.dto.SysMenuUpdateDto;
 import pers.elianacc.yurayura.entity.sys.menu.SysMenu;
+import pers.elianacc.yurayura.vo.SysMenuTreeVo;
 
 import java.util.List;
 
@@ -37,9 +37,9 @@ public interface ISysMenuService extends IService<SysMenu> {
      * 添加系统菜单
      *
      * @param dto
-     * @return java.lang.String
+     * @return void
      */
-    public String insert(SysMenuInsertDto dto);
+    public void insert(SysMenuInsertDto dto);
 
     /**
      * 删除系统菜单（根据系统菜单id）
@@ -53,7 +53,7 @@ public interface ISysMenuService extends IService<SysMenu> {
      * 修改系统菜单
      *
      * @param dto
-     * @return java.lang.String
+     * @return void
      */
-    public String update(SysMenuUpdateDto dto);
+    public void update(SysMenuUpdateDto dto);
 }

@@ -43,11 +43,7 @@ public class UserController {
      */
     @PostMapping("/getPage")
     public ApiResult<PageInfo<User>> getPage(@RequestBody UserSelectDto dto) {
-        PageInfo<User> pageInfo = iUserService.getPage(dto);
-        if (pageInfo.getTotal() == 0) {
-            return ApiResult.warn("查询不到数据");
-        }
-        return ApiResult.success("分页查询成功", pageInfo);
+        return ApiResult.success("分页查询成功", iUserService.getPage(dto));
     }
 
     /**

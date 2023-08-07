@@ -1,5 +1,6 @@
 package pers.elianacc.yurayura.service.impl;
 
+import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -43,7 +44,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 设置分页
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         List<SysRoleAndPermissionVo> roleAndPermissionList = sysRoleMapper.getRoleAndPermissionListBySelectDto(dto);
-        return new PageInfo<>(roleAndPermissionList, 5);
+        PageInfo<SysRoleAndPermissionVo> pageInfo = new PageInfo<>(roleAndPermissionList, 5);
+        Assert.isTrue(pageInfo.getTotal() != 0, "查询不到数据");
+        return pageInfo;
     }
 
     @Override
@@ -52,66 +55,54 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public String insert(SysRoleInsertDto dto) {
-        String warn = "";
+    public void insert(SysRoleInsertDto dto) {
         List<SysRole> sysRoleList = sysRoleMapper
                 .selectList(Wrappers.<SysRole>lambdaQuery()
                         .eq(SysRole::getRoleName, dto.getRoleName()));
-        if (sysRoleList.isEmpty()) {
-            SysRole sysRole = new SysRole();
-            BeanUtils.copyProperties(dto, sysRole);
-            sysRole.setRoleCreateTime(LocalDateTime.now());
-            sysRoleMapper.insert(sysRole);
-            if (!dto.getPermissionIdArr().isEmpty()) {
-                List<Integer> permissionIdExistList = dto.getPermissionIdArr()
-                        .stream()
-                        .filter(permissionId -> !(sysPermissionMapper
-                                .selectById(permissionId).getPermissionStatus() == EnableStatusEnum.DISABLE.getStatusId().intValue()))
-                        .collect(Collectors.toList());
-                if (!permissionIdExistList.isEmpty()) {
-                    sysRoleMapper.insertBatchRolePermission(permissionIdExistList, sysRole.getId());
-                }
+        Assert.isTrue(sysRoleList.isEmpty(), "角色名已经存在");
+        SysRole sysRole = new SysRole();
+        BeanUtils.copyProperties(dto, sysRole);
+        sysRole.setRoleCreateTime(LocalDateTime.now());
+        sysRoleMapper.insert(sysRole);
+        if (!dto.getPermissionIdArr().isEmpty()) {
+            List<Integer> permissionIdExistList = dto.getPermissionIdArr()
+                    .stream()
+                    .filter(permissionId -> !(sysPermissionMapper
+                            .selectById(permissionId).getPermissionStatus() == EnableStatusEnum.DISABLE.getStatusId().intValue()))
+                    .collect(Collectors.toList());
+            if (!permissionIdExistList.isEmpty()) {
+                sysRoleMapper.insertBatchRolePermission(permissionIdExistList, sysRole.getId());
             }
-        } else {
-            warn = "角色名已经存在";
         }
-        return warn;
     }
 
     @Override
-    public String update(SysRoleUpdateDto dto) {
-        String warn = "";
+    public void update(SysRoleUpdateDto dto) {
         SysRole oldRole = sysRoleMapper.selectById(dto.getId());
-        if (oldRole.getRoleName().equals("超级管理员")) {
-            warn = "超级管理员的角色信息不允许被修改";
-            return warn;
-        }
+        Assert.isTrue(!oldRole.getRoleName().equals("超级管理员"), "超级管理员的角色信息不允许被修改");
         List<SysRole> sysRoleList = sysRoleMapper.selectList(Wrappers.<SysRole>lambdaQuery()
                 .eq(SysRole::getRoleName, dto.getRoleName()));
-        if (!sysRoleList.isEmpty() && !oldRole.getRoleName().equals(dto.getRoleName())) {
-            warn = "角色名已经存在";
-        } else {
-            SysRole sysRole = new SysRole();
-            BeanUtils.copyProperties(dto, sysRole);
-            sysRole.setRoleUpdateTime(LocalDateTime.now());
-            sysRoleMapper.updateById(sysRole);
-            sysRoleMapper.deleteRolePermissionByRoleId(sysRole.getId());
-            if (!dto.getPermissionIdArr().isEmpty()) {
-                List<Integer> permissionIdExistList = dto.getPermissionIdArr()
-                        .stream()
-                        .filter(permissionId -> !(sysPermissionMapper
-                                .selectById(permissionId).getPermissionStatus() == EnableStatusEnum.DISABLE.getStatusId().intValue()))
-                        .collect(Collectors.toList());
-                if (!permissionIdExistList.isEmpty()) {
-                    sysRoleMapper.insertBatchRolePermission(permissionIdExistList, sysRole.getId());
-                }
-            }
-            if (oldRole.getRoleStatus() == EnableStatusEnum.ENABLE.getStatusId().intValue()
-                    && sysRole.getRoleStatus() == EnableStatusEnum.DISABLE.getStatusId().intValue()) {
-                sysManagerMapper.deleteManagerRoleByRoleId(sysRole.getId());
+        Assert.isTrue(sysRoleList.isEmpty() || oldRole.getRoleName().equals(dto.getRoleName())
+                , "角色名已经存在");
+        SysRole sysRole = new SysRole();
+        BeanUtils.copyProperties(dto, sysRole);
+        sysRole.setRoleUpdateTime(LocalDateTime.now());
+        sysRoleMapper.updateById(sysRole);
+        sysRoleMapper.deleteRolePermissionByRoleId(sysRole.getId());
+        if (!dto.getPermissionIdArr().isEmpty()) {
+            List<Integer> permissionIdExistList = dto.getPermissionIdArr()
+                    .stream()
+                    .filter(permissionId -> !(sysPermissionMapper
+                            .selectById(permissionId).getPermissionStatus() == EnableStatusEnum.DISABLE.getStatusId().intValue()))
+                    .collect(Collectors.toList());
+            if (!permissionIdExistList.isEmpty()) {
+                sysRoleMapper.insertBatchRolePermission(permissionIdExistList, sysRole.getId());
             }
         }
-        return warn;
+        if (oldRole.getRoleStatus() == EnableStatusEnum.ENABLE.getStatusId().intValue()
+                && sysRole.getRoleStatus() == EnableStatusEnum.DISABLE.getStatusId().intValue()) {
+            sysManagerMapper.deleteManagerRoleByRoleId(sysRole.getId());
+        }
     }
 
 

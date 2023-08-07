@@ -1,7 +1,6 @@
 package pers.elianacc.yurayura.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import pers.elianacc.yurayura.dto.IdDto;
 import pers.elianacc.yurayura.dto.SysMenuSubInsertDto;
@@ -44,10 +43,7 @@ public class SysMenuSubController {
      */
     @PostMapping("/insert")
     public ApiResult<String> insert(@RequestBody SysMenuSubInsertDto dto) {
-        String warn = iSysMenuSubService.insert(dto);
-        if (!ObjectUtils.isEmpty(warn)) {
-            return ApiResult.warn(warn);
-        }
+        iSysMenuSubService.insert(dto);
         return ApiResult.success("添加成功");
     }
 
@@ -59,10 +55,7 @@ public class SysMenuSubController {
      */
     @PutMapping("/update")
     public ApiResult<String> update(@RequestBody SysMenuSubUpdateDto dto) {
-        String warn = iSysMenuSubService.update(dto);
-        if (!ObjectUtils.isEmpty(warn)) {
-            return ApiResult.warn(warn);
-        }
+        iSysMenuSubService.update(dto);
         return ApiResult.success("修改成功");
     }
 
@@ -86,9 +79,6 @@ public class SysMenuSubController {
      */
     @GetMapping("/getByIndex")
     public ApiResult<SysMenuSub> getByIndex(@RequestParam String index) {
-        if (ObjectUtils.isEmpty(index)) {
-            return ApiResult.badRequest("路径不能为空");
-        }
         return ApiResult.success("查询成功", iSysMenuSubService.getByIndex(index));
     }
 

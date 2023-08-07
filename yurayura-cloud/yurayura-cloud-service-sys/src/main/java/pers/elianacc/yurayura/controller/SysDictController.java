@@ -3,7 +3,6 @@ package pers.elianacc.yurayura.controller;
 
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import pers.elianacc.yurayura.dto.IdDto;
 import pers.elianacc.yurayura.dto.SysDictInsertDto;
@@ -47,11 +46,7 @@ public class SysDictController {
      */
     @PostMapping("/getPage")
     public ApiResult<PageInfo<SysDict>> getPage(@RequestBody SysDictSelectDto dto) {
-        PageInfo<SysDict> pageInfo = iSysDictService.getPage(dto);
-        if (pageInfo.getTotal() == 0) {
-            return ApiResult.warn("查询不到数据");
-        }
-        return ApiResult.success("分页查询成功", pageInfo);
+        return ApiResult.success("分页查询成功", iSysDictService.getPage(dto));
     }
 
     /**
@@ -62,10 +57,7 @@ public class SysDictController {
      */
     @PostMapping("/insert")
     public ApiResult<String> insert(@RequestBody SysDictInsertDto dto) {
-        String warn = iSysDictService.insert(dto);
-        if (!ObjectUtils.isEmpty(warn)) {
-            return ApiResult.warn(warn);
-        }
+        iSysDictService.insert(dto);
         return ApiResult.success("添加成功");
     }
 
@@ -77,10 +69,7 @@ public class SysDictController {
      */
     @PutMapping("/update")
     public ApiResult<String> update(@RequestBody SysDictUpdateDto dto) {
-        String warn = iSysDictService.update(dto);
-        if (!ObjectUtils.isEmpty(warn)) {
-            return ApiResult.warn(warn);
-        }
+        iSysDictService.update(dto);
         return ApiResult.success("修改成功");
     }
 
@@ -92,14 +81,7 @@ public class SysDictController {
      */
     @GetMapping("/getByDictCode")
     public ApiResult<List<SysDict>> getByDictCode(@RequestParam String dictCode) {
-        if (ObjectUtils.isEmpty(dictCode)) {
-            return ApiResult.badRequest("字典编码不能为空");
-        }
-        List<SysDict> sysDictList = iSysDictService.getByDictCode(dictCode);
-        if (sysDictList.isEmpty()) {
-            return ApiResult.warn("字典编码：" + dictCode + "对应系统数据字典为空");
-        }
-        return ApiResult.success("查询成功", sysDictList);
+        return ApiResult.success("查询成功", iSysDictService.getByDictCode(dictCode));
     }
 
     /**
@@ -110,11 +92,7 @@ public class SysDictController {
      */
     @GetMapping("/getAll")
     public ApiResult<List<SysDict>> getAll() {
-        List<SysDict> sysDictList = iSysDictService.getAll();
-        if (sysDictList.isEmpty()) {
-            return ApiResult.warn("系统数据字典在redis中不存在，请添加");
-        }
-        return ApiResult.success("查询成功", sysDictList);
+        return ApiResult.success("查询成功", iSysDictService.getAll());
     }
 }
 

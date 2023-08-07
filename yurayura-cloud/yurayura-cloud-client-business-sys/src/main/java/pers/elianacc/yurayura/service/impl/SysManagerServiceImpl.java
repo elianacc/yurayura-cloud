@@ -1,5 +1,6 @@
 package pers.elianacc.yurayura.service.impl;
 
+import cn.hutool.core.lang.Assert;
 import com.github.pagehelper.PageInfo;
 import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
@@ -69,34 +70,26 @@ public class SysManagerServiceImpl implements SysManagerService {
     }
 
     @Override
-    public String login(SysManagerLoginDto dto, HttpSession session) {
-        String warn = "";
+    public void login(SysManagerLoginDto dto, HttpSession session) {
         // 获取服务器生成验证码
         Object managerVerifyCode = session.getAttribute("managerVerifyCode");
         // 验证码session失效
-        if (ObjectUtils.isEmpty(managerVerifyCode)) {
-            warn = "验证码过期，请重新输入";
-            return warn;
+        Assert.isTrue(!ObjectUtils.isEmpty(managerVerifyCode), "验证码过期，请重新输入");
+        Assert.isTrue(managerVerifyCode.toString().equalsIgnoreCase(dto.getVerifyCode()), "验证码错误");
+        // 封装用户登入数据(用户名+密码)为token
+        UsernamePasswordToken token = new UsernamePasswordToken(dto.getManagerName(), DigestUtils.md5DigestAsHex(dto.getManagerPassword().getBytes()));
+        // 获取当前用户
+        Subject subject = SecurityUtils.getSubject();
+        try {
+            // 当前用户登入
+            subject.login(token);
+            SysManager currentSysManager = (SysManager) subject.getPrincipal();
+            log.info("管理员：{}，登入成功", currentSysManager.getManagerName());
+        } catch (UnknownAccountException uae) {
+            throw new BusinessException(ApiResult.FORBIDDEN, "用户不存在");
+        } catch (IncorrectCredentialsException ice) {
+            throw new BusinessException(ApiResult.FORBIDDEN, "密码错误");
         }
-        if (managerVerifyCode.toString().equalsIgnoreCase(dto.getVerifyCode())) {
-            // 封装用户登入数据(用户名+密码)为token
-            UsernamePasswordToken token = new UsernamePasswordToken(dto.getManagerName(), DigestUtils.md5DigestAsHex(dto.getManagerPassword().getBytes()));
-            // 获取当前用户
-            Subject subject = SecurityUtils.getSubject();
-            try {
-                // 当前用户登入
-                subject.login(token);
-                SysManager currentSysManager = (SysManager) subject.getPrincipal();
-                log.info("管理员：{}，登入成功", currentSysManager.getManagerName());
-            } catch (UnknownAccountException uae) {
-                warn = "用户不存在";
-            } catch (IncorrectCredentialsException ice) {
-                warn = "密码错误";
-            }
-        } else {
-            warn = "验证码错误";
-        }
-        return warn;
     }
 
     @Override

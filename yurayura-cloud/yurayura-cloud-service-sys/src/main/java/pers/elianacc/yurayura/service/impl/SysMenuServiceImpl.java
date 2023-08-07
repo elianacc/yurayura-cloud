@@ -1,5 +1,6 @@
 package pers.elianacc.yurayura.service.impl;
 
+import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
@@ -50,18 +51,13 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public String insert(SysMenuInsertDto dto) {
-        String warn = "";
+    public void insert(SysMenuInsertDto dto) {
         List<String> menuNameList = sysMenuMapper.getMenuNameAndMenuSubName();
-        if (menuNameList.contains(dto.getMenuName())) {
-            warn = "菜单标识已存在，请更换";
-        } else {
-            SysMenu sysMenu = new SysMenu();
-            BeanUtils.copyProperties(dto, sysMenu);
-            sysMenu.setMenuType(SysMenuTypeEnum.FIRSTLEVEL.getTypeId());
-            sysMenuMapper.insert(sysMenu);
-        }
-        return warn;
+        Assert.isTrue(!menuNameList.contains(dto.getMenuName()), "菜单标识已存在，请更换");
+        SysMenu sysMenu = new SysMenu();
+        BeanUtils.copyProperties(dto, sysMenu);
+        sysMenu.setMenuType(SysMenuTypeEnum.FIRSTLEVEL.getTypeId());
+        sysMenuMapper.insert(sysMenu);
     }
 
     @Override
@@ -84,11 +80,9 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     @Override
-    public String update(SysMenuUpdateDto dto) {
-        String warn = "";
+    public void update(SysMenuUpdateDto dto) {
         SysMenu sysMenu = new SysMenu();
         BeanUtils.copyProperties(dto, sysMenu);
         sysMenuMapper.updateById(sysMenu);
-        return warn;
     }
 }

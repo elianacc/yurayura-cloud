@@ -1,5 +1,6 @@
 package pers.elianacc.yurayura.controller;
 
+import cn.hutool.core.lang.Assert;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.baomidou.lock.annotation.Lock4j;
 import com.github.pagehelper.PageInfo;
@@ -8,7 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ObjectUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pers.elianacc.yurayura.controller.block.SysManagerBlockHandler;
 import pers.elianacc.yurayura.dto.SysManagerInsertDto;
@@ -25,7 +26,6 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.validation.Valid;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -55,7 +55,7 @@ public class SysManagerController {
             blockHandlerClass = SysManagerBlockHandler.class,
             blockHandler = "getPageBlockHandler")
     @ApiOperation("分页查询系统管理员")
-    public ApiResult<PageInfo<SysManagerAndRoleVo>> getPage(@Valid @RequestBody SysManagerSelectDto dto) {
+    public ApiResult<PageInfo<SysManagerAndRoleVo>> getPage(@Validated @RequestBody SysManagerSelectDto dto) {
         return sysManagerService.getPage(dto);
     }
 
@@ -68,7 +68,7 @@ public class SysManagerController {
     @PostMapping("/insert")
     @Lock4j(keys = {"#dto.managerName"}, autoRelease = false)
     @ApiOperation("添加系统管理员")
-    public ApiResult<String> insert(@Valid @RequestBody SysManagerInsertDto dto) {
+    public ApiResult<String> insert(@Validated @RequestBody SysManagerInsertDto dto) {
         return sysManagerService.insert(dto);
     }
 
@@ -81,7 +81,7 @@ public class SysManagerController {
     @PutMapping("/update")
     @Lock4j(keys = {"#dto.id"}, autoRelease = false)
     @ApiOperation("修改系统管理员")
-    public ApiResult<String> update(@Valid @RequestBody SysManagerUpdateDto dto) {
+    public ApiResult<String> update(@Validated @RequestBody SysManagerUpdateDto dto) {
         return sysManagerService.update(dto);
     }
 
@@ -119,11 +119,8 @@ public class SysManagerController {
     @PostMapping("/login")
     @Lock4j(keys = {"#dto.managerName"}, autoRelease = false)
     @ApiOperation("系统管理员登入")
-    public ApiResult<String> login(@Valid @RequestBody SysManagerLoginDto dto, @ApiIgnore HttpSession session) {
-        String warn = sysManagerService.login(dto, session);
-        if (!ObjectUtils.isEmpty(warn)) {
-            return ApiResult.warn(warn);
-        }
+    public ApiResult<String> login(@Validated @RequestBody SysManagerLoginDto dto, @ApiIgnore HttpSession session) {
+        sysManagerService.login(dto, session);
         return ApiResult.success("管理员登入成功");
     }
 
@@ -151,9 +148,7 @@ public class SysManagerController {
     @ApiOperation("判断系统管理员认证状态")
     public ApiResult<String> judgeAuthen() {
         Subject subject = SecurityUtils.getSubject();
-        if (!subject.isAuthenticated()) {
-            return ApiResult.warn("管理员还未登入，请先登入！");
-        }
+        Assert.isTrue(subject.isAuthenticated(), "管理员还未登入，请先登入！");
         return ApiResult.success("管理员已登入");
     }
 

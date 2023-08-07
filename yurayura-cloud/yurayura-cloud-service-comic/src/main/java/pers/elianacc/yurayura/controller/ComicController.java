@@ -3,7 +3,6 @@ package pers.elianacc.yurayura.controller;
 
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import pers.elianacc.yurayura.dto.*;
 import pers.elianacc.yurayura.entity.comic.Comic;
@@ -42,11 +41,7 @@ public class ComicController {
      */
     @PostMapping("/getPage")
     public ApiResult<PageInfo<Comic>> getPage(@RequestBody ComicSelectDto dto) {
-        PageInfo<Comic> pageInfo = iComicService.getPage(dto);
-        if (pageInfo.getTotal() == 0) {
-            return ApiResult.warn("查询不到数据");
-        }
-        return ApiResult.success("分页查询成功", pageInfo);
+        return ApiResult.success("分页查询成功", iComicService.getPage(dto));
     }
 
     /**
@@ -57,10 +52,7 @@ public class ComicController {
      */
     @PostMapping("/insert")
     public ApiResult<String> insert(ComicInsertDto dto) {
-        String warn = iComicService.insert(dto);
-        if (!ObjectUtils.isEmpty(warn)) {
-            return ApiResult.warn(warn);
-        }
+        iComicService.insert(dto);
         return ApiResult.success("添加成功");
     }
 
@@ -84,10 +76,7 @@ public class ComicController {
      */
     @PutMapping("/update")
     public ApiResult<String> update(ComicUpdateDto dto) {
-        String warn = iComicService.update(dto);
-        if (!ObjectUtils.isEmpty(warn)) {
-            return ApiResult.warn(warn);
-        }
+        iComicService.update(dto);
         return ApiResult.success("修改成功");
     }
 }

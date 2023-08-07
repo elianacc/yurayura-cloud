@@ -1,5 +1,6 @@
 package pers.elianacc.yurayura.service.impl;
 
+import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -8,7 +9,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import pers.elianacc.yurayura.vo.SysPermissionAuthorTreeVo;
 import pers.elianacc.yurayura.dao.SysPermissionMapper;
 import pers.elianacc.yurayura.dao.SysRoleMapper;
 import pers.elianacc.yurayura.dto.SysPermissionInsertDto;
@@ -16,7 +16,9 @@ import pers.elianacc.yurayura.dto.SysPermissionSelectDto;
 import pers.elianacc.yurayura.dto.SysPermissionUpdateDto;
 import pers.elianacc.yurayura.entity.sys.permission.SysPermission;
 import pers.elianacc.yurayura.enumerate.EnableStatusEnum;
+import pers.elianacc.yurayura.enumerate.SysPermissionTypeEnum;
 import pers.elianacc.yurayura.service.ISysPermissionService;
+import pers.elianacc.yurayura.vo.SysPermissionAuthorTreeVo;
 
 import java.util.List;
 
@@ -51,12 +53,16 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
                                 , SysPermission::getPermissionBelongSubmenuName, dto.getPermissionBelongSubmenuName())
                         .orderByAsc(SysPermission::getPermissionBelongSubmenuName, SysPermission::getPermissionSeq)
                 );
-        return new PageInfo<>(sysPermissionList, 5);
+        PageInfo<SysPermission> pageInfo = new PageInfo<>(sysPermissionList, 5);
+        Assert.isTrue(pageInfo.getTotal() != 0, "查询不到数据");
+        return pageInfo;
     }
 
     @Override
-    public String insert(SysPermissionInsertDto dto) {
-        String warn = "";
+    public void insert(SysPermissionInsertDto dto) {
+        Assert.isTrue(!(ObjectUtils.isEmpty(dto.getPermissionBtnVal())
+                        && dto.getPermissionType() == SysPermissionTypeEnum.BUTTON.getTypeId().intValue())
+                , "权限类型为按钮时权限按钮不能为空");
         SysPermission sysPermission = new SysPermission();
         BeanUtils.copyProperties(dto, sysPermission);
         if (ObjectUtils.isEmpty(dto.getPermissionBtnVal())) {
@@ -67,20 +73,15 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
         }
         List<SysPermission> existPermList = sysPermissionMapper.selectList(Wrappers.<SysPermission>lambdaQuery()
                 .eq(SysPermission::getPermissionCode, sysPermission.getPermissionCode()));
-        if (!existPermList.isEmpty()) {
-            warn = "此权限已经存在";
-        } else {
-            sysPermissionMapper.insert(sysPermission);
-            if (sysPermission.getPermissionStatus() == EnableStatusEnum.ENABLE.getStatusId().intValue()) {
-                sysRoleMapper.insertRolePermissionForAdmin(sysPermission.getId());
-            }
+        Assert.isTrue(existPermList.isEmpty(), "此权限已经存在");
+        sysPermissionMapper.insert(sysPermission);
+        if (sysPermission.getPermissionStatus() == EnableStatusEnum.ENABLE.getStatusId().intValue()) {
+            sysRoleMapper.insertRolePermissionForAdmin(sysPermission.getId());
         }
-        return warn;
     }
 
     @Override
-    public String update(SysPermissionUpdateDto dto) {
-        String warn = "";
+    public void update(SysPermissionUpdateDto dto) {
         SysPermission oldPerm = sysPermissionMapper.selectById(dto.getId());
         SysPermission sysPermission = new SysPermission();
         BeanUtils.copyProperties(dto, sysPermission);
@@ -92,7 +93,6 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
                 && sysPermission.getPermissionStatus() == EnableStatusEnum.ENABLE.getStatusId().intValue()) {
             sysRoleMapper.insertRolePermissionForAdmin(sysPermission.getId());
         }
-        return warn;
     }
 
     @Override

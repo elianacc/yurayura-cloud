@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pers.elianacc.yurayura.controller.block.SysDictBlockHandler;
 import pers.elianacc.yurayura.dto.SysDictInsertDto;
@@ -16,7 +17,7 @@ import pers.elianacc.yurayura.entity.sys.dict.SysDict;
 import pers.elianacc.yurayura.service.SysDictService;
 import pers.elianacc.yurayura.vo.ApiResult;
 
-import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
@@ -28,6 +29,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/sys/dict")
 @Api(tags = "系统数据字典API")
+@Validated
 public class SysDictController {
 
     @Autowired
@@ -44,7 +46,7 @@ public class SysDictController {
             blockHandlerClass = SysDictBlockHandler.class,
             blockHandler = "getPageBlockHandler")
     @ApiOperation("分页查询系统数据字典")
-    public ApiResult<PageInfo<SysDict>> getPage(@Valid @RequestBody SysDictSelectDto dto) {
+    public ApiResult<PageInfo<SysDict>> getPage(@Validated @RequestBody SysDictSelectDto dto) {
         return sysDictService.getPage(dto);
     }
 
@@ -57,7 +59,7 @@ public class SysDictController {
     @PostMapping("/insert")
     @Lock4j(keys = {"#dto.dictCode", "#dto.dictVal"}, autoRelease = false)
     @ApiOperation("添加系统数据字典")
-    public ApiResult<String> insert(@Valid @RequestBody SysDictInsertDto dto) {
+    public ApiResult<String> insert(@Validated @RequestBody SysDictInsertDto dto) {
         return sysDictService.insert(dto);
     }
 
@@ -70,7 +72,7 @@ public class SysDictController {
     @PutMapping("/update")
     @Lock4j(keys = {"#dto.id"}, autoRelease = false)
     @ApiOperation("修改系统数据字典")
-    public ApiResult<String> update(@Valid @RequestBody SysDictUpdateDto dto) {
+    public ApiResult<String> update(@Validated @RequestBody SysDictUpdateDto dto) {
         return sysDictService.update(dto);
     }
 
@@ -83,7 +85,7 @@ public class SysDictController {
     @GetMapping("/getByDictCode")
     @ApiOperation("查询系统数据字典（根据字典编码）")
     @ApiImplicitParam(name = "dictCode", value = "字典编码", required = true, dataTypeClass = String.class)
-    public ApiResult<List<SysDict>> getByDictCode(@RequestParam String dictCode) {
+    public ApiResult<List<SysDict>> getByDictCode(@NotBlank(message = "字典编码不能为空") @RequestParam String dictCode) {
         return sysDictService.getByDictCode(dictCode);
     }
 

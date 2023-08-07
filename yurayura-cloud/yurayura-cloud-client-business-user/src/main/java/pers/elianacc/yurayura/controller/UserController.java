@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pers.elianacc.yurayura.controller.block.UserBlockHandler;
 import pers.elianacc.yurayura.dto.IdDto;
@@ -14,8 +15,6 @@ import pers.elianacc.yurayura.dto.UserUpdateStatusDto;
 import pers.elianacc.yurayura.entity.user.User;
 import pers.elianacc.yurayura.service.UserService;
 import pers.elianacc.yurayura.vo.ApiResult;
-
-import javax.validation.Valid;
 
 /**
  * 用户 controller
@@ -42,7 +41,7 @@ public class UserController {
             blockHandlerClass = UserBlockHandler.class,
             blockHandler = "getPageBlockHandler")
     @ApiOperation("分页查询用户")
-    public ApiResult<PageInfo<User>> getPage(@Valid @RequestBody UserSelectDto dto) {
+    public ApiResult<PageInfo<User>> getPage(@Validated @RequestBody UserSelectDto dto) {
         return userService.getPage(dto);
     }
 
@@ -55,7 +54,7 @@ public class UserController {
     @PutMapping("/updateStatus")
     @Lock4j(keys = {"#dto.id"}, autoRelease = false)
     @ApiOperation("修改状态（根据用户id）")
-    public ApiResult<String> updateStatus(@Valid @RequestBody UserUpdateStatusDto dto) {
+    public ApiResult<String> updateStatus(@Validated @RequestBody UserUpdateStatusDto dto) {
         return userService.updateStatus(dto);
     }
 
@@ -67,7 +66,7 @@ public class UserController {
      */
     @PutMapping("/updateAvatarDefault")
     @ApiOperation("重置为默认头像（根据用户id）")
-    public ApiResult<String> updateAvatarDefault(@Valid @RequestBody IdDto dto) {
+    public ApiResult<String> updateAvatarDefault(@Validated @RequestBody IdDto dto) {
         return userService.updateAvatarDefault(dto);
     }
 

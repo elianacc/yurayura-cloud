@@ -1,6 +1,7 @@
 package pers.elianacc.yurayura.component;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindException;
@@ -13,6 +14,7 @@ import pers.elianacc.yurayura.exception.RepeatSubmitException;
 import pers.elianacc.yurayura.util.MailUtil;
 import pers.elianacc.yurayura.vo.ApiResult;
 
+import javax.validation.ConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -51,7 +53,25 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BindException.class)
     public ApiResult<String> validExceptionHandler(BindException e) {
-        return ApiResult.badRequest(Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage());
+        return ApiResult.badRequest(Objects.requireNonNull(e.getFieldError()).getDefaultMessage());
+    }
+
+    /**
+     * 处理单个参数异常（带requestparam的方式）
+     *
+     * @param e
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ApiResult<String> validExceptionHandler(ConstraintViolationException e) {
+        String msg = e.getMessage();
+        if (msg != null) {
+            int lastIndex = msg.lastIndexOf(':');
+            if (lastIndex >= 0) {
+                msg = msg.substring(lastIndex + 1).trim();
+            }
+        }
+        return ApiResult.badRequest(msg);
     }
 
     /**
@@ -75,11 +95,21 @@ public class GlobalExceptionHandler {
     public ApiResult<String> businessExceptionHandler(BusinessException businessException) {
         if (businessException.getErrorCode() == 500) {
             return ApiResult.fail(businessException.getErrorMsg());
-        } else if (businessException.getErrorCode() == 400) {
-            return ApiResult.badRequest(businessException.getErrorMsg());
         } else {
             return ApiResult.warn(businessException.getErrorMsg());
         }
+    }
+
+    /**
+     * 处理断言异常
+     *
+     * @param exception
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ApiResult<String> illegalArgumentException(Exception exception) {
+        String msg = StringUtils.abbreviate(exception.getMessage(), 100);
+        return ApiResult.warn(msg);
     }
 
     /**

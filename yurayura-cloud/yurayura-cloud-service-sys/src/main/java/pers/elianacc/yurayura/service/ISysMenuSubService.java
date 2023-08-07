@@ -20,9 +20,9 @@ public interface ISysMenuSubService extends IService<SysMenuSub> {
      * 添加系统子菜单
      *
      * @param dto
-     * @return java.lang.String
+     * @return void
      */
-    public String insert(SysMenuSubInsertDto dto);
+    public void insert(SysMenuSubInsertDto dto);
 
     /**
      * 删除系统子菜单（根据系统子菜单id）
@@ -36,9 +36,9 @@ public interface ISysMenuSubService extends IService<SysMenuSub> {
      * 修改系统子菜单
      *
      * @param dto
-     * @return java.lang.String
+     * @return void
      */
-    public String update(SysMenuSubUpdateDto dto);
+    public void update(SysMenuSubUpdateDto dto);
 
     /**
      * 查询系统子菜单（根据路径）

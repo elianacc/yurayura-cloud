@@ -1,5 +1,6 @@
 package pers.elianacc.yurayura.service.impl;
 
+import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -45,36 +46,33 @@ public class SysManagerServiceImpl extends ServiceImpl<SysManagerMapper, SysMana
         // 设置分页
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         List<SysManagerAndRoleVo> managerAndPermissionList = sysManagerMapper.getManagerAndRoleListBySelectDto(dto);
-        return new PageInfo<>(managerAndPermissionList, 5);
+        PageInfo<SysManagerAndRoleVo> pageInfo = new PageInfo<>(managerAndPermissionList, 5);
+        Assert.isTrue(pageInfo.getTotal() != 0, "查询不到数据");
+        return pageInfo;
     }
 
     @Override
-    public String insert(SysManagerInsertDto dto) {
-        String warn = "";
+    public void insert(SysManagerInsertDto dto) {
         List<SysManager> sysManagerList = sysManagerMapper
                 .selectList(Wrappers.<SysManager>lambdaQuery()
                         .eq(SysManager::getManagerName, dto.getManagerName()));
-        if (sysManagerList.isEmpty()) {
-            SysManager sysManager = new SysManager();
-            BeanUtils.copyProperties(dto, sysManager);
-            sysManager.setManagerPassword(DigestUtils.md5DigestAsHex(sysManager.getManagerPassword().getBytes()));
-            sysManager.setManagerCreateTime(LocalDateTime.now());
-            sysManager.setManagerUpdateTime(null);
-            sysManagerMapper.insert(sysManager);
-            if (!dto.getRoleIdArr().isEmpty()) {
-                List<Integer> roleIdExistList = dto.getRoleIdArr()
-                        .stream()
-                        .filter(roleId -> !(sysRoleMapper
-                                .selectById(roleId).getRoleStatus() == EnableStatusEnum.DISABLE.getStatusId().intValue()))
-                        .collect(Collectors.toList());
-                if (!roleIdExistList.isEmpty()) {
-                    sysManagerMapper.insertBatchManagerRole(roleIdExistList, sysManager.getId());
-                }
+        Assert.isTrue(sysManagerList.isEmpty(), "管理员名已经被占用");
+        SysManager sysManager = new SysManager();
+        BeanUtils.copyProperties(dto, sysManager);
+        sysManager.setManagerPassword(DigestUtils.md5DigestAsHex(sysManager.getManagerPassword().getBytes()));
+        sysManager.setManagerCreateTime(LocalDateTime.now());
+        sysManager.setManagerUpdateTime(null);
+        sysManagerMapper.insert(sysManager);
+        if (!dto.getRoleIdArr().isEmpty()) {
+            List<Integer> roleIdExistList = dto.getRoleIdArr()
+                    .stream()
+                    .filter(roleId -> !(sysRoleMapper
+                            .selectById(roleId).getRoleStatus() == EnableStatusEnum.DISABLE.getStatusId().intValue()))
+                    .collect(Collectors.toList());
+            if (!roleIdExistList.isEmpty()) {
+                sysManagerMapper.insertBatchManagerRole(roleIdExistList, sysManager.getId());
             }
-        } else {
-            warn = "管理员名已经被占用";
         }
-        return warn;
     }
 
     @Override
@@ -83,13 +81,9 @@ public class SysManagerServiceImpl extends ServiceImpl<SysManagerMapper, SysMana
     }
 
     @Override
-    public String update(SysManagerUpdateDto dto) {
-        String warn = "";
+    public void update(SysManagerUpdateDto dto) {
         SysManager oldSysManager = sysManagerMapper.selectById(dto.getId());
-        if (oldSysManager.getManagerName().equals("admin")) {
-            warn = "管理员admin信息不允许被修改";
-            return warn;
-        }
+        Assert.isTrue(!oldSysManager.getManagerName().equals("admin"), "管理员admin信息不允许被修改");
         SysManager sysManager = new SysManager();
         BeanUtils.copyProperties(dto, sysManager);
         // 修改密码为空时使用此管理员旧密码
@@ -111,7 +105,6 @@ public class SysManagerServiceImpl extends ServiceImpl<SysManagerMapper, SysMana
                 sysManagerMapper.insertBatchManagerRole(roleIdExistList, sysManager.getId());
             }
         }
-        return warn;
     }
 
     @Override

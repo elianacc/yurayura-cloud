@@ -5,6 +5,7 @@ import com.baomidou.lock.annotation.Lock4j;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pers.elianacc.yurayura.controller.block.SysMenuBlockHandler;
 import pers.elianacc.yurayura.dto.IdDto;
@@ -14,7 +15,6 @@ import pers.elianacc.yurayura.service.SysMenuService;
 import pers.elianacc.yurayura.vo.ApiResult;
 import pers.elianacc.yurayura.vo.SysMenuTreeVo;
 
-import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -67,7 +67,7 @@ public class SysMenuController {
     @PostMapping("/insert")
     @Lock4j(keys = {"#dto.menuName"}, autoRelease = false)
     @ApiOperation("添加系统菜单")
-    public ApiResult<String> insert(@Valid @RequestBody SysMenuInsertDto dto) {
+    public ApiResult<String> insert(@Validated @RequestBody SysMenuInsertDto dto) {
         return sysMenuService.insert(dto);
     }
 
@@ -80,7 +80,7 @@ public class SysMenuController {
     @PutMapping("/update")
     @Lock4j(keys = {"#dto.id"}, autoRelease = false)
     @ApiOperation("修改系统菜单")
-    public ApiResult<String> update(@Valid @RequestBody SysMenuUpdateDto dto) {
+    public ApiResult<String> update(@Validated @RequestBody SysMenuUpdateDto dto) {
         return sysMenuService.update(dto);
     }
 
@@ -92,7 +92,7 @@ public class SysMenuController {
      */
     @PutMapping("/deleteById")
     @ApiOperation("删除系统菜单（根据系统菜单id）")
-    public ApiResult<String> deleteById(@Valid @RequestBody IdDto dto) {
+    public ApiResult<String> deleteById(@Validated @RequestBody IdDto dto) {
         return sysMenuService.deleteById(dto);
     }
 

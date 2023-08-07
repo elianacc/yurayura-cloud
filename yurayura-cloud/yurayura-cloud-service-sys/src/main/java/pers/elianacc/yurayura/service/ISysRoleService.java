@@ -38,16 +38,16 @@ public interface ISysRoleService extends IService<SysRole> {
      * 添加系统角色
      *
      * @param dto
-     * @return java.lang.String
+     * @return void
      */
-    public String insert(SysRoleInsertDto dto);
+    public void insert(SysRoleInsertDto dto);
 
     /**
      * 修改系统角色
      *
      * @param dto
-     * @return java.lang.String
+     * @return void
      */
-    public String update(SysRoleUpdateDto dto);
+    public void update(SysRoleUpdateDto dto);
 
 }

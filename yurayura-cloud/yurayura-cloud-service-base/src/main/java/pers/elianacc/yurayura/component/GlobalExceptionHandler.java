@@ -1,6 +1,7 @@
 package pers.elianacc.yurayura.component;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,6 +27,18 @@ public class GlobalExceptionHandler {
     private String receiveEmail;
     @Value("${spring.application.name}")
     private String applicationName;
+
+    /**
+     * 处理断言异常
+     *
+     * @param exception
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ApiResult<String> illegalArgumentException(Exception exception) {
+        String msg = StringUtils.abbreviate(exception.getMessage(), 100);
+        return ApiResult.warn(msg);
+    }
 
     /**
      * 处理系统异常

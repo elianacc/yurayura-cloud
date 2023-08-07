@@ -18,13 +18,13 @@ public class ApiResult<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final static int SUCCESS_CODE = 200; // 服务器处理成功状态码
-    private final static int FAIL_CODE = 500; // 服务器错误状态码
+    public final static int SUCCESS_CODE = 200; // 服务器处理成功状态码
+    public final static int FAIL_CODE = 500; // 服务器错误状态码
 
-    private final static int NOT_AUTHENTICATION = 401; // 未认证
-    private final static int NOT_AUTHORIZATION = 405; // 未授权
-    private final static int FORBIDDEN = 403; // 服务器理解请求客户端的请求，但是拒绝执行此请求
-    private final static int BAD_REQUEST = 400; // 客户端请求的语法错误，服务器无法理解
+    public final static int NOT_AUTHENTICATION = 401; // 未认证
+    public final static int NOT_AUTHORIZATION = 405; // 未授权
+    public final static int FORBIDDEN = 403; // 服务器理解请求客户端的请求，但是拒绝执行此请求
+    public final static int BAD_REQUEST = 400; // 客户端请求的语法错误，服务器无法理解
 
     private final static String NOT_AUTHENTICATION_MSG = "登入认证过期，请重新登入"; // 未认证提示信息
     private final static String NOT_AUTHORIZATION_MSG = "还未授权此操作"; // 未授权提示信息

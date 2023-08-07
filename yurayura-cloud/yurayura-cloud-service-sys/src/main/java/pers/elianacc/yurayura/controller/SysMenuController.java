@@ -1,7 +1,6 @@
 package pers.elianacc.yurayura.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import pers.elianacc.yurayura.dto.IdDto;
 import pers.elianacc.yurayura.dto.SysMenuInsertDto;
@@ -56,9 +55,6 @@ public class SysMenuController {
      */
     @GetMapping("/getTreeListByManagerId")
     public ApiResult<List<SysMenuTreeVo>> getTreeListByManagerId(@RequestParam Integer managerId) {
-        if (ObjectUtils.isEmpty(managerId)) {
-            return ApiResult.badRequest("id不能为空");
-        }
         return ApiResult.success("树形列表查询成功", iSysMenuService.getTreeListByManagerId(managerId));
     }
 
@@ -70,10 +66,7 @@ public class SysMenuController {
      */
     @PostMapping("/insert")
     public ApiResult<String> insert(@RequestBody SysMenuInsertDto dto) {
-        String warn = iSysMenuService.insert(dto);
-        if (!ObjectUtils.isEmpty(warn)) {
-            return ApiResult.warn(warn);
-        }
+        iSysMenuService.insert(dto);
         return ApiResult.success("添加成功");
     }
 
@@ -85,10 +78,7 @@ public class SysMenuController {
      */
     @PutMapping("/update")
     public ApiResult<String> update(@RequestBody SysMenuUpdateDto dto) {
-        String warn = iSysMenuService.update(dto);
-        if (!ObjectUtils.isEmpty(warn)) {
-            return ApiResult.warn(warn);
-        }
+        iSysMenuService.update(dto);
         return ApiResult.success("修改成功");
     }
 

@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pers.elianacc.yurayura.controller.block.ComicBlockHandler;
 import pers.elianacc.yurayura.dto.ComicInsertDto;
@@ -15,8 +16,6 @@ import pers.elianacc.yurayura.dto.IdsDto;
 import pers.elianacc.yurayura.entity.comic.Comic;
 import pers.elianacc.yurayura.service.ComicService;
 import pers.elianacc.yurayura.vo.ApiResult;
-
-import javax.validation.Valid;
 
 /**
  * 番剧 controller
@@ -43,7 +42,7 @@ public class ComicController {
             blockHandlerClass = ComicBlockHandler.class,
             blockHandler = "getPageBlockHandler")
     @ApiOperation("分页查询番剧")
-    public ApiResult<PageInfo<Comic>> getPage(@Valid @RequestBody ComicSelectDto dto) {
+    public ApiResult<PageInfo<Comic>> getPage(@Validated @RequestBody ComicSelectDto dto) {
         return comicService.getPage(dto);
     }
 
@@ -56,7 +55,7 @@ public class ComicController {
     @PostMapping("/insert")
     @Lock4j(keys = {"#dto.comicName"}, autoRelease = false)
     @ApiOperation("添加番剧")
-    public ApiResult<String> insert(@Valid ComicInsertDto dto) {
+    public ApiResult<String> insert(@Validated ComicInsertDto dto) {
         return comicService.insert(dto);
     }
 
@@ -68,7 +67,7 @@ public class ComicController {
      */
     @PutMapping("/deleteBatchByIds")
     @ApiOperation("批量删除番剧（根据番剧id组）")
-    public ApiResult<String> deleteBatchByIds(@Valid @RequestBody IdsDto dto) {
+    public ApiResult<String> deleteBatchByIds(@Validated @RequestBody IdsDto dto) {
         return comicService.deleteBatchByIds(dto);
     }
 
@@ -81,7 +80,7 @@ public class ComicController {
     @PutMapping("/update")
     @Lock4j(keys = {"#dto.id"}, autoRelease = false)
     @ApiOperation("修改番剧")
-    public ApiResult<String> update(@Valid ComicUpdateDto dto) {
+    public ApiResult<String> update(@Validated ComicUpdateDto dto) {
         return comicService.update(dto);
     }
 

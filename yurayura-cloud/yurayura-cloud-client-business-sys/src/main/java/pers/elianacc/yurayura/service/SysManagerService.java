@@ -47,10 +47,10 @@ public interface SysManagerService {
      * 系统管理员登入
      *
      * @param dto
-     * @param session
-     * @return java.lang.String
+	 * @param session
+     * @return void
      */
-    public String login(SysManagerLoginDto dto, HttpSession session);
+    public void login(SysManagerLoginDto dto, HttpSession session);
 
     /**
      * 获取当前登入管理员信息

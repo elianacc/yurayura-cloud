@@ -2,7 +2,6 @@ package pers.elianacc.yurayura.controller;
 
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import pers.elianacc.yurayura.dto.IdDto;
 import pers.elianacc.yurayura.dto.SysRoleInsertDto;
@@ -47,11 +46,7 @@ public class SysRoleController {
      */
     @PostMapping("/getPage")
     public ApiResult<PageInfo<SysRoleAndPermissionVo>> getPage(@RequestBody SysRoleSelectDto dto) {
-        PageInfo<SysRoleAndPermissionVo> pageInfo = iSysRoleService.getPage(dto);
-        if (pageInfo.getTotal() == 0) {
-            return ApiResult.warn("查询不到数据");
-        }
-        return ApiResult.success("分页查询成功", pageInfo);
+        return ApiResult.success("分页查询成功", iSysRoleService.getPage(dto));
     }
 
     /**
@@ -62,10 +57,7 @@ public class SysRoleController {
      */
     @PostMapping("/insert")
     public ApiResult<String> insert(@RequestBody SysRoleInsertDto dto) {
-        String warn = iSysRoleService.insert(dto);
-        if (!ObjectUtils.isEmpty(warn)) {
-            return ApiResult.warn(warn);
-        }
+        iSysRoleService.insert(dto);
         return ApiResult.success("添加成功");
     }
 
@@ -77,10 +69,7 @@ public class SysRoleController {
      */
     @PutMapping("/update")
     public ApiResult<String> update(@RequestBody SysRoleUpdateDto dto) {
-        String warn = iSysRoleService.update(dto);
-        if (!ObjectUtils.isEmpty(warn)) {
-            return ApiResult.warn(warn);
-        }
+        iSysRoleService.update(dto);
         return ApiResult.success("修改成功");
     }
 

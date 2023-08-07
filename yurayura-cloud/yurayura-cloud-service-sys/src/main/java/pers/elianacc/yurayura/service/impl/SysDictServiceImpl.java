@@ -1,5 +1,6 @@
 package pers.elianacc.yurayura.service.impl;
 
+import cn.hutool.core.lang.Assert;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -47,28 +48,25 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
                                 , "instr(dict_code, {0}) > 0", dto.getDictCode())
                         .eq(!ObjectUtils.isEmpty(dto.getDictStatus()), SysDict::getDictStatus, dto.getDictStatus())
                         .orderByAsc(SysDict::getDictCode, SysDict::getDictSeq));
-        return new PageInfo<>(sysDictList, 5);
+        PageInfo<SysDict> pageInfo = new PageInfo<>(sysDictList, 5);
+        Assert.isTrue(pageInfo.getTotal() != 0, "查询不到数据");
+        return pageInfo;
     }
 
     @Override
-    public String insert(SysDictInsertDto dto) {
-        String warn = "";
+    public void insert(SysDictInsertDto dto) {
         List<SysDict> sysDictList = sysDictMapper
                 .selectList(Wrappers.<SysDict>lambdaQuery()
                         .eq(SysDict::getDictCode, dto.getDictCode())
                         .eq(SysDict::getDictVal, dto.getDictVal()));
-        if (sysDictList.isEmpty()) {
-            SysDict sysDict = new SysDict();
-            BeanUtils.copyProperties(dto, sysDict);
-            sysDictMapper.insert(sysDict);
-            if (sysDict.getDictStatus().intValue() == EnableStatusEnum.ENABLE.getStatusId()) {
-                // 插入字典记录到redis
-                RedisUtil.lSet(sysDict.getDictCode(), sysDict);
-            }
-        } else {
-            warn = "此字典编码对应字典值已存在";
+        Assert.isTrue(sysDictList.isEmpty(), "此字典编码对应字典值已存在");
+        SysDict sysDict = new SysDict();
+        BeanUtils.copyProperties(dto, sysDict);
+        sysDictMapper.insert(sysDict);
+        if (sysDict.getDictStatus().intValue() == EnableStatusEnum.ENABLE.getStatusId()) {
+            // 插入字典记录到redis
+            RedisUtil.lSet(sysDict.getDictCode(), sysDict);
         }
-        return warn;
     }
 
     @Override
@@ -82,8 +80,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     }
 
     @Override
-    public String update(SysDictUpdateDto dto) {
-        String warn = "";
+    public void update(SysDictUpdateDto dto) {
         // 原字典记录
         SysDict oldSysDict = sysDictMapper.selectById(dto.getId());
         SysDict sysDict = new SysDict();
@@ -97,7 +94,6 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
             // 再插入新的字典记录到redis
             RedisUtil.lSet(oldSysDict.getDictCode(), sysDict);
         }
-        return warn;
     }
 
     @Override
@@ -111,11 +107,13 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
                     .sorted(Comparator.comparing(SysDict::getDictSeq))
                     .collect(Collectors.toList());
         }
-        return sysDictMapper
+        List<SysDict> sysDictList = sysDictMapper
                 .selectList(Wrappers.<SysDict>lambdaQuery()
                         .eq(SysDict::getDictCode, dictCode)
                         .eq(SysDict::getDictStatus, EnableStatusEnum.ENABLE.getStatusId())
                         .orderByAsc(SysDict::getDictSeq));
+        Assert.isTrue(!sysDictList.isEmpty(), "字典编码：" + dictCode + "对应系统数据字典为空");
+        return sysDictList;
     }
 
     @Override
@@ -131,6 +129,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
                 }
             });
         }
+        Assert.isTrue(!sysDictList.isEmpty(), "系统数据字典在redis中不存在，请添加");
         return sysDictList;
     }
 }
