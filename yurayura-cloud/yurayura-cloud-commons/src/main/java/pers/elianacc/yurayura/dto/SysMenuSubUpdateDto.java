@@ -40,7 +40,7 @@ public class SysMenuSubUpdateDto implements Serializable {
      * 图标样式
      */
     @NotBlank(message = "图标样式不能为空")
-    @Size(max = 30, message = "图标样式不能超过30个字符")
+    @Size(max = 40, message = "图标样式不能超过40个字符")
     @ApiModelProperty(value = "图标样式", required = true)
     private String menuIconClass;
 
