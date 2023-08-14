@@ -51,7 +51,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     public List<SysRole> getAll() {
-        return sysRoleMapper.selectList(Wrappers.<SysRole>lambdaQuery().ne(SysRole::getId, 1));
+        return sysRoleMapper
+                .selectList(Wrappers.<SysRole>lambdaQuery()
+                        .eq(SysRole::getRoleStatus, 1)
+                        .ne(SysRole::getId, 1));
     }
 
     @Override
