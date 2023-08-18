@@ -87,6 +87,12 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
 
+        <!-- SpringBoot commons-pool2（提供Redis连接池） 依赖 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+
         <!-- mybatis-plus springboot 依赖 -->
         <dependency>
             <groupId>com.baomidou</groupId>
