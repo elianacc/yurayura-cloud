@@ -108,13 +108,15 @@ spring:
       # 此属性控制从池返回的连接的默认自动提交行为，默认值：true
       auto-commit: true
       # 空闲连接存活最大时间，默认600000（10分钟）
-      idle-timeout: 300000
+      idle-timeout: 60000
+      # 测试连接的活动性的最长时间，默认值：5000
+      validation-timeout: 3000
       # 最小空闲连接数量，默认是10
-      minimum-idle: 30
+      minimum-idle: 10
       # 连接池最大连接数，默认是10
-      maximum-pool-size: 50
+      maximum-pool-size: 20
       # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
-      max-lifetime: 1800000
+      max-lifetime: 60000
       # 数据库连接超时时间，默认30秒，即30000
       connection-timeout: 30000
       connection-test-query: SELECT 1
@@ -154,13 +156,18 @@ spring:
     port: 6379
     password: 123456
     database: 10
-    jedis:
+    # 连接超时时间
+    timeout: 10s
+    lettuce:
       pool:
+        # 连接池最大连接数
         max-active: 200
-        max-wait: 100000
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1ms
+        # 连接池中的最大空闲连接
         max-idle: 10
+        # 连接池中的最小空闲连接
         min-idle: 0
-    timeout: 50000
 
 # seata配置
 seata:
@@ -326,13 +333,18 @@ spring:
     port: 6379
     password: 123456
     database: 10
-    jedis:
+    # 连接超时时间
+    timeout: 10s
+    lettuce:
       pool:
+        # 连接池最大连接数
         max-active: 200
-        max-wait: 100000
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1ms
+        # 连接池中的最大空闲连接
         max-idle: 10
+        # 连接池中的最小空闲连接
         min-idle: 0
-    timeout: 50000
   # session存储方式
   session:
     store-type: redis
