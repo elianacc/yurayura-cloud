@@ -12,13 +12,13 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 /**
- * Redis config
+ * Spring-RedisTemplate config
  *
  * @author ELiaNaCc
  * @since 2020-04-05
  */
 @Configuration
-public class RedisConfig {
+public class RedisTemplateConfig {
 
     @Bean
     @SuppressWarnings("all")
