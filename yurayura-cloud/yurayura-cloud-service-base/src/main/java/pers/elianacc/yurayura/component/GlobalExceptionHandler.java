@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
      * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @ExceptionHandler(IllegalArgumentException.class)
-    public ApiResult<String> illegalArgumentException(Exception exception) {
+    public ApiResult<String> illegalArgumentException(IllegalArgumentException exception) {
         String msg = StringUtils.abbreviate(exception.getMessage(), 100);
         return ApiResult.warn(msg);
     }
