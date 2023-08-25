@@ -122,7 +122,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         List<SysDict> sysDictList = new ArrayList<>();
         if (!keys.isEmpty()) {
             keys.forEach(key -> {
-                if (!key.contains("yurayura-cloud-client-business-session") && !key.contains("lock4j")) {
+                if (!key.contains("satoken") && !key.contains("lock4j")) {
                     List<Object> objList = RedisUtil.lGet(key, 0, -1);
                     List<SysDict> sysDictListForKey = JSON.parseArray(JSON.toJSONString(objList), SysDict.class);
                     sysDictList.addAll(sysDictListForKey);

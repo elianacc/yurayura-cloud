@@ -1,22 +1,16 @@
 package pers.elianacc.yurayura.service.impl;
 
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.lang.Assert;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageInfo;
 import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.ObjectUtils;
-import pers.elianacc.yurayura.dto.SysManagerInsertDto;
-import pers.elianacc.yurayura.dto.SysManagerLoginDto;
-import pers.elianacc.yurayura.dto.SysManagerSelectDto;
-import pers.elianacc.yurayura.dto.SysManagerUpdateDto;
+import pers.elianacc.yurayura.dto.*;
 import pers.elianacc.yurayura.entity.sys.manager.SysManager;
 import pers.elianacc.yurayura.exception.BusinessException;
 import pers.elianacc.yurayura.feign.SysFeignClient;
@@ -26,6 +20,7 @@ import pers.elianacc.yurayura.vo.SysManagerAndRoleVo;
 import pers.elianacc.yurayura.vo.SysManagerMsgVo;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * 系统管理员 service impl
@@ -76,32 +71,32 @@ public class SysManagerServiceImpl implements SysManagerService {
         // 验证码session失效
         Assert.isTrue(!ObjectUtils.isEmpty(managerVerifyCode), "验证码过期，请重新输入");
         Assert.isTrue(managerVerifyCode.toString().equalsIgnoreCase(dto.getVerifyCode()), "验证码错误");
-        // 封装用户登入数据(用户名+密码)为token
-        UsernamePasswordToken token = new UsernamePasswordToken(dto.getManagerName(), DigestUtils.md5DigestAsHex(dto.getManagerPassword().getBytes()));
-        // 获取当前用户
-        Subject subject = SecurityUtils.getSubject();
-        try {
-            // 当前用户登入
-            subject.login(token);
-            SysManager currentSysManager = (SysManager) subject.getPrincipal();
-            log.info("管理员：{}，登入成功", currentSysManager.getManagerName());
-        } catch (UnknownAccountException uae) {
-            throw new BusinessException(ApiResult.FORBIDDEN, "用户不存在");
-        } catch (IncorrectCredentialsException ice) {
-            throw new BusinessException(ApiResult.FORBIDDEN, "密码错误");
+
+        SysManager sysManager = new SysManager();
+        ApiResult<SysManager> apiResult = sysFeignClient.getEnableManagerByName(dto.getManagerName());
+        if (apiResult.getCode() == 200) {
+            sysManager = JSON.toJavaObject(JSON.parseObject(JSON.toJSONString(apiResult.getData())), SysManager.class);
         }
+
+        Assert.isTrue(!ObjectUtils.isEmpty(sysManager), "用户不存在");
+        Assert.isTrue(sysManager.getManagerPassword().equals(DigestUtils.md5DigestAsHex(dto.getManagerPassword().getBytes()))
+                , "密码错误");
+
+        StpUtil.login(sysManager.getId(), "PC");
+
+        StpUtil.getSession().set("sysManager", sysManager);
     }
 
     @Override
     public SysManagerMsgVo getCurrentManagerMsg() {
-        SysManager currentSysManager = (SysManager) SecurityUtils.getSubject().getPrincipal();
         SysManagerMsgVo sysManagerMsgVo = new SysManagerMsgVo();
+        SysManager currentSysManager = (SysManager) StpUtil.getSession().get("sysManager");
         sysManagerMsgVo.setManagerName(currentSysManager.getManagerName());
-        ApiResult<String> apiResult = sysFeignClient.getManagerRolePermission(currentSysManager.getId());
+        ApiResult<List<String>> apiResult = sysFeignClient.getManagerRolePermission(StpUtil.getLoginIdAsInt());
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
-        sysManagerMsgVo.setManagerPermission(apiResult.getData());
+        sysManagerMsgVo.setManagerPermission(String.join(",", apiResult.getData()));
         return sysManagerMsgVo;
     }
 

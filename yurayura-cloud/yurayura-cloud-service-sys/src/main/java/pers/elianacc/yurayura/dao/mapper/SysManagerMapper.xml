@@ -19,7 +19,7 @@
 
     <select id="getManagerRolePermission" resultType="java.lang.String">
         SELECT
-            GROUP_CONCAT(DISTINCT p.permission_code) permissionsStr
+            DISTINCT p.permission_code permissionsStr
         FROM
             yurayura_sys_manager_role mr
                 LEFT JOIN yurayura_sys_role_permission rp ON mr.role_id = rp.role_id

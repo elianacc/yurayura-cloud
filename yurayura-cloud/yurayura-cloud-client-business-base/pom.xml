@@ -52,12 +52,6 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- SpringBoot spring-session(redis方案) 依赖 -->
-        <dependency>
-            <groupId>org.springframework.session</groupId>
-            <artifactId>spring-session-data-redis</artifactId>
-        </dependency>
-
         <!-- SpringBoot Spring测试 依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -71,10 +65,16 @@
             <artifactId>lock4j-redis-template-spring-boot-starter</artifactId>
         </dependency>
 
-        <!-- shiro spring 依赖 -->
+        <!-- Sa-Token权限认证 springboot 依赖 -->
         <dependency>
-            <groupId>org.apache.shiro</groupId>
-            <artifactId>shiro-spring</artifactId>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot-starter</artifactId>
+        </dependency>
+
+        <!-- Sa-Token 整合 Redis （使用 jackson 序列化方式） -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-redis-jackson</artifactId>
         </dependency>
 
         <!-- 许可证书相关 依赖 -->

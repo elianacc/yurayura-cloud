@@ -33,7 +33,7 @@
         <pagehelper.version>5.2.0</pagehelper.version>
         <fastjson.version>1.2.83</fastjson.version>
         <knife4j.version>3.0.3</knife4j.version>
-        <shiro.version>1.7.1</shiro.version>
+        <sa-token.version>1.35.0.RC</sa-token.version>
         <hutool.version>5.8.9</hutool.version>
         <truelicense.version>1.33</truelicense.version>
         <license-generate.version>1.0.0</license-generate.version>
@@ -128,11 +128,18 @@
                 <version>${knife4j.version}</version>
             </dependency>
 
-            <!-- shiro spring 依赖 -->
+            <!-- Sa-Token权限认证 springboot 依赖 -->
             <dependency>
-                <groupId>org.apache.shiro</groupId>
-                <artifactId>shiro-spring</artifactId>
-                <version>${shiro.version}</version>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-spring-boot-starter</artifactId>
+                <version>${sa-token.version}</version>
+            </dependency>
+
+            <!-- Sa-Token 整合 Redis （使用 jackson 序列化方式） -->
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-redis-jackson</artifactId>
+                <version>${sa-token.version}</version>
             </dependency>
 
             <!-- truelicense 依赖 -->

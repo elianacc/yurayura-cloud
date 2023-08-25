@@ -49,7 +49,7 @@ public interface SysFeignClient {
     public ApiResult<String> update(@RequestBody SysManagerUpdateDto dto);
 
     @RequestMapping("/sys/manager/getManagerRolePermission")
-    public ApiResult<String> getManagerRolePermission(@RequestParam Integer managerId);
+    public ApiResult<List<String>> getManagerRolePermission(@RequestParam Integer managerId);
 
     @RequestMapping("/sys/manager/getEnableManagerByName")
     public ApiResult<SysManager> getEnableManagerByName(@RequestParam String managerName);

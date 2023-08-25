@@ -20,9 +20,9 @@ public interface SysManagerMapper extends BaseMapper<SysManager> {
      * 查询管理员拥有角色的所有权限（根据管理员id）
      *
      * @param managerId
-     * @return java.lang.String
+     * @return java.util.List<java.lang.String>
      */
-    String getManagerRolePermission(Integer managerId);
+    List<String> getManagerRolePermission(Integer managerId);
 
     /**
      * 批量添加管理员角色

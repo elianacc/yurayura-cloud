@@ -1,13 +1,12 @@
 package pers.elianacc.yurayura.service.impl;
 
+import cn.dev33.satoken.stp.StpUtil;
 import io.seata.spring.annotation.GlobalTransactional;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pers.elianacc.yurayura.dto.IdDto;
 import pers.elianacc.yurayura.dto.SysMenuInsertDto;
 import pers.elianacc.yurayura.dto.SysMenuUpdateDto;
-import pers.elianacc.yurayura.entity.sys.manager.SysManager;
 import pers.elianacc.yurayura.exception.BusinessException;
 import pers.elianacc.yurayura.feign.SysFeignClient;
 import pers.elianacc.yurayura.service.SysMenuService;
@@ -39,8 +38,7 @@ public class SysMenuServiceImpl implements SysMenuService {
 
     @Override
     public ApiResult<List<SysMenuTreeVo>> getTreeListForCurrentManager() {
-        SysManager currentSysManager = (SysManager) SecurityUtils.getSubject().getPrincipal();
-        ApiResult<List<SysMenuTreeVo>> apiResult = sysFeignClient.getMenuTreeListByManagerId(currentSysManager.getId());
+        ApiResult<List<SysMenuTreeVo>> apiResult = sysFeignClient.getMenuTreeListByManagerId(StpUtil.getLoginIdAsInt());
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }

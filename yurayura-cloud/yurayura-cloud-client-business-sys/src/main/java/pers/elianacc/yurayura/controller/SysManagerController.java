@@ -1,13 +1,13 @@
 package pers.elianacc.yurayura.controller;
 
+import cn.dev33.satoken.stp.SaTokenInfo;
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.lang.Assert;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.baomidou.lock.annotation.Lock4j;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -133,8 +133,7 @@ public class SysManagerController {
     @GetMapping("/logout")
     @ApiOperation("系统管理员注销")
     public ApiResult<String> logout() {
-        Subject subject = SecurityUtils.getSubject();
-        subject.logout();
+        StpUtil.logout();
         return ApiResult.success("管理员注销成功");
     }
 
@@ -147,8 +146,7 @@ public class SysManagerController {
     @GetMapping("/judgeAuthen")
     @ApiOperation("判断系统管理员认证状态")
     public ApiResult<String> judgeAuthen() {
-        Subject subject = SecurityUtils.getSubject();
-        Assert.isTrue(subject.isAuthenticated(), "管理员还未登入，请先登入！");
+        Assert.isTrue(StpUtil.isLogin(), "管理员还未登入，请先登入！");
         return ApiResult.success("管理员已登入");
     }
 
@@ -162,6 +160,18 @@ public class SysManagerController {
     @ApiOperation("获取当前登入管理员信息")
     public ApiResult<SysManagerMsgVo> getCurrentManagerMsg() {
         return ApiResult.success("获取成功", sysManagerService.getCurrentManagerMsg());
+    }
+
+    /**
+     * 获取当前会话的token信息
+     *
+     * @param
+     * @return pers.elianacc.yurayura.vo.ApiResult<cn.dev33.yurayura.stp.SaTokenInfo>
+     */
+    @GetMapping("/getTokenInfo")
+    @ApiOperation("获取当前会话的token信息")
+    public ApiResult<SaTokenInfo> getTokenInfo() {
+        return ApiResult.success(StpUtil.getTokenInfo());
     }
 
 }

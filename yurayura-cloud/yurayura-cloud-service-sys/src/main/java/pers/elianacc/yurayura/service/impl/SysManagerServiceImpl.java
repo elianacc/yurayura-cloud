@@ -108,7 +108,7 @@ public class SysManagerServiceImpl extends ServiceImpl<SysManagerMapper, SysMana
     }
 
     @Override
-    public String getManagerRolePermission(Integer managerId) {
+    public List<String> getManagerRolePermission(Integer managerId) {
         return sysManagerMapper.getManagerRolePermission(managerId);
     }
 

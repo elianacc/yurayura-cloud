@@ -2,9 +2,14 @@ package pers.elianacc.yurayura.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.pagehelper.PageInfo;
-import pers.elianacc.yurayura.dto.*;
+import pers.elianacc.yurayura.dto.IdsDto;
+import pers.elianacc.yurayura.dto.SysManagerInsertDto;
+import pers.elianacc.yurayura.dto.SysManagerSelectDto;
+import pers.elianacc.yurayura.dto.SysManagerUpdateDto;
 import pers.elianacc.yurayura.entity.sys.manager.SysManager;
 import pers.elianacc.yurayura.vo.SysManagerAndRoleVo;
+
+import java.util.List;
 
 
 /**
@@ -51,9 +56,9 @@ public interface ISysManagerService extends IService<SysManager> {
      * 查询管理员拥有角色的所有权限（根据管理员id）
      *
      * @param managerId
-     * @return java.lang.String
+     * @return List<String>
      */
-    public String getManagerRolePermission(Integer managerId);
+    public List<String> getManagerRolePermission(Integer managerId);
 
     /**
      * 查询启用的管理员（根据管理员名）

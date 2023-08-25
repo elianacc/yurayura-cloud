@@ -1,5 +1,8 @@
 package pers.elianacc.yurayura.component;
 
+import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.exception.NotPermissionException;
+import cn.dev33.satoken.exception.NotRoleException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -110,6 +113,39 @@ public class GlobalExceptionHandler {
     public ApiResult<String> illegalArgumentException(IllegalArgumentException exception) {
         String msg = StringUtils.abbreviate(exception.getMessage(), 100);
         return ApiResult.warn(msg);
+    }
+
+    /**
+     * 处理未登入异常
+     *
+     * @param exception
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
+     */
+    @ExceptionHandler(NotLoginException.class)
+    public ApiResult<String> notLoginException(NotLoginException exception) {
+        return ApiResult.notAuthentication(exception.getMessage());
+    }
+
+    /**
+     * 处理未授权限异常
+     *
+     * @param exception
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
+     */
+    @ExceptionHandler(NotPermissionException.class)
+    public ApiResult<String> notLoginException(NotPermissionException exception) {
+        return ApiResult.notAuthorization(exception.getMessage());
+    }
+
+    /**
+     * 处理未授角色异常
+     *
+     * @param exception
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
+     */
+    @ExceptionHandler(NotRoleException.class)
+    public ApiResult<String> notLoginException(NotRoleException exception) {
+        return ApiResult.notAuthorization(exception.getMessage());
     }
 
     /**

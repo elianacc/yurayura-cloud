@@ -33,7 +33,7 @@ yurayura-codegenerator  ----- 服务生产者代码生成器
 | 数据库持久层（ORM） | MyBatis-Plus                        | 3.5.1                       |
 | 自动生成代码工具    | MyBatis-Plus-Generator              | 3.5.1                       |
 | 分页工具            | Mybatis-PageHelper                  | 5.2.0                       |
-| 认证和授权          | Shiro                               | 1.7.1                       |
+| 认证和授权          | Sa-Token                            | 1.35.0.RC                   |
 | 分布式锁            | Lock4j                              | 2.2.2                       |
 | 日志                | Logback                             | 1.2.3                       |
 | 项目构建            | Maven                               | 3.6.3                       |
@@ -345,9 +345,6 @@ spring:
         max-idle: 10
         # 连接池中的最小空闲连接
         min-idle: 0
-  # session存储方式
-  session:
-    store-type: redis
 
 # openfeign设置
 feign:
@@ -386,6 +383,23 @@ seata:
       group: SEATA_GROUP
       username: nacos
       password: nacos
+
+# sa-token配置
+sa-token:
+  # token 名称（同时也是 cookie 名称）
+  token-name: satoken
+  # token 有效期（单位：秒） 默认30天，-1 代表永久有效
+  timeout: 2592000
+  # token 最低活跃频率（单位：秒），如果 token 超过此时间没有访问系统就会被冻结，默认-1 代表不限制，永不冻结
+  active-timeout: -1
+  # 是否允许同一账号多地同时登录 （为 true 时允许一起登录, 为 false 时新登录挤掉旧登录）
+  is-concurrent: false
+  # 在多人登录同一账号时，是否共用一个 token （为 true 时所有登录共用一个 token, 为 false 时每次登录新建一个 token）
+  is-share: true
+  # token 风格（默认可取值：uuid、simple-uuid、random-32、random-64、random-128、tik）
+  token-style: uuid
+  # 是否输出操作日志
+  is-log: true
 
 logging:
   # 日志级别设置

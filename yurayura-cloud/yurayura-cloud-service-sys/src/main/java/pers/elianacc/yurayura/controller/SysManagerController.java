@@ -13,6 +13,8 @@ import pers.elianacc.yurayura.service.ISysManagerService;
 import pers.elianacc.yurayura.vo.ApiResult;
 import pers.elianacc.yurayura.vo.SysManagerAndRoleVo;
 
+import java.util.List;
+
 
 /**
  * 系统管理员 controller
@@ -77,10 +79,10 @@ public class SysManagerController {
      * 查询管理员拥有角色的所有权限（根据管理员id）
      *
      * @param managerId
-     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.util.List<java.lang.String>>
      */
     @RequestMapping("/getManagerRolePermission")
-    public ApiResult<String> getManagerRolePermission(@RequestParam Integer managerId) {
+    public ApiResult<List<String>> getManagerRolePermission(@RequestParam Integer managerId) {
         return ApiResult.success("查询成功", iSysManagerService.getManagerRolePermission(managerId));
     }
 
