@@ -116,7 +116,7 @@ spring:
       # 连接池最大连接数，默认是10
       maximum-pool-size: 20
       # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
-      max-lifetime: 60000
+      max-lifetime: 65000
       # 数据库连接超时时间，默认30秒，即30000
       connection-timeout: 30000
       connection-test-query: SELECT 1
