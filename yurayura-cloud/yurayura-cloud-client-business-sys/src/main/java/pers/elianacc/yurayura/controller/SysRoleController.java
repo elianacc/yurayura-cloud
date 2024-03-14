@@ -3,6 +3,7 @@ package pers.elianacc.yurayura.controller;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.baomidou.lock.annotation.Lock4j;
 import com.github.pagehelper.PageInfo;
+import io.seata.spring.annotation.GlobalTransactional;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,8 @@ import pers.elianacc.yurayura.dto.SysRoleInsertDto;
 import pers.elianacc.yurayura.dto.SysRoleSelectDto;
 import pers.elianacc.yurayura.dto.SysRoleUpdateDto;
 import pers.elianacc.yurayura.entity.sys.role.SysRole;
-import pers.elianacc.yurayura.service.SysRoleService;
+import pers.elianacc.yurayura.exception.BusinessException;
+import pers.elianacc.yurayura.feign.SysFeignClient;
 import pers.elianacc.yurayura.vo.ApiResult;
 import pers.elianacc.yurayura.vo.SysRoleAndPermissionVo;
 
@@ -31,7 +33,7 @@ import java.util.List;
 public class SysRoleController {
 
     @Autowired
-    private SysRoleService sysRoleService;
+    private SysFeignClient sysFeignClient;
 
     /**
      * 分页查询系统角色
@@ -45,7 +47,11 @@ public class SysRoleController {
             blockHandler = "getPageBlockHandler")
     @ApiOperation("分页查询系统角色")
     public ApiResult<PageInfo<SysRoleAndPermissionVo>> getPage(@Validated @RequestBody SysRoleSelectDto dto) {
-        return sysRoleService.getPage(dto);
+        ApiResult<PageInfo<SysRoleAndPermissionVo>> apiResult = sysFeignClient.getPage(dto);
+        if (apiResult.getCode() != 200) {
+            throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
+        }
+        return apiResult;
     }
 
     /**
@@ -56,9 +62,14 @@ public class SysRoleController {
      */
     @PostMapping("/insert")
     @Lock4j(keys = {"#dto.roleName"}, autoRelease = false)
+    @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @ApiOperation("添加系统角色")
     public ApiResult<String> insert(@Validated @RequestBody SysRoleInsertDto dto) {
-        return sysRoleService.insert(dto);
+        ApiResult<String> apiResult = sysFeignClient.insert(dto);
+        if (apiResult.getCode() != 200) {
+            throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
+        }
+        return apiResult;
     }
 
     /**
@@ -69,9 +80,14 @@ public class SysRoleController {
      */
     @PutMapping("/update")
     @Lock4j(keys = {"#dto.id"}, autoRelease = false)
+    @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @ApiOperation("修改系统角色")
     public ApiResult<String> update(@Validated @RequestBody SysRoleUpdateDto dto) {
-        return sysRoleService.update(dto);
+        ApiResult<String> apiResult = sysFeignClient.update(dto);
+        if (apiResult.getCode() != 200) {
+            throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
+        }
+        return apiResult;
     }
 
     /**
@@ -83,6 +99,10 @@ public class SysRoleController {
     @GetMapping("/getAll")
     @ApiOperation("查询所有系统角色")
     public ApiResult<List<SysRole>> getAll() {
-        return sysRoleService.getAll();
+        ApiResult<List<SysRole>> apiResult = sysFeignClient.getAllRole();
+        if (apiResult.getCode() != 200) {
+            throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
+        }
+        return apiResult;
     }
 }

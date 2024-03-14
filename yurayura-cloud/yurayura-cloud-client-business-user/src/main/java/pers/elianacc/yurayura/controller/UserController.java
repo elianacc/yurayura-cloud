@@ -3,6 +3,7 @@ package pers.elianacc.yurayura.controller;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.baomidou.lock.annotation.Lock4j;
 import com.github.pagehelper.PageInfo;
+import io.seata.spring.annotation.GlobalTransactional;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,8 @@ import pers.elianacc.yurayura.dto.IdDto;
 import pers.elianacc.yurayura.dto.UserSelectDto;
 import pers.elianacc.yurayura.dto.UserUpdateStatusDto;
 import pers.elianacc.yurayura.entity.user.User;
-import pers.elianacc.yurayura.service.UserService;
+import pers.elianacc.yurayura.exception.BusinessException;
+import pers.elianacc.yurayura.feign.UserFeignClient;
 import pers.elianacc.yurayura.vo.ApiResult;
 
 /**
@@ -28,7 +30,7 @@ import pers.elianacc.yurayura.vo.ApiResult;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private UserFeignClient userFeignClient;
 
     /**
      * 分页查询用户
@@ -42,7 +44,11 @@ public class UserController {
             blockHandler = "getPageBlockHandler")
     @ApiOperation("分页查询用户")
     public ApiResult<PageInfo<User>> getPage(@Validated @RequestBody UserSelectDto dto) {
-        return userService.getPage(dto);
+        ApiResult<PageInfo<User>> apiResult = userFeignClient.getPage(dto);
+        if (apiResult.getCode() != 200) {
+            throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
+        }
+        return apiResult;
     }
 
     /**
@@ -53,9 +59,14 @@ public class UserController {
      */
     @PutMapping("/updateStatus")
     @Lock4j(keys = {"#dto.id"}, autoRelease = false)
+    @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @ApiOperation("修改状态（根据用户id）")
     public ApiResult<String> updateStatus(@Validated @RequestBody UserUpdateStatusDto dto) {
-        return userService.updateStatus(dto);
+        ApiResult<String> apiResult = userFeignClient.updateStatus(dto);
+        if (apiResult.getCode() != 200) {
+            throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
+        }
+        return apiResult;
     }
 
     /**
@@ -65,9 +76,14 @@ public class UserController {
      * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PutMapping("/updateAvatarDefault")
+    @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @ApiOperation("重置为默认头像（根据用户id）")
     public ApiResult<String> updateAvatarDefault(@Validated @RequestBody IdDto dto) {
-        return userService.updateAvatarDefault(dto);
+        ApiResult<String> apiResult = userFeignClient.updateAvatarDefault(dto);
+        if (apiResult.getCode() != 200) {
+            throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
+        }
+        return apiResult;
     }
 
 

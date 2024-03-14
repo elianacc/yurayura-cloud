@@ -3,6 +3,7 @@ package pers.elianacc.yurayura.controller;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.baomidou.lock.annotation.Lock4j;
 import com.github.pagehelper.PageInfo;
+import io.seata.spring.annotation.GlobalTransactional;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,8 @@ import pers.elianacc.yurayura.dto.ComicSelectDto;
 import pers.elianacc.yurayura.dto.ComicUpdateDto;
 import pers.elianacc.yurayura.dto.IdsDto;
 import pers.elianacc.yurayura.entity.comic.Comic;
-import pers.elianacc.yurayura.service.ComicService;
+import pers.elianacc.yurayura.exception.BusinessException;
+import pers.elianacc.yurayura.feign.ComicFeignClient;
 import pers.elianacc.yurayura.vo.ApiResult;
 
 /**
@@ -29,7 +31,7 @@ import pers.elianacc.yurayura.vo.ApiResult;
 public class ComicController {
 
     @Autowired
-    private ComicService comicService;
+    private ComicFeignClient comicFeignClient;
 
     /**
      * 分页查询番剧
@@ -43,7 +45,11 @@ public class ComicController {
             blockHandler = "getPageBlockHandler")
     @ApiOperation("分页查询番剧")
     public ApiResult<PageInfo<Comic>> getPage(@Validated @RequestBody ComicSelectDto dto) {
-        return comicService.getPage(dto);
+        ApiResult<PageInfo<Comic>> apiResult = comicFeignClient.getPage(dto);
+        if (apiResult.getCode() != 200) {
+            throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
+        }
+        return apiResult;
     }
 
     /**
@@ -54,9 +60,14 @@ public class ComicController {
      */
     @PostMapping("/insert")
     @Lock4j(keys = {"#dto.comicName"}, autoRelease = false)
+    @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @ApiOperation("添加番剧")
     public ApiResult<String> insert(@Validated ComicInsertDto dto) {
-        return comicService.insert(dto);
+        ApiResult<String> apiResult = comicFeignClient.insert(dto);
+        if (apiResult.getCode() != 200) {
+            throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
+        }
+        return apiResult;
     }
 
     /**
@@ -66,9 +77,14 @@ public class ComicController {
      * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PutMapping("/deleteBatchByIds")
+    @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @ApiOperation("批量删除番剧（根据番剧id组）")
     public ApiResult<String> deleteBatchByIds(@Validated @RequestBody IdsDto dto) {
-        return comicService.deleteBatchByIds(dto);
+        ApiResult<String> apiResult = comicFeignClient.deleteBatchByIds(dto);
+        if (apiResult.getCode() != 200) {
+            throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
+        }
+        return apiResult;
     }
 
     /**
@@ -79,9 +95,14 @@ public class ComicController {
      */
     @PutMapping("/update")
     @Lock4j(keys = {"#dto.id"}, autoRelease = false)
+    @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @ApiOperation("修改番剧")
     public ApiResult<String> update(@Validated ComicUpdateDto dto) {
-        return comicService.update(dto);
+        ApiResult<String> apiResult = comicFeignClient.update(dto);
+        if (apiResult.getCode() != 200) {
+            throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
+        }
+        return apiResult;
     }
 
 }

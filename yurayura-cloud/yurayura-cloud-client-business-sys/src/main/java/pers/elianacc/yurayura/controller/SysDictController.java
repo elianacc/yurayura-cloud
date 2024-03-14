@@ -3,6 +3,7 @@ package pers.elianacc.yurayura.controller;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.baomidou.lock.annotation.Lock4j;
 import com.github.pagehelper.PageInfo;
+import io.seata.spring.annotation.GlobalTransactional;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -14,7 +15,8 @@ import pers.elianacc.yurayura.dto.SysDictInsertDto;
 import pers.elianacc.yurayura.dto.SysDictSelectDto;
 import pers.elianacc.yurayura.dto.SysDictUpdateDto;
 import pers.elianacc.yurayura.entity.sys.dict.SysDict;
-import pers.elianacc.yurayura.service.SysDictService;
+import pers.elianacc.yurayura.exception.BusinessException;
+import pers.elianacc.yurayura.feign.SysFeignClient;
 import pers.elianacc.yurayura.vo.ApiResult;
 
 import javax.validation.constraints.NotBlank;
@@ -33,7 +35,7 @@ import java.util.List;
 public class SysDictController {
 
     @Autowired
-    private SysDictService sysDictService;
+    private SysFeignClient sysFeignClient;
 
     /**
      * 分页查询系统数据字典
@@ -47,7 +49,11 @@ public class SysDictController {
             blockHandler = "getPageBlockHandler")
     @ApiOperation("分页查询系统数据字典")
     public ApiResult<PageInfo<SysDict>> getPage(@Validated @RequestBody SysDictSelectDto dto) {
-        return sysDictService.getPage(dto);
+        ApiResult<PageInfo<SysDict>> apiResult = sysFeignClient.getPage(dto);
+        if (apiResult.getCode() != 200) {
+            throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
+        }
+        return apiResult;
     }
 
     /**
@@ -58,9 +64,14 @@ public class SysDictController {
      */
     @PostMapping("/insert")
     @Lock4j(keys = {"#dto.dictCode", "#dto.dictVal"}, autoRelease = false)
+    @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @ApiOperation("添加系统数据字典")
     public ApiResult<String> insert(@Validated @RequestBody SysDictInsertDto dto) {
-        return sysDictService.insert(dto);
+        ApiResult<String> apiResult = sysFeignClient.insert(dto);
+        if (apiResult.getCode() != 200) {
+            throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
+        }
+        return apiResult;
     }
 
     /**
@@ -71,9 +82,14 @@ public class SysDictController {
      */
     @PutMapping("/update")
     @Lock4j(keys = {"#dto.id"}, autoRelease = false)
+    @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @ApiOperation("修改系统数据字典")
     public ApiResult<String> update(@Validated @RequestBody SysDictUpdateDto dto) {
-        return sysDictService.update(dto);
+        ApiResult<String> apiResult = sysFeignClient.update(dto);
+        if (apiResult.getCode() != 200) {
+            throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
+        }
+        return apiResult;
     }
 
     /**
@@ -86,7 +102,11 @@ public class SysDictController {
     @ApiOperation("查询系统数据字典（根据字典编码）")
     @ApiImplicitParam(name = "dictCode", value = "字典编码", required = true, dataTypeClass = String.class)
     public ApiResult<List<SysDict>> getByDictCode(@NotBlank(message = "字典编码不能为空") @RequestParam String dictCode) {
-        return sysDictService.getByDictCode(dictCode);
+        ApiResult<List<SysDict>> apiResult = sysFeignClient.getDictByDictCode(dictCode);
+        if (apiResult.getCode() != 200) {
+            throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
+        }
+        return apiResult;
     }
 
     /**
@@ -98,7 +118,11 @@ public class SysDictController {
     @GetMapping("/getAll")
     @ApiOperation("查询所有系统数据字典")
     public ApiResult<List<SysDict>> getAll() {
-        return sysDictService.getAll();
+        ApiResult<List<SysDict>> apiResult = sysFeignClient.getAllDict();
+        if (apiResult.getCode() != 200) {
+            throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
+        }
+        return apiResult;
     }
 
 }

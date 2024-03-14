@@ -1,6 +1,7 @@
 package pers.elianacc.yurayura.controller;
 
 import com.baomidou.lock.annotation.Lock4j;
+import io.seata.spring.annotation.GlobalTransactional;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -11,7 +12,8 @@ import pers.elianacc.yurayura.dto.IdDto;
 import pers.elianacc.yurayura.dto.SysMenuSubInsertDto;
 import pers.elianacc.yurayura.dto.SysMenuSubUpdateDto;
 import pers.elianacc.yurayura.entity.sys.menu.SysMenuSub;
-import pers.elianacc.yurayura.service.SysMenuSubService;
+import pers.elianacc.yurayura.exception.BusinessException;
+import pers.elianacc.yurayura.feign.SysFeignClient;
 import pers.elianacc.yurayura.vo.ApiResult;
 
 import javax.validation.constraints.NotBlank;
@@ -30,7 +32,7 @@ import java.util.List;
 public class SysMenuSubController {
 
     @Autowired
-    private SysMenuSubService sysMenuSubService;
+    private SysFeignClient sysFeignClient;
 
     /**
      * 添加系统子菜单
@@ -40,9 +42,14 @@ public class SysMenuSubController {
      */
     @PostMapping("/insert")
     @Lock4j(keys = {"#dto.menuName"}, autoRelease = false)
+    @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @ApiOperation("添加系统子菜单")
     public ApiResult<String> insert(@Validated @RequestBody SysMenuSubInsertDto dto) {
-        return sysMenuSubService.insert(dto);
+        ApiResult<String> apiResult = sysFeignClient.insert(dto);
+        if (apiResult.getCode() != 200) {
+            throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
+        }
+        return apiResult;
     }
 
     /**
@@ -53,9 +60,14 @@ public class SysMenuSubController {
      */
     @PutMapping("/update")
     @Lock4j(keys = {"#dto.id"}, autoRelease = false)
+    @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @ApiOperation("修改系统子菜单")
     public ApiResult<String> update(@Validated @RequestBody SysMenuSubUpdateDto dto) {
-        return sysMenuSubService.update(dto);
+        ApiResult<String> apiResult = sysFeignClient.update(dto);
+        if (apiResult.getCode() != 200) {
+            throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
+        }
+        return apiResult;
     }
 
     /**
@@ -65,9 +77,14 @@ public class SysMenuSubController {
      * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PutMapping("/deleteById")
+    @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @ApiOperation("删除系统子菜单（根据系统子菜单id）")
     public ApiResult<String> deleteById(@Validated @RequestBody IdDto dto) {
-        return sysMenuSubService.deleteById(dto);
+        ApiResult<String> apiResult = sysFeignClient.deleteMenuSubById(dto);
+        if (apiResult.getCode() != 200) {
+            throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
+        }
+        return apiResult;
     }
 
     /**
@@ -80,7 +97,11 @@ public class SysMenuSubController {
     @ApiOperation("查询系统子菜单（根据路径）")
     @ApiImplicitParam(name = "index", value = "路径", required = true, dataTypeClass = String.class)
     public ApiResult<SysMenuSub> getByIndex(@NotBlank(message = "路径不能为空") @RequestParam String index) {
-        return sysMenuSubService.getByIndex(index);
+        ApiResult<SysMenuSub> apiResult = sysFeignClient.getMenuSubByIndex(index);
+        if (apiResult.getCode() != 200) {
+            throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
+        }
+        return apiResult;
     }
 
     /**
@@ -92,6 +113,10 @@ public class SysMenuSubController {
     @GetMapping("/getAll")
     @ApiOperation("查询所有系统子菜单")
     public ApiResult<List<SysMenuSub>> getAll() {
-        return sysMenuSubService.getAll();
+        ApiResult<List<SysMenuSub>> apiResult = sysFeignClient.getAllMenuSub();
+        if (apiResult.getCode() != 200) {
+            throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
+        }
+        return apiResult;
     }
 }
