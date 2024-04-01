@@ -3,9 +3,11 @@ package pers.elianacc.yurayura.config;
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.stp.StpUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import pers.elianacc.yurayura.component.TokenInterceptor;
 
 /**
  * sa-token路由拦截鉴权 config
@@ -15,17 +17,30 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class SaTokenConfigure implements WebMvcConfigurer {
+
+    @Autowired
+    private TokenInterceptor tokenInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        // 注册Token验证 拦截器
+        registry.addInterceptor(tokenInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns("/api/sys/manager/getVerifyCode"
+                        , "/api/sys/manager/login"
+                        , "/api/sys/manager/logout"
+                        , "/api/sys/manager/judgeAuthen"
+                        , "/favicon.ico"
+                        , "/doc.html"
+                        , "/webjars/**"
+                        , "/swagger-resources"
+                        , "/v3/api-docs");
+
         // 注册 Sa-Token 拦截器，定义详细认证规则
         registry.addInterceptor(new SaInterceptor(handler -> {
             // 指定一条 match 规则
             SaRouter
                     .match("/**") // 拦截的 path 列表，可以写多个 */
-                    .notMatch("/api/sys/manager/getVerifyCode") // 排除掉的 path 列表，可以写多个
-                    .notMatch("/api/sys/manager/login")
-                    .notMatch("/api/sys/manager/logout")
-                    .notMatch("/api/sys/manager/judgeAuthen")
                     .check(r -> StpUtil.checkLogin()); // 要执行的校验动作，可以写完整的 lambda 表达式
 
             SaRouter
@@ -55,7 +70,6 @@ public class SaTokenConfigure implements WebMvcConfigurer {
 
             SaRouter
                     .match("/api/sys/manager/get*")
-                    .notMatch("/api/sys/manager/getVerifyCode")
                     .notMatch("/api/sys/manager/getCurrentManagerMsg")
                     .check(r -> StpUtil.checkPermission("sys_manager_select"));
             SaRouter.match("/api/sys/manager/insert*", r -> StpUtil.checkPermission("sys_manager_insert"));
@@ -84,6 +98,15 @@ public class SaTokenConfigure implements WebMvcConfigurer {
             SaRouter.match("/api/user/get*", r -> StpUtil.checkPermission("user_info_select"));
             SaRouter.match("/api/user/update*", r -> StpUtil.checkPermission("user_info_update"));
 
-        })).addPathPatterns("/**");
+        })).addPathPatterns("/**")
+                .excludePathPatterns("/api/sys/manager/getVerifyCode"
+                        , "/api/sys/manager/login"
+                        , "/api/sys/manager/logout"
+                        , "/api/sys/manager/judgeAuthen"
+                        , "/favicon.ico"
+                        , "/doc.html"
+                        , "/webjars/**"
+                        , "/swagger-resources"
+                        , "/v3/api-docs");
     }
 }

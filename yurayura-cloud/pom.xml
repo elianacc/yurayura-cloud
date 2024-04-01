@@ -135,10 +135,10 @@
                 <version>${sa-token.version}</version>
             </dependency>
 
-            <!-- Sa-Token 整合 Redis （使用 jackson 序列化方式） -->
+            <!-- Sa-Token 整合Jwt 依赖 -->
             <dependency>
                 <groupId>cn.dev33</groupId>
-                <artifactId>sa-token-redis-jackson</artifactId>
+                <artifactId>sa-token-jwt</artifactId>
                 <version>${sa-token.version}</version>
             </dependency>
 

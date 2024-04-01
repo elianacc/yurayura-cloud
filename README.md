@@ -33,7 +33,7 @@ yurayura-codegenerator  ----- 服务生产者代码生成器
 | 数据库持久层（ORM） | MyBatis-Plus                        | 3.5.1                       |
 | 自动生成代码工具    | MyBatis-Plus-Generator              | 3.5.1                       |
 | 分页工具            | Mybatis-PageHelper                  | 5.2.0                       |
-| 认证和授权          | Sa-Token                            | 1.35.0.RC                   |
+| 认证和授权          | Sa-Token + Jwt                      | 1.35.0.RC                   |
 | 分布式锁            | Lock4j                              | 2.2.2                       |
 | 日志                | Logback                             | 1.2.3                       |
 | 项目构建            | Maven                               | 3.6.3                       |
@@ -52,7 +52,7 @@ yurayura-codegenerator  ----- 服务生产者代码生成器
 -  全局捕获异常处理(包括系统异常500、自定义业务异常403、请求接口参数异常400、重复提交异常等)
 -  AOP统一处理Web请求日志
 -  防止重复提交表单数据
--  分布式session共享
+-  ~~分布式session共享~~   →  现转为无状态模式，使用 Jwt
 -  外部静态资源访问处理
 -  通用接口返回信息处理
 -  发送Email工具
@@ -392,10 +392,10 @@ sa-token:
   timeout: 2592000
   # token 最低活跃频率（单位：秒），如果 token 超过此时间没有访问系统就会被冻结，默认-1 代表不限制，永不冻结
   active-timeout: -1
-  # 是否允许同一账号多地同时登录 （为 true 时允许一起登录, 为 false 时新登录挤掉旧登录）
-  is-concurrent: false
+  # 是否允许同一账号同端多地同时登录 （为 true 时允许一起登录, 为 false 时新登录挤掉旧登录）
+  is-concurrent: true
   # 在多人登录同一账号时，是否共用一个 token （为 true 时所有登录共用一个 token, 为 false 时每次登录新建一个 token）
-  is-share: true
+  is-share: false
   # token 风格（默认可取值：uuid、simple-uuid、random-32、random-64、random-128、tik）
   token-style: uuid
   # 是否输出操作日志

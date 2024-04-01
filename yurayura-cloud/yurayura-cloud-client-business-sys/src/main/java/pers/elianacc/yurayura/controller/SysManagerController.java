@@ -1,5 +1,6 @@
 package pers.elianacc.yurayura.controller;
 
+import cn.dev33.satoken.stp.SaLoginConfig;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.lang.Assert;
@@ -11,6 +12,7 @@ import io.seata.spring.annotation.GlobalTransactional;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.validation.annotation.Validated;
@@ -35,6 +37,9 @@ import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -50,6 +55,9 @@ public class SysManagerController {
 
     @Autowired
     private SysFeignClient sysFeignClient;
+
+    @Value("${sa-token.timeout}")
+    private Integer tokenTimeout;
 
     /**
      * 分页查询系统管理员
@@ -157,10 +165,20 @@ public class SysManagerController {
         Assert.isTrue(sysManager.getManagerPassword().equals(DigestUtils.md5DigestAsHex(dto.getManagerPassword().getBytes()))
                 , "密码错误");
 
-        StpUtil.login(sysManager.getId(), "PC");
+        Date currentDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        calendar.add(Calendar.SECOND, tokenTimeout);
+        Date tokenTimeoutDate = calendar.getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String tokenTimeoutDateStr = sdf.format(tokenTimeoutDate);
 
-        StpUtil.getSession().set("sysManager", sysManager);
-        return ApiResult.success("管理员登入成功");
+        StpUtil.login(sysManager.getId(), SaLoginConfig
+                .setExtra("adminName", sysManager.getManagerName())
+                // token到期时间
+                .setExtra("expiration", tokenTimeoutDateStr));
+
+        return ApiResult.success("管理员登入成功", StpUtil.getTokenValue());
     }
 
     /**
@@ -199,8 +217,7 @@ public class SysManagerController {
     @ApiOperation("获取当前登入管理员信息")
     public ApiResult<SysManagerMsgVo> getCurrentManagerMsg() {
         SysManagerMsgVo sysManagerMsgVo = new SysManagerMsgVo();
-        SysManager currentSysManager = (SysManager) StpUtil.getSession().get("sysManager");
-        sysManagerMsgVo.setManagerName(currentSysManager.getManagerName());
+        sysManagerMsgVo.setManagerName(StpUtil.getExtra("adminName").toString());
         ApiResult<List<String>> apiResult = sysFeignClient.getManagerRolePermission(StpUtil.getLoginIdAsInt());
         if (apiResult.getCode() != 200) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());

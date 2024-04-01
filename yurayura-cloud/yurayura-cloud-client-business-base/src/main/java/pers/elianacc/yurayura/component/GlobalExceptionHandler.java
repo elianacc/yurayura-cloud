@@ -96,8 +96,10 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BusinessException.class)
     public ApiResult<String> businessExceptionHandler(BusinessException businessException) {
-        if (businessException.getErrorCode() == 500) {
+        if (businessException.getErrorCode() == ApiResult.FAIL_CODE) {
             return ApiResult.fail(businessException.getErrorMsg());
+        } else if (businessException.getErrorCode() == ApiResult.NOT_AUTHENTICATION) {
+            return ApiResult.notAuthentication(businessException.getErrorMsg());
         } else {
             return ApiResult.warn(businessException.getErrorMsg());
         }
