@@ -46,7 +46,7 @@ public class SysMenuSubController {
     @ApiOperation("添加系统子菜单")
     public ApiResult<String> insert(@Validated @RequestBody SysMenuSubInsertDto dto) {
         ApiResult<String> apiResult = sysFeignClient.insert(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -64,7 +64,7 @@ public class SysMenuSubController {
     @ApiOperation("修改系统子菜单")
     public ApiResult<String> update(@Validated @RequestBody SysMenuSubUpdateDto dto) {
         ApiResult<String> apiResult = sysFeignClient.update(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -81,7 +81,7 @@ public class SysMenuSubController {
     @ApiOperation("删除系统子菜单（根据系统子菜单id）")
     public ApiResult<String> deleteById(@Validated @RequestBody IdDto dto) {
         ApiResult<String> apiResult = sysFeignClient.deleteMenuSubById(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -98,7 +98,7 @@ public class SysMenuSubController {
     @ApiImplicitParam(name = "index", value = "路径", required = true, dataTypeClass = String.class)
     public ApiResult<SysMenuSub> getByIndex(@NotBlank(message = "路径不能为空") @RequestParam String index) {
         ApiResult<SysMenuSub> apiResult = sysFeignClient.getMenuSubByIndex(index);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -114,7 +114,7 @@ public class SysMenuSubController {
     @ApiOperation("查询所有系统子菜单")
     public ApiResult<List<SysMenuSub>> getAll() {
         ApiResult<List<SysMenuSub>> apiResult = sysFeignClient.getAllMenuSub();
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;

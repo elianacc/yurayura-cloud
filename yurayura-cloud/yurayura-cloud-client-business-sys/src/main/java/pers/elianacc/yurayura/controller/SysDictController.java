@@ -50,7 +50,7 @@ public class SysDictController {
     @ApiOperation("分页查询系统数据字典")
     public ApiResult<PageInfo<SysDict>> getPage(@Validated @RequestBody SysDictSelectDto dto) {
         ApiResult<PageInfo<SysDict>> apiResult = sysFeignClient.getPage(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -68,7 +68,7 @@ public class SysDictController {
     @ApiOperation("添加系统数据字典")
     public ApiResult<String> insert(@Validated @RequestBody SysDictInsertDto dto) {
         ApiResult<String> apiResult = sysFeignClient.insert(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -86,7 +86,7 @@ public class SysDictController {
     @ApiOperation("修改系统数据字典")
     public ApiResult<String> update(@Validated @RequestBody SysDictUpdateDto dto) {
         ApiResult<String> apiResult = sysFeignClient.update(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -103,7 +103,7 @@ public class SysDictController {
     @ApiImplicitParam(name = "dictCode", value = "字典编码", required = true, dataTypeClass = String.class)
     public ApiResult<List<SysDict>> getByDictCode(@NotBlank(message = "字典编码不能为空") @RequestParam String dictCode) {
         ApiResult<List<SysDict>> apiResult = sysFeignClient.getDictByDictCode(dictCode);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -119,7 +119,7 @@ public class SysDictController {
     @ApiOperation("查询所有系统数据字典")
     public ApiResult<List<SysDict>> getAll() {
         ApiResult<List<SysDict>> apiResult = sysFeignClient.getAllDict();
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;

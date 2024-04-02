@@ -44,7 +44,7 @@ public class SysMenuController {
     @ApiOperation("查询系统侧边菜单")
     public ApiResult<List<SysMenuTreeVo>> getSysSideMenu() {
         ApiResult<List<SysMenuTreeVo>> apiResult = sysFeignClient.getMenuTreeListByManagerId(StpUtil.getLoginIdAsInt());
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -63,7 +63,7 @@ public class SysMenuController {
     @ApiOperation("查询系统菜单树形列表")
     public ApiResult<List<SysMenuTreeVo>> getTreeList() {
         ApiResult<List<SysMenuTreeVo>> apiResult = sysFeignClient.getMenuTreeList();
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -81,7 +81,7 @@ public class SysMenuController {
     @ApiOperation("添加系统菜单")
     public ApiResult<String> insert(@Validated @RequestBody SysMenuInsertDto dto) {
         ApiResult<String> apiResult = sysFeignClient.insert(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -99,7 +99,7 @@ public class SysMenuController {
     @ApiOperation("修改系统菜单")
     public ApiResult<String> update(@Validated @RequestBody SysMenuUpdateDto dto) {
         ApiResult<String> apiResult = sysFeignClient.update(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -116,7 +116,7 @@ public class SysMenuController {
     @ApiOperation("删除系统菜单（根据系统菜单id）")
     public ApiResult<String> deleteById(@Validated @RequestBody IdDto dto) {
         ApiResult<String> apiResult = sysFeignClient.deleteMenuById(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;

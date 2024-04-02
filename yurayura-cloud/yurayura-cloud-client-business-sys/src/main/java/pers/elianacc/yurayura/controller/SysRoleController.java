@@ -48,7 +48,7 @@ public class SysRoleController {
     @ApiOperation("分页查询系统角色")
     public ApiResult<PageInfo<SysRoleAndPermissionVo>> getPage(@Validated @RequestBody SysRoleSelectDto dto) {
         ApiResult<PageInfo<SysRoleAndPermissionVo>> apiResult = sysFeignClient.getPage(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -66,7 +66,7 @@ public class SysRoleController {
     @ApiOperation("添加系统角色")
     public ApiResult<String> insert(@Validated @RequestBody SysRoleInsertDto dto) {
         ApiResult<String> apiResult = sysFeignClient.insert(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -84,7 +84,7 @@ public class SysRoleController {
     @ApiOperation("修改系统角色")
     public ApiResult<String> update(@Validated @RequestBody SysRoleUpdateDto dto) {
         ApiResult<String> apiResult = sysFeignClient.update(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -100,7 +100,7 @@ public class SysRoleController {
     @ApiOperation("查询所有系统角色")
     public ApiResult<List<SysRole>> getAll() {
         ApiResult<List<SysRole>> apiResult = sysFeignClient.getAllRole();
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;

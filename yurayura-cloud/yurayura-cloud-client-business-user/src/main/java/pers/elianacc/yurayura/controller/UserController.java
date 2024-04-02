@@ -45,7 +45,7 @@ public class UserController {
     @ApiOperation("分页查询用户")
     public ApiResult<PageInfo<User>> getPage(@Validated @RequestBody UserSelectDto dto) {
         ApiResult<PageInfo<User>> apiResult = userFeignClient.getPage(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -63,7 +63,7 @@ public class UserController {
     @ApiOperation("修改状态（根据用户id）")
     public ApiResult<String> updateStatus(@Validated @RequestBody UserUpdateStatusDto dto) {
         ApiResult<String> apiResult = userFeignClient.updateStatus(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -80,7 +80,7 @@ public class UserController {
     @ApiOperation("重置为默认头像（根据用户id）")
     public ApiResult<String> updateAvatarDefault(@Validated @RequestBody IdDto dto) {
         ApiResult<String> apiResult = userFeignClient.updateAvatarDefault(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;

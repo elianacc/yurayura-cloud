@@ -16,7 +16,7 @@ import pers.elianacc.yurayura.component.TokenInterceptor;
  * @since 2023-08-24
  */
 @Configuration
-public class SaTokenConfigure implements WebMvcConfigurer {
+public class SaTokenRouteConfig implements WebMvcConfigurer {
 
     @Autowired
     private TokenInterceptor tokenInterceptor;

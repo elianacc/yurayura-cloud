@@ -46,7 +46,7 @@ public class ComicController {
     @ApiOperation("分页查询番剧")
     public ApiResult<PageInfo<Comic>> getPage(@Validated @RequestBody ComicSelectDto dto) {
         ApiResult<PageInfo<Comic>> apiResult = comicFeignClient.getPage(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -64,7 +64,7 @@ public class ComicController {
     @ApiOperation("添加番剧")
     public ApiResult<String> insert(@Validated ComicInsertDto dto) {
         ApiResult<String> apiResult = comicFeignClient.insert(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -81,7 +81,7 @@ public class ComicController {
     @ApiOperation("批量删除番剧（根据番剧id组）")
     public ApiResult<String> deleteBatchByIds(@Validated @RequestBody IdsDto dto) {
         ApiResult<String> apiResult = comicFeignClient.deleteBatchByIds(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -99,7 +99,7 @@ public class ComicController {
     @ApiOperation("修改番剧")
     public ApiResult<String> update(@Validated ComicUpdateDto dto) {
         ApiResult<String> apiResult = comicFeignClient.update(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;

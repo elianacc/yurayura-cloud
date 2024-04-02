@@ -72,7 +72,7 @@ public class SysManagerController {
     @ApiOperation("分页查询系统管理员")
     public ApiResult<PageInfo<SysManagerAndRoleVo>> getPage(@Validated @RequestBody SysManagerSelectDto dto) {
         ApiResult<PageInfo<SysManagerAndRoleVo>> apiResult = sysFeignClient.getPage(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -90,7 +90,7 @@ public class SysManagerController {
     @ApiOperation("添加系统管理员")
     public ApiResult<String> insert(@Validated @RequestBody SysManagerInsertDto dto) {
         ApiResult<String> apiResult = sysFeignClient.insert(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -108,7 +108,7 @@ public class SysManagerController {
     @ApiOperation("修改系统管理员")
     public ApiResult<String> update(@Validated @RequestBody SysManagerUpdateDto dto) {
         ApiResult<String> apiResult = sysFeignClient.update(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -157,7 +157,7 @@ public class SysManagerController {
 
         SysManager sysManager = new SysManager();
         ApiResult<SysManager> apiResult = sysFeignClient.getEnableManagerByName(dto.getManagerName());
-        if (apiResult.getCode() == 200) {
+        if (apiResult.getCode() == ApiResult.SUCCESS_CODE) {
             sysManager = JSON.toJavaObject(JSON.parseObject(JSON.toJSONString(apiResult.getData())), SysManager.class);
         }
 
@@ -219,7 +219,7 @@ public class SysManagerController {
         SysManagerMsgVo sysManagerMsgVo = new SysManagerMsgVo();
         sysManagerMsgVo.setManagerName(StpUtil.getExtra("adminName").toString());
         ApiResult<List<String>> apiResult = sysFeignClient.getManagerRolePermission(StpUtil.getLoginIdAsInt());
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         sysManagerMsgVo.setManagerPermission(String.join(",", apiResult.getData()));

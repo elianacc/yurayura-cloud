@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
  * @since 2024-03-31
  */
 @Configuration
-public class SaTokenConfig {
+public class SaTokenJwtConfig {
     @Bean
     public StpLogic getStpLogicJwt() {
         return new StpLogicJwtForStateless();

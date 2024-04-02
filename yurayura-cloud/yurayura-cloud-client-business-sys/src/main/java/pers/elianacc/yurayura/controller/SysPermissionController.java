@@ -48,7 +48,7 @@ public class SysPermissionController {
     @ApiOperation("分页查询系统权限")
     public ApiResult<PageInfo<SysPermission>> getPage(@Validated @RequestBody SysPermissionSelectDto dto) {
         ApiResult<PageInfo<SysPermission>> apiResult = sysFeignClient.getPage(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -66,7 +66,7 @@ public class SysPermissionController {
     @ApiOperation("添加系统权限")
     public ApiResult<String> insert(@Validated @RequestBody SysPermissionInsertDto dto) {
         ApiResult<String> apiResult = sysFeignClient.insert(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -84,7 +84,7 @@ public class SysPermissionController {
     @ApiOperation("修改系统权限")
     public ApiResult<String> update(@Validated @RequestBody SysPermissionUpdateDto dto) {
         ApiResult<String> apiResult = sysFeignClient.update(dto);
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;
@@ -100,7 +100,7 @@ public class SysPermissionController {
     @ApiOperation("查询权限授权树")
     public ApiResult<List<SysPermissionAuthorTreeVo>> getPermissionAuthorTree() {
         ApiResult<List<SysPermissionAuthorTreeVo>> apiResult = sysFeignClient.getPermissionAuthorTree();
-        if (apiResult.getCode() != 200) {
+        if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }
         return apiResult;

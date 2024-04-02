@@ -35,7 +35,7 @@ public class StpInterfaceImpl implements StpInterface {
         }
 
         ApiResult<List<String>> apiResult = sysFeignClient.getManagerRolePermission(Integer.parseInt(loginId.toString()));
-        if (apiResult.getCode() == 200) {
+        if (apiResult.getCode() == ApiResult.SUCCESS_CODE) {
             return apiResult.getData();
         }
         return new ArrayList<>();
