@@ -37,9 +37,8 @@ import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -165,18 +164,16 @@ public class SysManagerController {
         Assert.isTrue(sysManager.getManagerPassword().equals(DigestUtils.md5DigestAsHex(dto.getManagerPassword().getBytes()))
                 , "密码错误");
 
-        Date currentDate = new Date();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentDate);
-        calendar.add(Calendar.SECOND, tokenTimeout);
-        Date tokenTimeoutDate = calendar.getTime();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String tokenTimeoutDateStr = sdf.format(tokenTimeoutDate);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        // 获取当前时间
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        // token到期时间
+        LocalDateTime tokenTimeoutDate = currentDateTime.plusSeconds(tokenTimeout);
 
         StpUtil.login(sysManager.getId(), SaLoginConfig
                 .setExtra("adminName", sysManager.getManagerName())
-                // token到期时间
-                .setExtra("expiration", tokenTimeoutDateStr));
+                // 存入token到期时间
+                .setExtra("expiration", formatter.format(tokenTimeoutDate)));
 
         return ApiResult.success("管理员登入成功", StpUtil.getTokenValue());
     }

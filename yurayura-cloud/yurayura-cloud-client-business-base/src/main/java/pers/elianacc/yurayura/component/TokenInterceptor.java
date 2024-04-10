@@ -9,8 +9,8 @@ import pers.elianacc.yurayura.vo.ApiResult;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Token验证 interceptor
@@ -32,10 +32,10 @@ public class TokenInterceptor implements HandlerInterceptor {
         }
 
         String expirationStr = StpUtil.getExtra("expiration").toString();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date expiration = sdf.parse(expirationStr);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime expiration = LocalDateTime.parse(expirationStr, formatter);
 
-        if(expiration.before(new Date())) {
+        if(expiration.isBefore(LocalDateTime.now())) {
             throw new BusinessException(ApiResult.NOT_AUTHENTICATION, "Token已过期，请重新登入");
         }
 
