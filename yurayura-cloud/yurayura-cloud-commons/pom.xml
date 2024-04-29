@@ -111,12 +111,6 @@
             <artifactId>pagehelper</artifactId>
         </dependency>
 
-        <!-- FastJson 依赖 -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-        </dependency>
-
         <!-- Hutool 依赖 -->
         <dependency>
             <groupId>cn.hutool</groupId>

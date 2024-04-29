@@ -1,7 +1,7 @@
 package pers.elianacc.yurayura.service.impl;
 
 import cn.hutool.core.lang.Assert;
-import com.alibaba.fastjson.JSON;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -101,7 +101,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
         // 判断是否存在这个字典编码key对应的字典记录在redis，存在则直接获取，不存在从数据库查询
         if (RedisUtil.hasKey(dictCode) && !RedisUtil.lGet(dictCode, 0, -1).isEmpty()) {
             List<Object> objList = RedisUtil.lGet(dictCode, 0, -1);
-            List<SysDict> sysDictList = JSON.parseArray(JSON.toJSONString(objList), SysDict.class);
+            List<SysDict> sysDictList = JSONUtil.toList(JSONUtil.toJsonStr(objList), SysDict.class);
             return sysDictList
                     .stream()
                     .sorted(Comparator.comparing(SysDict::getDictSeq))
@@ -124,7 +124,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
             keys.forEach(key -> {
                 if (!key.contains("satoken") && !key.contains("lock4j")) {
                     List<Object> objList = RedisUtil.lGet(key, 0, -1);
-                    List<SysDict> sysDictListForKey = JSON.parseArray(JSON.toJSONString(objList), SysDict.class);
+                    List<SysDict> sysDictListForKey = JSONUtil.toList(JSONUtil.toJsonStr(objList), SysDict.class);
                     sysDictList.addAll(sysDictListForKey);
                 }
             });

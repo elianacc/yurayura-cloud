@@ -4,8 +4,8 @@ import cn.dev33.satoken.stp.SaLoginConfig;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.json.JSONUtil;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
-import com.alibaba.fastjson.JSON;
 import com.baomidou.lock.annotation.Lock4j;
 import com.github.pagehelper.PageInfo;
 import io.seata.spring.annotation.GlobalTransactional;
@@ -157,7 +157,7 @@ public class SysManagerController {
         SysManager sysManager = new SysManager();
         ApiResult<SysManager> apiResult = sysFeignClient.getEnableManagerByName(dto.getManagerName());
         if (apiResult.getCode() == ApiResult.SUCCESS_CODE) {
-            sysManager = JSON.toJavaObject(JSON.parseObject(JSON.toJSONString(apiResult.getData())), SysManager.class);
+            sysManager = JSONUtil.toBean(JSONUtil.toJsonStr(apiResult.getData()), SysManager.class);
         }
 
         Assert.isTrue(!ObjectUtils.isEmpty(sysManager), "用户不存在");
