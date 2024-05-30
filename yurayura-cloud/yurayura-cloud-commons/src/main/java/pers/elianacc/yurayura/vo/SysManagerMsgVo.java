@@ -25,6 +25,12 @@ public class SysManagerMsgVo implements Serializable {
     private String managerName;
 
     /**
+     * 管理员组织
+     */
+    @ApiModelProperty(value = "管理员组织")
+    private Integer managerOrg;
+
+    /**
      * 管理员所有权限
      */
     @ApiModelProperty(value = "管理员拥有权限组")

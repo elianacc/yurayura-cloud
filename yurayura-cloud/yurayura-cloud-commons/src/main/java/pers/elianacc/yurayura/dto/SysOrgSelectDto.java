@@ -8,34 +8,22 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
- * 系统管理员查询 dto
+ * 系统组织查询 dto
  *
  * @author ELiaNaCc
- * @since 2020-12-08
+ * @since 2024-05-20
  */
 @Data
-@ApiModel(value = "系统管理员查询dto")
-public class SysManagerSelectDto implements Serializable {
+@ApiModel(value = "系统组织查询dto")
+public class SysOrgSelectDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 管理员名
+     * 组织名称
      */
-    @ApiModelProperty(value = "管理员名")
-    private String managerName;
-
-    /**
-     * 状态- 0：禁用，1：启用
-     */
-    @ApiModelProperty(value = "状态- 0：禁用，1：启用", example = "1")
-    private Integer managerStatus;
-
-    /**
-     * 管理员组织
-     */
-    @ApiModelProperty(value = "管理员组织")
-    private Integer managerOrg;
+    @ApiModelProperty(value = "组织名称")
+    private String orgName;
 
     /**
      * 页码

@@ -91,15 +91,15 @@ public class SysRoleController {
     }
 
     /**
-     * 查询所有系统角色
+     * 查询系统角色（根据组织）
      *
-     * @param
+     * @param orgId
      * @return pers.elianacc.yurayura.vo.ApiResult<java.util.List<pers.elianacc.yurayura.entity.sys.role.SysRole>>
      */
-    @GetMapping("/getAll")
-    @ApiOperation("查询所有系统角色")
-    public ApiResult<List<SysRole>> getAll() {
-        ApiResult<List<SysRole>> apiResult = sysFeignClient.getAllRole();
+    @GetMapping("/getByOrg/{orgId}")
+    @ApiOperation("查询系统角色（根据组织）")
+    public ApiResult<List<SysRole>> getByOrg(@PathVariable("orgId") Integer orgId) {
+        ApiResult<List<SysRole>> apiResult = sysFeignClient.getByOrg(orgId);
         if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());
         }

@@ -39,6 +39,18 @@ public class SysManagerAndRoleVo implements Serializable {
     private Integer managerStatus;
 
     /**
+     * 管理员组织
+     */
+    @ApiModelProperty(value = "管理员组织")
+    private Integer managerOrg;
+
+    /**
+     * 管理员组织名
+     */
+    @ApiModelProperty(value = "管理员组织名")
+    private String managerOrgName;
+
+    /**
      * 创建时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

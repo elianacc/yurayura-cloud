@@ -74,14 +74,14 @@ public class SysRoleController {
     }
 
     /**
-     * 查询所有系统角色
+     * 查询系统角色（根据组织）
      *
-     * @param
+     * @param orgId
      * @return pers.elianacc.yurayura.vo.ApiResult<java.util.List<pers.elianacc.yurayura.entity.sys.role.SysRole>>
      */
-    @GetMapping("/getAll")
-    public ApiResult<List<SysRole>> getAll() {
-        return ApiResult.success("查询成功", iSysRoleService.getAll());
+    @GetMapping("/getByOrg/{orgId}")
+    public ApiResult<List<SysRole>> getByOrg(@PathVariable("orgId") Integer orgId) {
+        return ApiResult.success("查询成功", iSysRoleService.getByOrg(orgId));
     }
 }
 

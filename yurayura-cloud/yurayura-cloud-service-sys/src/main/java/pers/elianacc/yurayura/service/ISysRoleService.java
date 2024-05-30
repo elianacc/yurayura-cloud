@@ -27,12 +27,12 @@ public interface ISysRoleService extends IService<SysRole> {
     public PageInfo<SysRoleAndPermissionVo> getPage(SysRoleSelectDto dto);
 
     /**
-     * 查询所有系统角色
+     * 查询系统角色（根据组织）
      *
-     * @param
-     * @return java.util.List<pers.elianacc.yurayura.entity.sys.role.SysRole>
+     * @param orgId
+     * @return List<SysRole>
      */
-    public List<SysRole> getAll();
+    public List<SysRole> getByOrg(Integer orgId);
 
     /**
      * 添加系统角色

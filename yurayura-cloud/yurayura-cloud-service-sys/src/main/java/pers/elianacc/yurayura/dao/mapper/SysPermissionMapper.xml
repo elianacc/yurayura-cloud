@@ -53,7 +53,7 @@
             ) m
                 LEFT JOIN yurayura_sys_permission p ON m.permission_belong_submenu_name = p.permission_belong_submenu_name
         WHERE
-            p.permission_status = 1
+            p.permission_status = 1 and p.id not in (1,2,3,4,5,6,7,11,12,13,14,15,16,27,28,29)
         ORDER BY
             m.menu_seq,
             m.msmenu_seq,

@@ -42,6 +42,13 @@ public class SysManagerUpdateDto implements Serializable {
     private Integer managerStatus;
 
     /**
+     * 管理员组织
+     */
+    @NotNull(message = "管理员组织不能为空")
+    @ApiModelProperty(value = "管理员组织")
+    private Integer managerOrg;
+
+    /**
      * 拥有角色id组
      */
     @Size(min = 1, message = "至少分配一个角色")

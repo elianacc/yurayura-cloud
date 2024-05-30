@@ -32,6 +32,12 @@ public class SysRoleSelectDto implements Serializable {
     private Integer roleStatus;
 
     /**
+     * 角色组织
+     */
+    @ApiModelProperty(value = "角色组织")
+    private Integer roleOrg;
+
+    /**
      * 页码
      */
     @NotNull(message = "页码不能为空")

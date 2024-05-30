@@ -171,7 +171,8 @@ public class SysManagerController {
         LocalDateTime tokenTimeoutDate = currentDateTime.plusSeconds(tokenTimeout);
 
         StpUtil.login(sysManager.getId(), SaLoginConfig
-                .setExtra("adminName", sysManager.getManagerName())
+                .setExtra("managerName", sysManager.getManagerName())
+                .setExtra("managerOrg", sysManager.getManagerOrg())
                 // 存入token到期时间
                 .setExtra("expiration", formatter.format(tokenTimeoutDate)));
 
@@ -214,7 +215,8 @@ public class SysManagerController {
     @ApiOperation("获取当前登入管理员信息")
     public ApiResult<SysManagerMsgVo> getCurrentManagerMsg() {
         SysManagerMsgVo sysManagerMsgVo = new SysManagerMsgVo();
-        sysManagerMsgVo.setManagerName(StpUtil.getExtra("adminName").toString());
+        sysManagerMsgVo.setManagerName(StpUtil.getExtra("managerName").toString());
+        sysManagerMsgVo.setManagerOrg((Integer) StpUtil.getExtra("managerOrg"));
         ApiResult<List<String>> apiResult = sysFeignClient.getManagerRolePermission(StpUtil.getLoginIdAsInt());
         if (apiResult.getCode() != ApiResult.SUCCESS_CODE) {
             throw new BusinessException(apiResult.getCode(), apiResult.getMsg());

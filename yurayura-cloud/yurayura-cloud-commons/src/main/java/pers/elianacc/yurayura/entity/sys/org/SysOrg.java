@@ -1,4 +1,4 @@
-package pers.elianacc.yurayura.entity.sys.role;
+package pers.elianacc.yurayura.entity.sys.org;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -13,15 +13,15 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 系统角色 entity
+ * 系统组织 entity
  *
  * @author ELiaNaCc
- * @since 2022-03-07
+ * @since 2024-05-14
  */
 @Data
-@TableName("yurayura_sys_role")
-@ApiModel(value = "SysRole对象", description = "系统角色")
-public class SysRole implements Serializable {
+@TableName("yurayura_sys_org")
+@ApiModel(value = "SysOrg对象", description = "系统组织")
+public class SysOrg implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,41 +33,27 @@ public class SysRole implements Serializable {
     private Integer id;
 
     /**
-     * 角色名
+     * 组织名称
      */
-    @TableField("role_name")
-    @ApiModelProperty(value = "角色名")
-    private String roleName;
-
-    /**
-     * 状态- 0：禁用，1：启用
-     */
-    @TableField("role_status")
-    @ApiModelProperty(value = "状态- 0：禁用，1：启用")
-    private Integer roleStatus;
-
-    /**
-     * 角色组织
-     */
-    @TableField("role_org")
-    @ApiModelProperty(value = "角色组织")
-    private Integer roleOrg;
+    @TableField("org_name")
+    @ApiModelProperty(value = "组织名称")
+    private String orgName;
 
     /**
      * 创建时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @TableField("role_create_time")
+    @TableField("org_create_time")
     @ApiModelProperty(value = "创建时间")
-    private LocalDateTime roleCreateTime;
+    private LocalDateTime orgCreateTime;
 
     /**
      * 更新时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @TableField("role_update_time")
+    @TableField("org_update_time")
     @ApiModelProperty(value = "更新时间")
-    private LocalDateTime roleUpdateTime;
+    private LocalDateTime orgUpdateTime;
 
 
 }

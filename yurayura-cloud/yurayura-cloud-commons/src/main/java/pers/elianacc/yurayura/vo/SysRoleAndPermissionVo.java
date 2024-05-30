@@ -39,6 +39,18 @@ public class SysRoleAndPermissionVo implements Serializable {
     private Integer roleStatus;
 
     /**
+     * 角色组织
+     */
+    @ApiModelProperty(value = "角色组织")
+    private Integer roleOrg;
+
+    /**
+     * 角色组织名
+     */
+    @ApiModelProperty(value = "角色组织名")
+    private String roleOrgName;
+
+    /**
      * 创建时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

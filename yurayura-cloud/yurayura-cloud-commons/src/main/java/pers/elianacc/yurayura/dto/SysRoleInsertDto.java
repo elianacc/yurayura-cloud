@@ -38,6 +38,13 @@ public class SysRoleInsertDto implements Serializable {
     private Integer roleStatus;
 
     /**
+     * 角色组织
+     */
+    @NotNull(message = "角色组织不能为空")
+    @ApiModelProperty(value = "角色组织")
+    private Integer roleOrg;
+
+    /**
      * 拥有权限id组
      */
     @Size(min = 1, message = "至少分配一个权限")

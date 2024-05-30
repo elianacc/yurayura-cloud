@@ -54,6 +54,13 @@ public class SysManager implements Serializable {
     private Integer managerStatus;
 
     /**
+     * 管理员组织
+     */
+    @TableField("manager_org")
+    @ApiModelProperty(value = "管理员组织")
+    private Integer managerOrg;
+
+    /**
      * 创建时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

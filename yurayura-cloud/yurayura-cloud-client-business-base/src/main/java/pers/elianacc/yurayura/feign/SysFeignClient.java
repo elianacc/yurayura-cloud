@@ -7,6 +7,7 @@ import pers.elianacc.yurayura.dto.*;
 import pers.elianacc.yurayura.entity.sys.dict.SysDict;
 import pers.elianacc.yurayura.entity.sys.manager.SysManager;
 import pers.elianacc.yurayura.entity.sys.menu.SysMenuSub;
+import pers.elianacc.yurayura.entity.sys.org.SysOrg;
 import pers.elianacc.yurayura.entity.sys.permission.SysPermission;
 import pers.elianacc.yurayura.entity.sys.role.SysRole;
 import pers.elianacc.yurayura.vo.*;
@@ -113,7 +114,21 @@ public interface SysFeignClient {
     @PutMapping("/sys/role/update")
     public ApiResult<String> update(@RequestBody SysRoleUpdateDto dto);
 
-    @GetMapping("/sys/role/getAll")
-    public ApiResult<List<SysRole>> getAllRole();
+    @GetMapping("/sys/role/getByOrg/{orgId}")
+    public ApiResult<List<SysRole>> getByOrg(@PathVariable("orgId") Integer orgId);
+
+//----------------------------------------------------------------------------------------------------------------------
+
+    @GetMapping("/sys/org/getAll")
+    public ApiResult<List<SysOrg>> getAllOrg();
+
+    @PostMapping("/sys/org/getPage")
+    public ApiResult<PageInfo<SysOrg>> getPage(@RequestBody SysOrgSelectDto dto);
+
+    @PostMapping("/sys/org/insert")
+    public ApiResult<String> insert(@RequestBody SysOrgInsertDto dto);
+
+    @PutMapping("/sys/org/update")
+    public ApiResult<String> update(@RequestBody SysOrgUpdateDto dto);
 
 }
