@@ -54,7 +54,7 @@ yura-cloud
 
 ## 常用功能实现
 
--  sentinel可视化配置同步到nacos持久化（改官方的sentinel源码--步骤在个人空间中另一个项目总结https://github.com/elianacc/sentinel-dashboard-nacos）
+-  sentinel可视化配置同步到nacos持久化 -> 改官方的sentinel源码--步骤在个人空间中另一个项目总结https://github.com/elianacc/sentinel-dashboard-nacos
 -  全局捕获异常处理(包括系统异常500、自定义业务异常403、请求接口参数异常400、重复提交异常等)
 -  AOP统一处理Web请求日志
 -  防止重复提交表单数据
