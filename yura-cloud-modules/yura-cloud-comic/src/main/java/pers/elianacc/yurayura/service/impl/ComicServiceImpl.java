@@ -1,16 +1,20 @@
 package pers.elianacc.yurayura.service.impl;
 
+import cn.afterturn.easypoi.entity.ImageEntity;
+import cn.afterturn.easypoi.excel.entity.TemplateExportParams;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.lang.Assert;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import lombok.SneakyThrows;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import pers.elianacc.yurayura.bo.ComicExportBO;
 import pers.elianacc.yurayura.dao.ComicMapper;
 import pers.elianacc.yurayura.dao.ComicUserDataMapper;
 import pers.elianacc.yurayura.dto.ComicInsertDTO;
@@ -19,15 +23,24 @@ import pers.elianacc.yurayura.dto.ComicUpdateDTO;
 import pers.elianacc.yurayura.dto.IdsDTO;
 import pers.elianacc.yurayura.entity.Comic;
 import pers.elianacc.yurayura.entity.ComicUserData;
+import pers.elianacc.yurayura.enumerate.ComicShelfStatusEnum;
 import pers.elianacc.yurayura.enumerate.ComicStatusEnum;
 import pers.elianacc.yurayura.enumerate.ImgUploadCategoryEnum;
 import pers.elianacc.yurayura.enumerate.ImgUploadResultEnum;
+import pers.elianacc.yurayura.feign.SysFeignClient;
 import pers.elianacc.yurayura.service.IComicService;
+import pers.elianacc.yurayura.utils.EasyPoiUtil;
 import pers.elianacc.yurayura.utils.FileUtil;
+import pers.elianacc.yurayura.vo.ApiResult;
+import pers.elianacc.yurayura.vo.SysDictVO;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 番剧 service impl
@@ -42,9 +55,13 @@ public class ComicServiceImpl extends ServiceImpl<ComicMapper, Comic> implements
     private ComicMapper comicMapper;
     @Autowired
     private ComicUserDataMapper comicUserDataMapper;
+    @Autowired
+    private SysFeignClient sysFeignClient;
 
     @Value("${yurayura.default-upload.comic-image}")
     private String defaultUplCmImg;
+    @Value("${spring.servlet.multipart.location}")
+    private String uploadPath;
 
     @Override
     public PageInfo<Comic> getPage(ComicSelectDTO dto) {
@@ -149,5 +166,55 @@ public class ComicServiceImpl extends ServiceImpl<ComicMapper, Comic> implements
             }
         }
         comicMapper.updateById(comic);
+    }
+
+    @Override
+    public void exportExcel(ComicSelectDTO dto, HttpServletResponse response) throws IOException {
+        List<Comic> comicList = comicMapper.getListBySelectDTO(dto);
+        ApiResult<List<SysDictVO>> apiResult = sysFeignClient.getByDictCode("comicStatus");
+        Assert.isTrue(apiResult.getCode() == ApiResult.SUCCESS_CODE, "获取状态字典列表失败");
+        List<SysDictVO> dictVOS = apiResult.getData();
+        List<ComicExportBO> exportBOList = comicList
+                .stream()
+                .map(comic -> {
+                    ComicExportBO comicExportBO = new ComicExportBO();
+                    BeanUtils.copyProperties(comic, comicExportBO);
+                    if (comic.getComicShelfStatus().equals(ComicShelfStatusEnum.FINISHED.getStatusId())) {
+                        comicExportBO.setComicName(comicExportBO.getComicName() + "(已下架)");
+                    }
+                    if (comic.getComicStatus().equals(ComicStatusEnum.FINISHED.getStatusId())) {
+                        comicExportBO.setComicCurtStatus("已完结：全" + comic.getComicCurrentEpisodes() + "话");
+                    } else {
+                        dictVOS.forEach(vo -> {
+                            if (vo.getDictVal().equals(comic.getComicStatus().toString())) {
+                                comicExportBO.setComicCurtStatus(vo.getDictName()
+                                        + "：更新至第" + comic.getComicCurrentEpisodes() + "话");
+                            }
+                        });
+                    }
+                    List<String> labelList = CollUtil
+                            .newArrayList(comic
+                                    .getComicLabel()
+                                    .split(","))
+                            .stream()
+                            .filter(label -> StringUtils.isNotBlank(label))
+                            .collect(Collectors.toList());
+                    comicExportBO.setComicLabel(CollUtil.join(labelList, ","));
+
+                    ImageEntity imageEntity = new ImageEntity(uploadPath.substring(0, 28) + comic.getComicImageUrl()
+                            , 165, 217);
+                    comicExportBO.setComicImage(imageEntity);
+
+                    return comicExportBO;
+                })
+                .collect(Collectors.toList());
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("comicList", exportBOList);
+        TemplateExportParams exportParams = new TemplateExportParams("templates/comic-export-tplt.xlsx"
+                , 0);
+
+        EasyPoiUtil.exportExcelByTemplate("番剧信息" + System.currentTimeMillis()
+                , data, exportParams, response);
     }
 }

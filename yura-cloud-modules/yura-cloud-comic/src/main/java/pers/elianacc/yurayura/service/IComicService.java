@@ -8,6 +8,7 @@ import pers.elianacc.yurayura.dto.ComicUpdateDTO;
 import pers.elianacc.yurayura.dto.IdsDTO;
 import pers.elianacc.yurayura.entity.Comic;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -49,5 +50,14 @@ public interface IComicService extends IService<Comic> {
      * @return void
      */
     public void update(ComicUpdateDTO dto) throws IOException;
+
+    /**
+     * 导出excel
+     *
+     * @param dto
+	 * @param response
+     * @return void
+     */
+    public void exportExcel(ComicSelectDTO dto, HttpServletResponse response) throws IOException;
 
 }

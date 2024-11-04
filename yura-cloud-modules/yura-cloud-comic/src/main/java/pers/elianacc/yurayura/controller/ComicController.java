@@ -14,7 +14,9 @@ import pers.elianacc.yurayura.dto.*;
 import pers.elianacc.yurayura.entity.Comic;
 import pers.elianacc.yurayura.service.IComicService;
 import pers.elianacc.yurayura.vo.ApiResult;
+import springfox.documentation.annotations.ApiIgnore;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -100,6 +102,20 @@ public class ComicController {
     public ApiResult<String> update(@Validated ComicUpdateDTO dto) throws IOException {
         iComicService.update(dto);
         return ApiResult.success("修改成功");
+    }
+
+    /**
+     * 导出
+     *
+     * @param dto
+	 * @param response
+     * @return void
+     */
+    @GetMapping("/export")
+    @ApiOperation("导出")
+    public void export(ComicSelectDTO dto, @ApiIgnore HttpServletResponse response)
+            throws IOException {
+        iComicService.exportExcel(dto, response);
     }
 
 }

@@ -9,7 +9,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import pers.elianacc.yurayura.bo.MailBo;
+import pers.elianacc.yurayura.bo.MailBO;
 import pers.elianacc.yurayura.exception.BusinessException;
 import pers.elianacc.yurayura.exception.RepeatSubmitException;
 import pers.elianacc.yurayura.utils.MailUtil;
@@ -130,7 +130,7 @@ public class GlobalExceptionHandler {
         errorMsg = ExceptionUtils.getStackTrace(exception);
         log.error(errorMsg);
         // 发送错误信息邮件
-        MailBo bo = new MailBo();
+        MailBO bo = new MailBO();
         bo.setTitle("【" + applicationName + "】服务报错信息");
         bo.setReceiveEmail(receiveEmail);
         Map<String, Object> map = new HashMap<>();

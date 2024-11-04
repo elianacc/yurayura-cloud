@@ -12,7 +12,7 @@ import java.util.Map;
  * @since 2019-11-25
  */
 @Data
-public class MailBo implements Serializable {
+public class MailBO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

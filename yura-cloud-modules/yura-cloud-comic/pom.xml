@@ -75,6 +75,13 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- sys api调用模块 依赖 -->
+        <dependency>
+            <groupId>pers.elianacc.yurayura</groupId>
+            <artifactId>yura-cloud-api-sys</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- SpringBoot mysql驱动 依赖 -->
         <dependency>
             <groupId>mysql</groupId>
@@ -99,6 +106,13 @@
                 <includes>
                     <include>**/*.xml</include>
                 </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>templates/*.xlsx</include>
+                </includes>
+                <filtering>false</filtering>
             </resource>
         </resources>
         <plugins>

@@ -11,7 +11,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import pers.elianacc.yurayura.bo.MailBo;
+import pers.elianacc.yurayura.bo.MailBO;
 
 import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
@@ -50,7 +50,7 @@ public class MailUtil {
      *
      * @param bo
      */
-    public static void sendTextMail(MailBo bo) {
+    public static void sendTextMail(MailBO bo) {
         // 建立邮件消息
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(mailUtil.sendEmail); // 发送人的邮箱
@@ -71,7 +71,7 @@ public class MailUtil {
      * @param bo
      * @param isShowHtml 是否解析html
      */
-    public static void sendHtmlMail(MailBo bo, boolean isShowHtml) {
+    public static void sendHtmlMail(MailBO bo, boolean isShowHtml) {
         try {
             MimeMessage mimeMessage = mailUtil.javaMailSender.createMimeMessage();
             // 是否发送的邮件是富文本（附件，图片，html等）
@@ -110,7 +110,7 @@ public class MailUtil {
      * @param bo
      * @param templatePosition
      */
-    public static void sendTemplateMail(MailBo bo, String templatePosition) {
+    public static void sendTemplateMail(MailBO bo, String templatePosition) {
         try {
             MimeMessage mimeMessage = mailUtil.javaMailSender.createMimeMessage();
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true);

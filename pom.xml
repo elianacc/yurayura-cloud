@@ -32,6 +32,7 @@
         <knife4j.version>3.0.3</knife4j.version>
         <sa-token.version>1.35.0.RC</sa-token.version>
         <hutool.version>5.8.9</hutool.version>
+        <easypoi.version>4.2.0</easypoi.version>
         <truelicense.version>1.33</truelicense.version>
         <license-generate.version>1.0.0</license-generate.version>
     </properties>
@@ -147,6 +148,13 @@
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
                 <version>${hutool.version}</version>
+            </dependency>
+
+            <!-- easypoi springboot 依赖 -->
+            <dependency>
+                <groupId>cn.afterturn</groupId>
+                <artifactId>easypoi-spring-boot-starter</artifactId>
+                <version>${easypoi.version}</version>
             </dependency>
 
         </dependencies>
