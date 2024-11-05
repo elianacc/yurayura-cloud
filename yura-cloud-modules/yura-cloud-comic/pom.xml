@@ -110,6 +110,11 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <includes>
+                    <include>*.txt</include>
+                    <include>*.xml</include>
+                    <include>*.yml</include>
+                    <include>**/*.ico</include>
+                    <include>**/*.html</include>
                     <include>templates/*.xlsx</include>
                 </includes>
                 <filtering>false</filtering>
