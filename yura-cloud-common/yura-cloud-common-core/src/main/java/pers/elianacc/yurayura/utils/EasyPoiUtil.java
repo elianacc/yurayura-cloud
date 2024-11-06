@@ -22,7 +22,7 @@ public class EasyPoiUtil {
     /**
      * 保存按模板excel导出
      *
-     * @param exportExcelName      导出excel文件名（含后缀）
+     * @param exportExcelName      导出excel文件名（不含后缀）
      * @param dataSet              导出数据（必须map类型）
      * @param saveDir              导出文件保存路径
      * @param templateExportParams 模板导出参数
@@ -43,10 +43,10 @@ public class EasyPoiUtil {
     /**
      * 按模板excel导出
      *
-     * @param exportExcelName
-	 * @param dataSet
-	 * @param templateExportParams
-	 * @param response
+     * @param exportExcelName 导出excel文件名（不含后缀）
+	 * @param dataSet 导出数据（必须map类型）
+	 * @param templateExportParams 模板导出参数
+	 * @param response HttpServletResponse对象
      * @return void
      */
     public static void exportExcelByTemplate(String exportExcelName, Map<String, Object> dataSet
