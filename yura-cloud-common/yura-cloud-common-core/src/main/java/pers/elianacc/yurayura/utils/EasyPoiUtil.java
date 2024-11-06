@@ -35,7 +35,7 @@ public class EasyPoiUtil {
         if (!savefile.exists()) {
             savefile.mkdirs();
         }
-        FileOutputStream fos = new FileOutputStream(saveDir + "/" + exportExcelName);
+        FileOutputStream fos = new FileOutputStream(saveDir + "/" + exportExcelName + ".xlsx");
         workbook.write(fos);
         fos.close();
     }
