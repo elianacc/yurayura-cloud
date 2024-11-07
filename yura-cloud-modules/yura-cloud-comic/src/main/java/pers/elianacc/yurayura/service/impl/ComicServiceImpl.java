@@ -197,11 +197,11 @@ public class ComicServiceImpl extends ServiceImpl<ComicMapper, Comic> implements
                                     .getComicLabel()
                                     .split(","))
                             .stream()
-                            .filter(label -> StringUtils.isNotBlank(label))
+                            .filter(StringUtils::isNotBlank)
                             .collect(Collectors.toList());
                     comicExportBO.setComicLabel(CollUtil.join(labelList, ","));
 
-                    String imgUrl = "";
+                    String imgUrl;
                     if (comic.getComicImageUrl().equals(defaultUplCmImg)) {
                         imgUrl = "static" + defaultUplCmImg;
                     } else {
