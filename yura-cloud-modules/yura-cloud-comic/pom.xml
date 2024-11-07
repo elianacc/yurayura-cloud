@@ -114,6 +114,7 @@
                     <include>*.xml</include>
                     <include>*.yml</include>
                     <include>**/*.ico</include>
+                    <include>**/*.jpg</include>
                     <include>**/*.html</include>
                     <include>templates/*.xlsx</include>
                 </includes>

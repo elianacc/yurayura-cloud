@@ -201,8 +201,14 @@ public class ComicServiceImpl extends ServiceImpl<ComicMapper, Comic> implements
                             .collect(Collectors.toList());
                     comicExportBO.setComicLabel(CollUtil.join(labelList, ","));
 
-                    ImageEntity imageEntity = new ImageEntity(uploadPath.substring(0, 28) + comic.getComicImageUrl()
-                            , 165, 217);
+                    String imgUrl = "";
+                    if (comic.getComicImageUrl().equals(defaultUplCmImg)) {
+                        imgUrl = "static" + defaultUplCmImg;
+                    } else {
+                        imgUrl = uploadPath.substring(0, 28) + comic.getComicImageUrl();
+                    }
+
+                    ImageEntity imageEntity = new ImageEntity(imgUrl, 165, 217);
                     comicExportBO.setComicImage(imageEntity);
 
                     return comicExportBO;
