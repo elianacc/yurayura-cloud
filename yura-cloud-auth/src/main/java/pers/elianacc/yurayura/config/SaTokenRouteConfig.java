@@ -111,6 +111,8 @@ public class SaTokenRouteConfig implements WebMvcConfigurer {
 
                     SaRouter.match("/api/user/get*", r -> StpUtil.checkPermission("user_info_select"));
                     SaRouter.match("/api/user/update*", r -> StpUtil.checkPermission("user_info_update"));
+                    SaRouter.match("/api/user/export*"
+                            , r -> StpUtil.checkPermission("user_info_export"));
 
                 })).addPathPatterns("/**")
                 .excludePathPatterns("/api/sys/manager/getVerifyCode"
