@@ -7,6 +7,9 @@ import pers.elianacc.yurayura.dto.UserSelectDTO;
 import pers.elianacc.yurayura.dto.UserUpdateStatusDTO;
 import pers.elianacc.yurayura.entity.User;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 /**
  * 用户 service
  *
@@ -38,5 +41,14 @@ public interface IUserService extends IService<User> {
      * @return void
      */
     public void updateAvatarDefault(IdDTO dto);
+
+    /**
+     * 导出excel
+     *
+     * @param dto
+	 * @param response
+     * @return void
+     */
+    public void exportExcel(UserSelectDTO dto, HttpServletResponse response) throws IOException;
 
 }

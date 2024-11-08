@@ -14,6 +14,10 @@ import pers.elianacc.yurayura.dto.UserUpdateStatusDTO;
 import pers.elianacc.yurayura.entity.User;
 import pers.elianacc.yurayura.service.IUserService;
 import pers.elianacc.yurayura.vo.ApiResult;
+import springfox.documentation.annotations.ApiIgnore;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * 用户 controller
@@ -82,5 +86,17 @@ public class UserController {
         return ApiResult.success("重置为默认头像成功");
     }
 
+    /**
+     * 导出
+     *
+     * @param dto
+	 * @param response
+     * @return void
+     */
+    @GetMapping("/export")
+    @ApiOperation("导出")
+    public void export(UserSelectDTO dto, @ApiIgnore HttpServletResponse response) throws IOException {
+        iUserService.exportExcel(dto, response);
+    }
 
 }
