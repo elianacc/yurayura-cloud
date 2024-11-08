@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import pers.elianacc.yurayura.enumerate.ImgUploadResultEnum;
 
-import javax.imageio.IIOException;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
@@ -60,7 +59,7 @@ public class FileUtil {
                     // 新文件名
                     String fileNewName;
                     // 上传文件路径
-                    String path = uploadPath + "/" + category;
+                    String path = uploadPath + "/upload/" + category;
                     // 生成不重复的32位新文件名
                     fileNewName = UUID.randomUUID().toString().replace("-", "") + fileEndName;
                     File newFile = new File(path, fileNewName);
@@ -87,7 +86,7 @@ public class FileUtil {
      * @return void
      */
     public static void fileDelete(String dPath) {
-        File file = new File(uploadPath.substring(0, 28) + dPath);
+        File file = new File(uploadPath + dPath);
         if (file.isFile() && file.exists()) { // 上传文件路径不为空
             file.delete(); // 删除文件
         }

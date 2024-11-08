@@ -205,7 +205,7 @@ public class ComicServiceImpl extends ServiceImpl<ComicMapper, Comic> implements
                     if (comic.getComicImageUrl().equals(defaultUplCmImg)) {
                         imgUrl = "static" + defaultUplCmImg;
                     } else {
-                        imgUrl = uploadPath.substring(0, 28) + comic.getComicImageUrl();
+                        imgUrl = uploadPath + comic.getComicImageUrl();
                     }
 
                     ImageEntity imageEntity = new ImageEntity(imgUrl, 165, 217);

@@ -108,7 +108,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
                     if (user.getUserAvatarUrl().equals(defaultUplUserAvatar)) {
                         imgUrl = "static" + defaultUplUserAvatar;
                     } else {
-                        imgUrl = uploadPath.substring(0, 28) + user.getUserAvatarUrl();
+                        imgUrl = uploadPath + user.getUserAvatarUrl();
                     }
 
                     userExportBO.setUserAvatar(imgUrl);
