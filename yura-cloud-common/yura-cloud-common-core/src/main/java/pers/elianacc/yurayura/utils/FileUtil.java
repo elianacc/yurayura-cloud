@@ -1,12 +1,18 @@
 package pers.elianacc.yurayura.utils;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import pers.elianacc.yurayura.enumerate.ImgUploadResultEnum;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.UUID;
 
 /**
@@ -90,6 +96,30 @@ public class FileUtil {
         if (file.isFile() && file.exists()) { // 上传文件路径不为空
             file.delete(); // 删除文件
         }
+    }
+
+    /**
+     * 下载文件
+     *
+     * @param fileName 下载文件名
+	 * @param saveDir 文件保存路径
+     * @return org.springframework.http.ResponseEntity<org.springframework.core.io.FileSystemResource>
+     */
+    public static ResponseEntity<FileSystemResource> downloadFile(String fileName, String saveDir)
+            throws UnsupportedEncodingException {
+        File file = new File(saveDir);
+        if (!file.exists()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.setContentDispositionFormData("attachment", URLEncoder.encode(fileName, "UTF-8"));
+        headers.setContentLength(file.length());
+
+        FileSystemResource resource = new FileSystemResource(file);
+
+        return ResponseEntity.ok().headers(headers).body(resource);
     }
 
 }

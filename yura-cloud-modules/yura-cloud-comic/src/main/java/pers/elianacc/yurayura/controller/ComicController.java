@@ -1,5 +1,6 @@
 package pers.elianacc.yurayura.controller;
 
+import cn.hutool.core.lang.Assert;
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.baomidou.lock.annotation.Lock4j;
 import com.github.pagehelper.PageInfo;
@@ -9,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pers.elianacc.yurayura.controller.block.ComicBlockHandler;
 import pers.elianacc.yurayura.dto.*;
 import pers.elianacc.yurayura.entity.Comic;
@@ -116,6 +118,23 @@ public class ComicController {
     public void export(ComicSelectDTO dto, @ApiIgnore HttpServletResponse response)
             throws IOException {
         iComicService.exportExcel(dto, response);
+    }
+
+    /**
+     * 导入
+     *
+     * @param file
+     * @return void
+     */
+    @PostMapping("/import")
+    @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
+    @ApiOperation("导入")
+    public void importExcel(@RequestPart("file") MultipartFile file) throws Exception {
+        String fileName = file.getOriginalFilename();
+        String fileEndName = fileName.substring(fileName.lastIndexOf("."));
+        Assert.isTrue(fileEndName.equals(".xlsx"), "上传文件格式不正确");
+        Assert.isTrue(file.getSize() < 10000 * 1024, "上传文件大小不能超过10M");
+        iComicService.importExcel(file);
     }
 
 }

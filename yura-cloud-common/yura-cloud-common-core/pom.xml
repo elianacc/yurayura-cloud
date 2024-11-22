@@ -85,6 +85,12 @@
             <artifactId>easypoi-spring-boot-starter</artifactId>
         </dependency>
 
+        <!-- SpringBoot test 依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>

@@ -13,11 +13,11 @@ public enum ComicShelfStatusEnum {
     /**
      * 上架
      */
-    MONDAY(1),
+    UP(1),
     /**
      * 下架
      */
-    FINISHED(0);
+    DOWN(0);
 
     private Integer statusId;
 

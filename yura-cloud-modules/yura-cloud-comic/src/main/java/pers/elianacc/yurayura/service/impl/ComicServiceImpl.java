@@ -1,7 +1,10 @@
 package pers.elianacc.yurayura.service.impl;
 
 import cn.afterturn.easypoi.entity.ImageEntity;
+import cn.afterturn.easypoi.excel.ExcelImportUtil;
+import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.afterturn.easypoi.excel.entity.TemplateExportParams;
+import cn.afterturn.easypoi.excel.entity.result.ExcelImportResult;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.lang.Assert;
@@ -9,12 +12,16 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.util.IOUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.multipart.MultipartFile;
 import pers.elianacc.yurayura.bo.ComicExportBO;
+import pers.elianacc.yurayura.bo.ComicImportBO;
 import pers.elianacc.yurayura.dao.ComicMapper;
 import pers.elianacc.yurayura.dao.ComicUserDataMapper;
 import pers.elianacc.yurayura.dto.ComicInsertDTO;
@@ -27,6 +34,8 @@ import pers.elianacc.yurayura.enumerate.ComicShelfStatusEnum;
 import pers.elianacc.yurayura.enumerate.ComicStatusEnum;
 import pers.elianacc.yurayura.enumerate.ImgUploadCategoryEnum;
 import pers.elianacc.yurayura.enumerate.ImgUploadResultEnum;
+import pers.elianacc.yurayura.excel.ComicImportVerifyHandler;
+import pers.elianacc.yurayura.exception.BusinessException;
 import pers.elianacc.yurayura.feign.SysFeignClient;
 import pers.elianacc.yurayura.service.IComicService;
 import pers.elianacc.yurayura.utils.EasyPoiUtil;
@@ -35,6 +44,8 @@ import pers.elianacc.yurayura.vo.ApiResult;
 import pers.elianacc.yurayura.vo.SysDictVO;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -179,7 +190,7 @@ public class ComicServiceImpl extends ServiceImpl<ComicMapper, Comic> implements
                 .map(comic -> {
                     ComicExportBO comicExportBO = new ComicExportBO();
                     BeanUtils.copyProperties(comic, comicExportBO);
-                    if (comic.getComicShelfStatus().equals(ComicShelfStatusEnum.FINISHED.getStatusId())) {
+                    if (comic.getComicShelfStatus().equals(ComicShelfStatusEnum.DOWN.getStatusId())) {
                         comicExportBO.setComicName(comicExportBO.getComicName() + "(已下架)");
                     }
                     if (comic.getComicStatus().equals(ComicStatusEnum.FINISHED.getStatusId())) {
@@ -223,4 +234,65 @@ public class ComicServiceImpl extends ServiceImpl<ComicMapper, Comic> implements
         EasyPoiUtil.exportExcelByTemplate("番剧信息" + System.currentTimeMillis()
                 , data, exportParams, response);
     }
+
+
+    @Override
+    public void importExcel(MultipartFile file) throws Exception {
+
+        ImportParams importParams = new ImportParams();
+        importParams.setNeedVerify(true);
+        importParams.setVerifyHandler(new ComicImportVerifyHandler());
+
+        ExcelImportResult<ComicImportBO> importResult = ExcelImportUtil.importExcelMore(file.getInputStream()
+                , ComicImportBO.class, importParams);
+
+        // 导入失败信息列表
+        List<ComicImportBO> failList = importResult.getFailList();
+
+        Assert.isTrue(CollUtil.isEmpty(failList), failList
+                .stream()
+                .map(ComicImportBO::getErrorMsg)
+                .collect(Collectors.joining(",")));
+
+        List<ComicImportBO> list = importResult.getList();
+
+        list.forEach(bo -> {
+            ComicInsertDTO dto = new ComicInsertDTO();
+            BeanUtils.copyProperties(bo, dto);
+            dto.setComicShelfStatus(ComicShelfStatusEnum.UP.getStatusId());
+            if (StringUtils.isBlank(bo.getComicCustomLabel())) {
+                // 自定义标签null转空字符
+                bo.setComicCustomLabel("");
+            }
+            StringBuilder comicLb;
+            if (!StringUtils.isBlank(bo.getComicLabel())) {
+                comicLb = new StringBuilder(bo.getComicLabel() + "," + bo.getComicCustomLabel());
+                int cutmLbCount = bo.getComicCustomLabel().split(",").length;
+                for (int i = 0; i < 4 - cutmLbCount; i++) {
+                    comicLb.append(",");
+                }
+            } else {
+                comicLb = new StringBuilder(bo.getComicCustomLabel());
+            }
+            dto.setComicLabel(comicLb.toString());
+            try {
+                if (StringUtils.isBlank(bo.getComicImage())) {
+                    dto.setComicImgFile(null);
+                } else {
+                    File imgFile = new File(bo.getComicImage());
+                    FileInputStream fileInputStream = new FileInputStream(imgFile);
+                    MultipartFile multipartFile = new MockMultipartFile("file", imgFile.getName()
+                            , "text/plain", IOUtils.toByteArray(fileInputStream));
+                    dto.setComicImgFile(multipartFile);
+                }
+                this.insert(dto);
+            } catch (IllegalArgumentException e) {
+                throw new BusinessException(ApiResult.FORBIDDEN, "第 " + bo.getRowNum() + " 行" + e.getMessage());
+            } catch (IOException e) {
+                throw new BusinessException(ApiResult.FORBIDDEN, e.getMessage());
+            }
+        });
+
+    }
+
 }
