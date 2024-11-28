@@ -16,6 +16,9 @@ import org.apache.poi.util.IOUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -293,6 +296,14 @@ public class ComicServiceImpl extends ServiceImpl<ComicMapper, Comic> implements
             }
         });
 
+    }
+
+    @Override
+    public ResponseEntity<FileSystemResource> downloadImportTplt() throws IOException {
+        // 获取ClassPathResource下资源
+        ClassPathResource resource = new ClassPathResource("templates/comic-import-tplt.xlsx");
+        File file = resource.getFile();
+        return FileUtil.downloadFile("comic-import-tplt.xlsx", file);
     }
 
 }

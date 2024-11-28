@@ -8,6 +8,8 @@ import io.seata.spring.annotation.GlobalTransactional;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -124,17 +126,30 @@ public class ComicController {
      * 导入
      *
      * @param file
-     * @return void
+     * @return pers.elianacc.yurayura.vo.ApiResult<java.lang.String>
      */
     @PostMapping("/import")
     @GlobalTransactional(rollbackFor = Exception.class) // TM开启全局事务
     @ApiOperation("导入")
-    public void importExcel(@RequestPart("file") MultipartFile file) throws Exception {
+    public ApiResult<String> importExcel(@RequestPart("file") MultipartFile file) throws Exception {
         String fileName = file.getOriginalFilename();
         String fileEndName = fileName.substring(fileName.lastIndexOf("."));
         Assert.isTrue(fileEndName.equals(".xlsx"), "上传文件格式不正确");
         Assert.isTrue(file.getSize() < 10000 * 1024, "上传文件大小不能超过10M");
         iComicService.importExcel(file);
+        return ApiResult.success("导入成功");
+    }
+
+    /**
+     * 下载导入模板
+     *
+     * @param
+     * @return org.springframework.http.ResponseEntity<org.springframework.core.io.FileSystemResource>
+     */
+    @GetMapping("/downloadImportTplt")
+    @ApiOperation("下载导入模板")
+    public ResponseEntity<FileSystemResource> downloadImportTplt() throws IOException {
+        return iComicService.downloadImportTplt();
     }
 
 }

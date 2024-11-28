@@ -2,6 +2,8 @@ package pers.elianacc.yurayura.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.github.pagehelper.PageInfo;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import pers.elianacc.yurayura.dto.ComicInsertDTO;
 import pers.elianacc.yurayura.dto.ComicSelectDTO;
@@ -68,4 +70,12 @@ public interface IComicService extends IService<Comic> {
      * @return java.lang.String
      */
     public void importExcel(MultipartFile file) throws Exception;
+
+    /**
+     * 下载导入模板
+     *
+     * @param
+     * @return org.springframework.http.ResponseEntity<org.springframework.core.io.FileSystemResource>
+     */
+    public ResponseEntity<FileSystemResource> downloadImportTplt() throws IOException;
 }

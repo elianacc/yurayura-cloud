@@ -102,14 +102,13 @@ public class FileUtil {
      * 下载文件
      *
      * @param fileName 下载文件名
-	 * @param saveDir 文件保存路径
+	 * @param file 待下载文件
      * @return org.springframework.http.ResponseEntity<org.springframework.core.io.FileSystemResource>
      */
-    public static ResponseEntity<FileSystemResource> downloadFile(String fileName, String saveDir)
+    public static ResponseEntity<FileSystemResource> downloadFile(String fileName, File file)
             throws UnsupportedEncodingException {
-        File file = new File(saveDir);
         if (!file.exists()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.noContent().build();
         }
 
         HttpHeaders headers = new HttpHeaders();

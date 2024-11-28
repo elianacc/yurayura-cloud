@@ -108,6 +108,8 @@ public class SaTokenRouteConfig implements WebMvcConfigurer {
                             , r -> StpUtil.checkPermission("comic_info_deleteBatch"));
                     SaRouter.match("/api/comic/export*"
                             , r -> StpUtil.checkPermission("comic_info_export"));
+                    SaRouter.match("/api/comic/import*", "/api/comic/downloadImport*")
+                            .check(r -> StpUtil.checkPermission("comic_info_import"));
 
                     SaRouter.match("/api/user/get*", r -> StpUtil.checkPermission("user_info_select"));
                     SaRouter.match("/api/user/update*", r -> StpUtil.checkPermission("user_info_update"));
