@@ -255,7 +255,7 @@ public class ComicServiceImpl extends ServiceImpl<ComicMapper, Comic> implements
         Assert.isTrue(CollUtil.isEmpty(failList), failList
                 .stream()
                 .map(ComicImportBO::getErrorMsg)
-                .collect(Collectors.joining(",")));
+                .collect(Collectors.joining("，")));
 
         List<ComicImportBO> list = importResult.getList();
 
