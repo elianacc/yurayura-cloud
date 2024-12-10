@@ -5,6 +5,7 @@ import cn.afterturn.easypoi.excel.ExcelImportUtil;
 import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.afterturn.easypoi.excel.entity.TemplateExportParams;
 import cn.afterturn.easypoi.excel.entity.result.ExcelImportResult;
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.lang.Assert;
@@ -79,6 +80,10 @@ public class ComicServiceImpl extends ServiceImpl<ComicMapper, Comic> implements
 
     @Override
     public PageInfo<Comic> getPage(ComicSelectDTO dto) {
+        Integer managerOrg = (Integer) StpUtil.getExtra("managerOrg");
+        if (!managerOrg.equals(0)) {
+            dto.setComicOrg(managerOrg);
+        }
         // 设置分页
         PageHelper.startPage(dto.getPageNum(), dto.getPageSize());
         List<Comic> comicList = comicMapper.getListBySelectDTO(dto);
@@ -120,6 +125,7 @@ public class ComicServiceImpl extends ServiceImpl<ComicMapper, Comic> implements
         }
         comic.setComicCreateTime(LocalDateTime.now());
         comic.setComicUpdateTime(null);
+        comic.setComicOrg((Integer) StpUtil.getExtra("managerOrg"));
         comicMapper.insert(comic);
         comicUserData.setComicId(comic.getId());
         comicUserData.setComicName(comic.getComicName());
