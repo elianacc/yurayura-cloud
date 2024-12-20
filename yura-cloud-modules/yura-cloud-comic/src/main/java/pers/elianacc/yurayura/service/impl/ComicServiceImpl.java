@@ -9,7 +9,6 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.lang.Assert;
-import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
@@ -32,10 +31,7 @@ import pers.elianacc.yurayura.component.MqttMessageSender;
 import pers.elianacc.yurayura.constants.MqttConstant;
 import pers.elianacc.yurayura.dao.ComicMapper;
 import pers.elianacc.yurayura.dao.ComicUserDataMapper;
-import pers.elianacc.yurayura.dto.ComicInsertDTO;
-import pers.elianacc.yurayura.dto.ComicSelectDTO;
-import pers.elianacc.yurayura.dto.ComicUpdateDTO;
-import pers.elianacc.yurayura.dto.IdsDTO;
+import pers.elianacc.yurayura.dto.*;
 import pers.elianacc.yurayura.entity.Comic;
 import pers.elianacc.yurayura.entity.ComicUserData;
 import pers.elianacc.yurayura.enumerate.ComicShelfStatusEnum;
@@ -141,14 +137,14 @@ public class ComicServiceImpl extends ServiceImpl<ComicMapper, Comic> implements
         comicUserData.setComicUserDataCreateTime(LocalDateTime.now());
         comicUserData.setComicUserDataUpdateTime(null);
         comicUserDataMapper.insert(comicUserData);
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.set("noticeSender", StpUtil.getExtra("managerName").toString());
-        jsonObject.set("noticeContent", StpUtil
+        SysNoticeInsertDTO noticeInsertDTO = new SysNoticeInsertDTO();
+        noticeInsertDTO.setNoticeSender(StpUtil.getExtra("managerName").toString());
+        noticeInsertDTO.setNoticeContent(StpUtil
                 .getExtra("managerName").toString() + "上架了番剧 " + comic.getComicName());
-        jsonObject.set("noticeOrg", StpUtil.getExtra("managerOrg"));
-        jsonObject.set("noticeCreateTime", LocalDateTime.now());
+        noticeInsertDTO.setNoticeOrg((Integer) StpUtil.getExtra("managerOrg"));
+        noticeInsertDTO.setNoticeCreateTime(LocalDateTime.now());
         mqttMessageSender.sendMsg(MqttConstant.YURA_CLOUD_SYS_INSERT_NOTICE
-                , JSONUtil.toJsonStr(jsonObject));
+                , JSONUtil.toJsonStr(noticeInsertDTO));
     }
 
     @Override
@@ -166,14 +162,15 @@ public class ComicServiceImpl extends ServiceImpl<ComicMapper, Comic> implements
             comicDelNames.append(comic.getComicName()).append("、");
         }
         String comicDelName = comicDelNames.substring(0, comicDelNames.length() - 1);
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.set("noticeSender", StpUtil.getExtra("managerName").toString());
-        jsonObject.set("noticeContent", StpUtil
+        SysNoticeInsertDTO noticeInsertDTO = new SysNoticeInsertDTO();
+        noticeInsertDTO.setNoticeSender(StpUtil.getExtra("managerName").toString());
+        noticeInsertDTO.setNoticeContent(StpUtil
                 .getExtra("managerName").toString() + "删除了番剧 " + comicDelName);
-        jsonObject.set("noticeOrg", StpUtil.getExtra("managerOrg"));
-        jsonObject.set("noticeCreateTime", LocalDateTime.now());
+        noticeInsertDTO.setNoticeOrg((Integer) StpUtil.getExtra("managerOrg"));
+        noticeInsertDTO.setNoticeCreateTime(LocalDateTime.now());
+
         mqttMessageSender.sendMsg(MqttConstant.YURA_CLOUD_SYS_INSERT_NOTICE
-                , JSONUtil.toJsonStr(jsonObject));
+                , JSONUtil.toJsonStr(noticeInsertDTO));
     }
 
     @Override
