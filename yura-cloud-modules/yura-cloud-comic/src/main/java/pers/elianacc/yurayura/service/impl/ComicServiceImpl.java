@@ -144,7 +144,7 @@ public class ComicServiceImpl extends ServiceImpl<ComicMapper, Comic> implements
         JSONObject jsonObject = new JSONObject();
         jsonObject.set("noticeSender", StpUtil.getExtra("managerName").toString());
         jsonObject.set("noticeContent", StpUtil
-                .getExtra("managerName").toString() + "上架了番剧" + comic.getComicName());
+                .getExtra("managerName").toString() + "上架了番剧 " + comic.getComicName());
         jsonObject.set("noticeOrg", StpUtil.getExtra("managerOrg"));
         jsonObject.set("noticeCreateTime", LocalDateTime.now());
         mqttMessageSender.sendMsg(MqttConstant.YURA_CLOUD_SYS_INSERT_NOTICE
@@ -156,13 +156,24 @@ public class ComicServiceImpl extends ServiceImpl<ComicMapper, Comic> implements
         List<Comic> delComicList = comicMapper.selectBatchIds(dto.getIds());
         comicMapper.deleteBatchIds(dto.getIds());
         comicUserDataMapper.deleteBatchByComicId(dto.getIds());
-        delComicList.forEach(comic -> {
+        StringBuilder comicDelNames = new StringBuilder();
+        for (Comic comic : delComicList) {
             // 如果用的是默认图片的，则不删除
             if (!(comic.getComicImageUrl().equals(defaultUplCmImg))) {
                 // 删除番剧图片
                 FileUtil.fileDelete(comic.getComicImageUrl());
             }
-        });
+            comicDelNames.append(comic.getComicName()).append("、");
+        }
+        String comicDelName = comicDelNames.substring(0, comicDelNames.length() - 1);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.set("noticeSender", StpUtil.getExtra("managerName").toString());
+        jsonObject.set("noticeContent", StpUtil
+                .getExtra("managerName").toString() + "删除了番剧 " + comicDelName);
+        jsonObject.set("noticeOrg", StpUtil.getExtra("managerOrg"));
+        jsonObject.set("noticeCreateTime", LocalDateTime.now());
+        mqttMessageSender.sendMsg(MqttConstant.YURA_CLOUD_SYS_INSERT_NOTICE
+                , JSONUtil.toJsonStr(jsonObject));
     }
 
     @Override
