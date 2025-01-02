@@ -226,7 +226,7 @@ mybatis-plus:
 # lock4j配置
 lock4j:
   acquire-timeout: 3000
-  expire: 3000
+  expire: 5000
   primary-executor: com.baomidou.lock.executor.RedisTemplateLockExecutor
   lock-key-prefix: lock4j
 
