@@ -110,7 +110,7 @@ spring:
   # 数据源配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/yurayura_sys?serverTimezone=GMT%2B8&useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true
+    url: jdbc:mysql://127.0.0.1:3306/yurayura_sys?serverTimezone=GMT%2B8&useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&rewriteBatchedStatements=true
     username: root
     password: 123456
     type: com.zaxxer.hikari.HikariDataSource
@@ -118,7 +118,7 @@ spring:
       # 此属性控制从池返回的连接的默认自动提交行为，默认值：true
       auto-commit: true
       # 空闲连接存活最大时间，默认600000（10分钟）
-      idle-timeout: 60000
+      idle-timeout: 300000
       # 测试连接的活动性的最长时间，默认值：5000
       validation-timeout: 3000
       # 最小空闲连接数量，默认是10
@@ -126,10 +126,11 @@ spring:
       # 连接池最大连接数，默认是10
       maximum-pool-size: 20
       # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
-      max-lifetime: 65000
+      max-lifetime: 1800000
       # 数据库连接超时时间，默认30秒，即30000
       connection-timeout: 30000
-      connection-test-query: SELECT 1
+      # 保持连接活性，每5分钟ping一次
+      keepalive-time: 300000
       pool-name: ELiaNaCcHikariCP
   # thymeleaf配置
   thymeleaf:
