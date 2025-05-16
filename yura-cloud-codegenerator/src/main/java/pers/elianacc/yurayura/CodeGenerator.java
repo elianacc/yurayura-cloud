@@ -25,18 +25,18 @@ public class CodeGenerator {
 
         String generatorDb = scanner("请输入需要生成的库名");
 
-        String generatorDbUrl = "jdbc:mysql://127.0.0.1:3306/" + generatorDb
+        String generatorDbUrl = "jdbc:mysql://192.168.3.203:33306/" + generatorDb
                 + "?serverTimezone=GMT%2B8&useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true";
 
         AtomicReference<String> generatorTable = new AtomicReference<>();
         AtomicReference<String> modulePackagePath = new AtomicReference<>();
 
-        FastAutoGenerator.create(generatorDbUrl, "root", "123456")
+        FastAutoGenerator.create(generatorDbUrl, "mysql", "Amigo@123$#@")
                 // 全局配置(GlobalConfig)
                 .globalConfig(builder -> builder
                         .author("ELiaNaCc")
                         .outputDir("D://mp_generator")
-                        .enableSwagger()
+//                        .enableSwagger()
                 )
                 // 包配置(PackageConfig)
                 .packageConfig((scanner, builder) -> {
@@ -52,8 +52,8 @@ public class CodeGenerator {
                     }
                     modulePackagePath.set(modulePackagePath.get().contains("_")
                             ? modulePackagePath.get().substring(0, modulePackagePath.get().indexOf("_")) : modulePackagePath.get());
-                    builder.parent("pers.elianacc") // 根据实际修改
-                            .moduleName("yurayura") // 根据实际修改
+                    builder.parent("cn.opapp.modules") // 根据实际修改
+                            .moduleName("im") // 根据实际修改
                             .entity("entity")
                             // SpringBoot单体项目加上模块包路径
 //                            .xml("dao." + modulePackagePath.get() + ".mapper")
@@ -81,13 +81,13 @@ public class CodeGenerator {
                     Map<String, Object> parmMap = new HashMap<>();
                     parmMap.put("sysModulePath", generatorTable.get().contains("_sys_") ? "/sys/" : "/");
                     parmMap.put("modulePackagePath", modulePackagePath.get());
-                    parmMap.put("packageParentPath", "pers.elianacc.yurayura"); // 根据实际修改
+                    parmMap.put("packageParentPath", "cn.opapp.modules.im"); // 根据实际修改
                     builder.customMap(parmMap);
                 })
                 // 策略配置(StrategyConfig)
                 .strategyConfig(builder -> {
                     builder.addInclude(generatorTable.get())
-                            .addTablePrefix("yurayura_") // 根据实际修改
+                            .addTablePrefix("im_") // 根据实际修改
                             .entityBuilder()
                             .enableLombok()
                             .enableTableFieldAnnotation()

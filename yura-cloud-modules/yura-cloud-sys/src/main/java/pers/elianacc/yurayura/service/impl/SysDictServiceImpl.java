@@ -71,6 +71,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     public void deleteBatchByIds(IdsDTO dto) {
         dto.getIds().forEach(id -> {
             SysDict sysDict = sysDictMapper.selectById(id);
+            Assert.isTrue(!ObjectUtils.isEmpty(sysDict), "删除系统字典不存在");
             // 删除redis中的字典记录
             RedisUtil.lRemove(sysDict.getDictCode(), 0, sysDict);
         });
@@ -81,6 +82,7 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     public void update(SysDictUpdateDTO dto) {
         // 原字典记录
         SysDict oldSysDict = sysDictMapper.selectById(dto.getId());
+        Assert.isTrue(!ObjectUtils.isEmpty(oldSysDict), "修改系统字典不存在");
         SysDict sysDict = new SysDict();
         BeanUtils.copyProperties(dto, sysDict);
         sysDictMapper.updateById(sysDict);

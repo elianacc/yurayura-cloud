@@ -25,6 +25,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring-cloud.version>2021.0.5</spring-cloud.version>
         <spring-cloud-alibaba.version>2021.0.5.0</spring-cloud-alibaba.version>
+        <mysql.version>8.0.22</mysql.version>
         <mybatis-plus.version>3.5.5</mybatis-plus.version>
         <velocity.version>2.3</velocity.version>
         <lock4j-redis.version>2.2.4</lock4j-redis.version>
@@ -85,6 +86,13 @@
                 <version>${spring-cloud-alibaba.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <!-- SpringBoot mysql驱动 依赖 -->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql.version}</version>
             </dependency>
 
             <!-- mybatis-plus springboot 依赖 -->

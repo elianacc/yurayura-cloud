@@ -81,6 +81,7 @@ public class SysPermissionServiceImpl extends ServiceImpl<SysPermissionMapper, S
     @Override
     public void update(SysPermissionUpdateDTO dto) {
         SysPermission oldPerm = sysPermissionMapper.selectById(dto.getId());
+        Assert.isTrue(!ObjectUtils.isEmpty(oldPerm), "修改系统权限不存在");
         SysPermission sysPermission = new SysPermission();
         BeanUtils.copyProperties(dto, sysPermission);
         if (sysPermission.getPermissionStatus() == EnableStatusEnum.DISABLE.getStatusId().intValue()) {

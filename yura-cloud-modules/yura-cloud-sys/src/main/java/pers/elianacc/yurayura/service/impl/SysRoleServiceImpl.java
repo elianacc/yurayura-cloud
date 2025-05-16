@@ -8,12 +8,14 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import pers.elianacc.yurayura.dao.SysManagerMapper;
 import pers.elianacc.yurayura.dao.SysPermissionMapper;
 import pers.elianacc.yurayura.dao.SysRoleMapper;
 import pers.elianacc.yurayura.dto.SysRoleInsertDTO;
 import pers.elianacc.yurayura.dto.SysRoleSelectDTO;
 import pers.elianacc.yurayura.dto.SysRoleUpdateDTO;
+import pers.elianacc.yurayura.entity.SysPermission;
 import pers.elianacc.yurayura.entity.SysRole;
 import pers.elianacc.yurayura.enumerate.AdminOrgEnum;
 import pers.elianacc.yurayura.enumerate.EnableStatusEnum;
@@ -71,8 +73,12 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if (!dto.getPermissionIdArr().isEmpty()) {
             List<Integer> permissionIdExistList = dto.getPermissionIdArr()
                     .stream()
-                    .filter(permissionId -> !(sysPermissionMapper
-                            .selectById(permissionId).getPermissionStatus() == EnableStatusEnum.DISABLE.getStatusId().intValue()))
+                    .filter(permissionId -> {
+                        SysPermission sysPermission = sysPermissionMapper
+                                .selectById(permissionId);
+                        Assert.isTrue(!ObjectUtils.isEmpty(sysPermission), "添加系统权限不存在");
+                        return sysPermission.getPermissionStatus() == EnableStatusEnum.ENABLE.getStatusId().intValue();
+                    })
                     .collect(Collectors.toList());
             if (!permissionIdExistList.isEmpty()) {
                 sysRoleMapper.insertBatchRolePermission(permissionIdExistList, sysRole.getId());
@@ -83,6 +89,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public void update(SysRoleUpdateDTO dto) {
         SysRole oldRole = sysRoleMapper.selectById(dto.getId());
+        Assert.isTrue(!ObjectUtils.isEmpty(oldRole), "修改系统角色不存在");
         Assert.isTrue(!oldRole.getRoleOrg().equals(AdminOrgEnum.ADMIN_ORG.getOrg()), "超级管理员的角色信息不允许被修改");
         List<SysRole> sysRoleList = sysRoleMapper.selectList(Wrappers.<SysRole>lambdaQuery()
                 .eq(SysRole::getRoleName, dto.getRoleName())
@@ -97,8 +104,12 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if (!dto.getPermissionIdArr().isEmpty()) {
             List<Integer> permissionIdExistList = dto.getPermissionIdArr()
                     .stream()
-                    .filter(permissionId -> !(sysPermissionMapper
-                            .selectById(permissionId).getPermissionStatus() == EnableStatusEnum.DISABLE.getStatusId().intValue()))
+                    .filter(permissionId -> {
+                        SysPermission sysPermission = sysPermissionMapper
+                                .selectById(permissionId);
+                        Assert.isTrue(!ObjectUtils.isEmpty(sysPermission), "修改系统权限不存在");
+                        return sysPermission.getPermissionStatus() == EnableStatusEnum.ENABLE.getStatusId().intValue();
+                    })
                     .collect(Collectors.toList());
             if (!permissionIdExistList.isEmpty()) {
                 sysRoleMapper.insertBatchRolePermission(permissionIdExistList, sysRole.getId());

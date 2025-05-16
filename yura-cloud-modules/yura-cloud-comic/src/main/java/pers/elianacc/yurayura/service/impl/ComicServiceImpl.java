@@ -198,6 +198,7 @@ public class ComicServiceImpl extends ServiceImpl<ComicMapper, Comic> implements
         if (!imgUplRes.equals(ImgUploadResultEnum.NULL.getResult())) {
             comic.setComicImageUrl(imgUplRes);
             Comic aComic = comicMapper.selectById(comic.getId());
+            Assert.isTrue(!ObjectUtils.isEmpty(aComic), "修改番剧不存在");
             // 如果用的是默认图片的，则不删除
             if (!(aComic.getComicImageUrl().equals(defaultUplCmImg))) {
                 // 删除番剧图片

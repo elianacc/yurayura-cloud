@@ -82,6 +82,7 @@ public class SysManagerServiceImpl extends ServiceImpl<SysManagerMapper, SysMana
     @Override
     public void update(SysManagerUpdateDTO dto) {
         SysManager oldSysManager = sysManagerMapper.selectById(dto.getId());
+        Assert.isTrue(!ObjectUtils.isEmpty(oldSysManager), "修改系统管理员不存在");
         Assert.isTrue(!oldSysManager.getManagerOrg().equals(AdminOrgEnum.ADMIN_ORG.getOrg())
                 , "管理员admin信息不允许被修改");
         SysManager sysManager = new SysManager();

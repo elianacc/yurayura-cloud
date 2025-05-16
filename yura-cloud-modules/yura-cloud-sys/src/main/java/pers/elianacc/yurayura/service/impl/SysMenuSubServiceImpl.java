@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import pers.elianacc.yurayura.dao.SysMenuMapper;
 import pers.elianacc.yurayura.dao.SysMenuSubMapper;
 import pers.elianacc.yurayura.dao.SysPermissionMapper;
@@ -66,6 +67,7 @@ public class SysMenuSubServiceImpl extends ServiceImpl<SysMenuSubMapper, SysMenu
     @Override
     public void deleteById(IdDTO dto) {
         SysMenuSub deleteSysMenuSub = sysMenuSubMapper.selectById(dto.getId());
+        Assert.isTrue(!ObjectUtils.isEmpty(deleteSysMenuSub), "删除系统子菜单不存在");
         List<SysPermission> deleteSysPermissions = sysPermissionMapper
                 .selectList(Wrappers.<SysPermission>lambdaQuery()
                         .eq(SysPermission::getPermissionBelongSubmenuName, deleteSysMenuSub.getMenuName()));
